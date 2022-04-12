@@ -1,7 +1,8 @@
 package com.choo.blog.domain.controller;
 
-import com.choo.blog.domain.posts.PostOpenType;
+import com.choo.blog.common.RestDocsConfiguration;
 import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.posts.PostOpenType;
 import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.users.User;
@@ -13,24 +14,36 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
 @DisplayName("게시물 관리")
 class PostControllerTest {
     private static final String TITLE = "게시물 제목";
@@ -61,7 +74,6 @@ class PostControllerTest {
     void setUp() throws Exception {
         user = prepareUser("");
         session = login(prepareLoginData());
-
     }
 
     @AfterEach
@@ -95,14 +107,47 @@ class PostControllerTest {
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("id").exists())
                         .andExpect(header().exists(HttpHeaders.LOCATION))
-                        .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
                         .andExpect(jsonPath("title").value(saveData.getTitle()))
                         .andExpect(jsonPath("content").value(saveData.getContent()))
                         .andExpect(jsonPath("likes").value(0))
                         .andExpect(jsonPath("dislikes").value(0))
                         .andExpect(jsonPath("openType").value(saveData.getOpenType().toString()))
                         .andExpect(jsonPath("view").value(0))
-                        .andExpect(jsonPath("_links.self").exists());
+                        .andExpect(jsonPath("_links.self").exists())
+                        .andDo(document(
+                                "create-posts",
+                                links(halLinks(),
+                                        linkWithRel("self").description("Link to self")
+                                ),
+                                requestHeaders(
+                                        headerWithName(HttpHeaders.ACCEPT).description("accept header"),
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header")
+                                ),
+                                requestFields(
+                                        fieldWithPath("title").description("게시물 제목"),
+                                        fieldWithPath("content").description("게시물 내용"),
+                                        fieldWithPath("openType").description("게시물 공개 범위")
+                                ),
+                                responseHeaders(
+                                        headerWithName(HttpHeaders.LOCATION).description("Location header"),
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content type")
+                                ),
+                                relaxedResponseFields(
+                                        fieldWithPath("id").description("생성된 게시물 번호"),
+                                        fieldWithPath("author").description("게시물 작성자"),
+                                        fieldWithPath("title").description("게시물 제목"),
+                                        fieldWithPath("content").description("게시물 내용"),
+                                        fieldWithPath("category").description("게시물 카테고리"),
+                                        fieldWithPath("likes").description("게시물 좋아요 갯수"),
+                                        fieldWithPath("dislikes").description("게시물 싫어요 갯수"),
+                                        fieldWithPath("view").description("게시물 조회 수"),
+                                        fieldWithPath("openType").description("게시물 공개 범위"),
+                                        fieldWithPath("commentsList").description("게시물 댓글 목록"),
+                                        fieldWithPath("createDate").description("게시물 생성 시간"),
+                                        fieldWithPath("modifiedDate").description("게시물 수정 시간")
+                                )
+
+                        ));
             }
         }
 

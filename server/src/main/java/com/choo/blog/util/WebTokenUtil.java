@@ -27,6 +27,7 @@ public class WebTokenUtil {
 
 
     public Claims decode(String token) {
+        System.out.println("Token : " + token);
         if (!checkValidToken(token)) {
             throw new InvalidTokenException(token);
         }
