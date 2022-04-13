@@ -2,6 +2,7 @@ package com.choo.blog.error.handler;
 
 import com.choo.blog.error.ErrorResponse;
 import com.choo.blog.exceptions.InvalidParameterException;
+import com.choo.blog.exceptions.InvalidTokenException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

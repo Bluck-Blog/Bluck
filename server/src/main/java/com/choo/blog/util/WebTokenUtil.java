@@ -1,16 +1,20 @@
 package com.choo.blog.util;
 
+import com.choo.blog.exceptions.InvalidParameterException;
 import com.choo.blog.exceptions.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 
 @Component
+@Slf4j
 public class WebTokenUtil {
     private Key key;
 
@@ -27,7 +31,7 @@ public class WebTokenUtil {
 
 
     public Claims decode(String token) {
-        System.out.println("Token : " + token);
+        log.debug("token : {token}", token);
         if (!checkValidToken(token)) {
             throw new InvalidTokenException(token);
         }
@@ -38,6 +42,8 @@ public class WebTokenUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (SignatureException e) {
+            throw new InvalidTokenException(token);
+        } catch (MalformedJwtException e){
             throw new InvalidTokenException(token);
         }
     }
