@@ -3,6 +3,7 @@ package com.choo.blog.config;
 import com.choo.blog.domain.users.service.AuthenticationService;
 import com.choo.blog.filter.AuthenticationErrorFilter;
 import com.choo.blog.filter.AuthenticationFilter;
+import com.choo.blog.security.CustomeBasicAuthenticationEntryPoint;
 import com.choo.blog.security.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -36,8 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(
-                        new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+                .authenticationEntryPoint(authenticationEntryPoint());
     }
 
     @Override
@@ -53,5 +53,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwtAuthenticationProvider jwtAuthenticationProvider(){
         return new JwtAuthenticationProvider(authenticationService);
+    }
+
+    @Bean
+    public CustomeBasicAuthenticationEntryPoint authenticationEntryPoint(){
+        return new CustomeBasicAuthenticationEntryPoint();
     }
 }
