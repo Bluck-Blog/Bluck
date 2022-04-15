@@ -24,17 +24,13 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -395,7 +391,7 @@ class PostControllerTest {
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("page").exists())
                         .andExpect(jsonPath("_links.self").exists())
-                        .andExpect(jsonPath("_embedded.postsList[0]._links.self").exists());
+                        .andExpect(jsonPath("_embedded.posts[0]._links.self").exists());
             }
         }
     }
@@ -569,7 +565,6 @@ class PostControllerTest {
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(prepareUserRegistData(suffix)))).andReturn();
         String content = result.getResponse().getContentAsString();
-        System.out.println(content);
         return objectMapper.readValue(content, User.class);
     }
 
