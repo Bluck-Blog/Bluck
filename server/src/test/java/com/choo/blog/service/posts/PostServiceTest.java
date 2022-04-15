@@ -14,7 +14,6 @@ import com.choo.blog.exceptions.PostNotFoundException;
 import com.choo.blog.security.UserAuthentication;
 import com.choo.blog.session.WithMockCustomUser;
 import com.choo.blog.util.WebTokenUtil;
-import org.h2.engine.UserBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

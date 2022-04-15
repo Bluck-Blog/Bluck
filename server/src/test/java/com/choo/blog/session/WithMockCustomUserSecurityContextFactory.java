@@ -1,6 +1,5 @@
 package com.choo.blog.session;
 
-import com.choo.blog.domain.users.UserRole;
 import com.choo.blog.security.UserAuthentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;

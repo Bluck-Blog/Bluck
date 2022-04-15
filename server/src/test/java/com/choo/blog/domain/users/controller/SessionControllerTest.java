@@ -1,7 +1,6 @@
 package com.choo.blog.domain.users.controller;
 
 import com.choo.blog.domain.users.User;
-import com.choo.blog.domain.users.dto.SessionResponseData;
 import com.choo.blog.domain.users.dto.UserLoginData;
 import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.repository.UserRepository;
@@ -21,7 +20,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
