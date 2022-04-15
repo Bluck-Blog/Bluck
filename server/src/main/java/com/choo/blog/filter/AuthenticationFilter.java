@@ -2,7 +2,9 @@ package com.choo.blog.filter;
 
 import com.choo.blog.domain.users.UserRole;
 import com.choo.blog.domain.users.service.AuthenticationService;
+import com.choo.blog.exceptions.InvalidTokenException;
 import com.choo.blog.security.UserAuthentication;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 public class AuthenticationFilter extends BasicAuthenticationFilter {
     private final AuthenticationService authenticationService;
 
@@ -47,7 +50,7 @@ public class AuthenticationFilter extends BasicAuthenticationFilter {
     private String parseAuthorizationHeaderFrom(HttpServletRequest request){
         String authorization = request.getHeader("Authorization");
 
-        if(authorization == null){
+        if(authorization == null || !authorization.startsWith("Bearer")){
             return "";
         }
         return authorization.substring("Bearer ".length());
