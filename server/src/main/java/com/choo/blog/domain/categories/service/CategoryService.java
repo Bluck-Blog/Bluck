@@ -41,6 +41,11 @@ public class CategoryService {
         return categoryRespository.findCategoryByUserId(userId);
     }
 
+    public Category getCategory(Long userId, Long categoryId){
+        return categoryRespository.findByUserIdAndId(userId, categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+    }
+
     private void checkDuplicatedTitle(CategoryRequestData saveData) {
         if(categoryRespository.existsByUserIdAndAndTitle(getLoginUserId(), saveData.getTitle())){
             throw new DuplicateTitleException(saveData.getTitle());

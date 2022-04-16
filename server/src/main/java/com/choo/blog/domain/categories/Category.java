@@ -1,5 +1,6 @@
 package com.choo.blog.domain.categories;
 
+import com.choo.blog.domain.posts.Post;
 import com.choo.blog.domain.users.User;
 import lombok.*;
 
@@ -26,4 +27,7 @@ public class Category {
 
     @Column(name = "user_id")
     private Long userId;
+
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<Post> postList;
 }

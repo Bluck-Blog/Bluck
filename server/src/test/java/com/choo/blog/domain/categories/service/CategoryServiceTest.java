@@ -98,7 +98,7 @@ class CategoryServiceTest {
     }
 
     @Nested
-    @DisplayName("카테고리 조회는")
+    @DisplayName("카테고리 목록 조회는")
     class Descrive_findAll{
         @Nested
         @DisplayName("유저 pk를 입력받으면")
@@ -117,6 +117,58 @@ class CategoryServiceTest {
             void it_return_category_list_of_user(){
                 List<Category> categories = categoryService.getCategories(user.getId());
                 assertThat(categories.size()).isEqualTo(size);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("카테고리 조회는")
+    class Descrive_find{
+        @Nested
+        @DisplayName("userId 와 categoryId를 입력받으면")
+        class Context_with_userId_and_categoryId{
+            Category category;
+
+            @BeforeEach
+            void setUp(){
+                category = categoryRespository.save(prepareRequestData("").toEntity(user.getId()));
+            }
+
+            @Test
+            @DisplayName("해당 카테고리를 반환한다.")
+            void it_return_category(){
+                Category findCategory = categoryService.getCategory(user.getId(), this.category.getId());
+
+                assertThat(findCategory.getId()).isEqualTo(category.getId());
+                assertThat(findCategory.getTitle()).isEqualTo(category.getTitle());
+                assertThat(findCategory.getUserId()).isEqualTo(user.getId());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 categoryId가 주어진다면")
+        class Context_with_non_exist_categoryId{
+            @Test
+            @DisplayName("카테고리를 찾을 수 없다는 예외를 던진다.")
+            void it_throw_cateoryNotFoundException(){
+                assertThatThrownBy(() -> categoryService.getCategory(user.getId(), -1L))
+                        .isInstanceOf(CategoryNotFoundException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("카테고리의 userId와 다른 userId가 주어진다면")
+        class Context_with_differnt_userId{
+            Category category;
+            @BeforeEach
+            void setUp(){
+                category = categoryRespository.save(prepareRequestData("").toEntity(user.getId()));
+            }
+            @Test
+            @DisplayName("카테고리를 찾을 수 없다는 예외를 던진다.")
+            void it_throw_categoryNotFoundException(){
+                assertThatThrownBy(() -> categoryService.getCategory(-1L, category.getId()))
+                        .isInstanceOf(CategoryNotFoundException.class);
             }
         }
     }
