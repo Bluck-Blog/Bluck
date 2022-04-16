@@ -2,10 +2,12 @@ package com.choo.blog.domain.categories.service;
 
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
+import com.choo.blog.domain.categories.repository.CategoryRespository;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.UserRole;
 import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.service.UserService;
+import com.choo.blog.exceptions.DuplicateTitleException;
 import com.choo.blog.security.UserAuthentication;
 import com.choo.blog.util.WebTokenUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @DisplayName("카테고리 관리")
@@ -33,6 +36,8 @@ class CategoryServiceTest {
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private CategoryRespository categoryRespository;
     @Autowired
     private WebTokenUtil webTokenUtil;
     @Autowired
@@ -66,6 +71,25 @@ class CategoryServiceTest {
                 Category category = categoryService.save(saveData);
                 assertThat(category.getTitle()).isEqualTo(saveData.getTitle());
                 assertThat(category.getUserId()).isEqualTo(user.getId());
+            }
+        }
+
+        @Nested
+        @DisplayName("중복된 이름을 입력받으면")
+        class Context_with_dupliacted_title{
+            CategoryRequestData saveData;
+
+            @BeforeEach
+            void setUp(){
+                saveData = prepareRequestData("");
+                categoryRespository.save(saveData.toEntity(user.getId()));
+            }
+
+            @Test
+            @DisplayName("이름이 중복되었다는 예외를 던진다")
+            void it_throw_duplicatedTitleException(){
+                assertThatThrownBy(() -> categoryService.save(saveData))
+                        .isInstanceOf(DuplicateTitleException.class);
             }
         }
     }
