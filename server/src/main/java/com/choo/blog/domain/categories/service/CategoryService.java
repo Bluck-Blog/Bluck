@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
@@ -22,6 +24,10 @@ public class CategoryService {
         }
 
         return categoryRespository.save(saveData.toEntity(user.getUserId()));
+    }
+
+    public List<Category> getCategories(Long userId){
+        return categoryRespository.findCategoryByUserId(userId);
     }
 
     private UserAuthentication getLoginInfo(){

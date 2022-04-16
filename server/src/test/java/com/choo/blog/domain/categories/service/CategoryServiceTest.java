@@ -19,6 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -90,6 +92,30 @@ class CategoryServiceTest {
             void it_throw_duplicatedTitleException(){
                 assertThatThrownBy(() -> categoryService.save(saveData))
                         .isInstanceOf(DuplicateTitleException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("카테고리 조회는")
+    class Descrive_findAll{
+        @Nested
+        @DisplayName("유저 pk를 입력받으면")
+        class Context_with_userId{
+            int size = 30;
+
+            @BeforeEach
+            void setUp(){
+                IntStream.range(0, size).forEach(i ->{
+                    categoryRespository.save(prepareRequestData(i + "").toEntity(user.getId()));
+                });
+            }
+
+            @Test
+            @DisplayName("해당 유저의 카테고리 목록을 반환한다.")
+            void it_return_category_list_of_user(){
+                List<Category> categories = categoryService.getCategories(user.getId());
+                assertThat(categories.size()).isEqualTo(size);
             }
         }
     }
