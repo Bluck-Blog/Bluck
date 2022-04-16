@@ -1,9 +1,17 @@
 package com.choo.blog.domain.categories;
 
+import com.choo.blog.domain.users.User;
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@ToString
 public class Category {
     @Id @GeneratedValue
     @Column(name = "category_id")
@@ -11,12 +19,10 @@ public class Category {
 
     private String title;
 
-    private int depth;
-
     @ManyToOne
-    @JoinColumn(name = "parent", referencedColumnName = "category_id")
-    private Category parent;
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
 
-    @OneToMany(mappedBy = "parent")
-    private List<Category> childrens;
+    @Column(name = "user_id")
+    private Long userId;
 }

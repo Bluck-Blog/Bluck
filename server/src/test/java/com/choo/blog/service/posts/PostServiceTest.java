@@ -1,6 +1,7 @@
 package com.choo.blog.service.posts;
 
 import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.posts.PostOpenType;
 import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.posts.service.PostService;
@@ -205,26 +206,26 @@ class PostServiceTest {
     @Nested
     @DisplayName("게시물 목록 조회는")
     class Descrive_findAll{
+        int page = 0;
+        int pageSize = 10;
+        int size = 30;
+
+        Pageable pageable;
+
+        @BeforeEach
+        public void setUp(){
+            pageable = PageRequest.of(page,pageSize);
+
+            User author = prepareUser("");
+
+            IntStream.range(0, size).forEach(i ->{
+                postRepository.save(prepareRequestData(i + "").createEntity(author));
+            });
+        }
+
         @Nested
         @DisplayName("조회조건을 입력받으면")
         class Context_with_search_condition{
-            int page = 0;
-            int pageSize = 10;
-            int size = 30;
-
-            Pageable pageable;
-
-            @BeforeEach
-            public void setUp(){
-                pageable = PageRequest.of(page,pageSize);
-
-                User author = prepareUser("");
-
-                IntStream.range(0, size).forEach(i ->{
-                    postRepository.save(prepareRequestData(i + "").createEntity(author));
-                });
-            }
-
             @Test
             @DisplayName("조회 결과를 반환한다.")
             public void it_return_paging_posts(){
@@ -309,6 +310,7 @@ class PostServiceTest {
     private PostRequestData prepareRequestData(String suffix){
         return PostRequestData.builder()
                 .title(TITLE + suffix)
+                .openType(PostOpenType.ALL)
                 .content(CONTENT + suffix)
                 .build();
     }
