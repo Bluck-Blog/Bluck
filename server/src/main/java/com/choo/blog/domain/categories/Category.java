@@ -17,6 +17,7 @@ public class Category {
     @Column(name = "category_id")
     private Long id;
 
+    @Setter
     private String title;
 
     @ManyToOne

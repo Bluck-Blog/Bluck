@@ -7,6 +7,7 @@ import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.UserRole;
 import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.service.UserService;
+import com.choo.blog.exceptions.CategoryNotFoundException;
 import com.choo.blog.exceptions.DuplicateTitleException;
 import com.choo.blog.security.UserAuthentication;
 import com.choo.blog.util.WebTokenUtil;
@@ -116,6 +117,66 @@ class CategoryServiceTest {
             void it_return_category_list_of_user(){
                 List<Category> categories = categoryService.getCategories(user.getId());
                 assertThat(categories.size()).isEqualTo(size);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("카테고리 수정은")
+    class Descrive_update{
+        CategoryRequestData updateData;
+
+        @BeforeEach
+        void setUp(){
+            updateData = prepareRequestData("_NEW");
+        }
+        @Nested
+        @DisplayName("수정 데이터를 입력 받으면")
+        class Context_with_update_data{
+            Category category;
+
+            @BeforeEach
+            void setUp(){
+                category = categoryRespository.save(prepareRequestData("").toEntity(user.getId()));
+            }
+
+            @Test
+            @DisplayName("카테고리를 수정하고 수정된 카테고리를 반환한다.")
+            void it_return_category(){
+                Category updatedCategory = categoryService.update(category.getId(), updateData);
+
+                assertThat(updatedCategory.getTitle()).isEqualTo(updateData.getTitle());
+                assertThat(updatedCategory.getId()).isEqualTo(category.getId());
+                assertThat(updatedCategory.getUserId()).isEqualTo(category.getUserId());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재 하지 않는 카테고리의 아이디가 주어지면")
+        class Context_woth_non_exist_categoryId{
+
+            @Test
+            @DisplayName("케테고리를 찾을 수 없다는 예외를 던진다.")
+            void it_throw_categoryNotFoundException(){
+                assertThatThrownBy(() -> categoryService.update(-1L, updateData))
+                        .isInstanceOf(CategoryNotFoundException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("중복된 이름을 입력받으면")
+        class Context_with_dupliacted_title{
+
+            @BeforeEach
+            void setUp(){
+                categoryRespository.save(updateData.toEntity(user.getId()));
+            }
+
+            @Test
+            @DisplayName("이름이 중복되었다는 예외를 던진다")
+            void it_throw_duplicatedTitleException(){
+                assertThatThrownBy(() -> categoryService.save(updateData))
+                        .isInstanceOf(DuplicateTitleException.class);
             }
         }
     }
