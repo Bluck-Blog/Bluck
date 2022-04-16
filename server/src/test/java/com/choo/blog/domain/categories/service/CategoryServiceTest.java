@@ -9,6 +9,7 @@ import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.service.UserService;
 import com.choo.blog.exceptions.CategoryNotFoundException;
 import com.choo.blog.exceptions.DuplicateTitleException;
+import com.choo.blog.exceptions.ForbiddenCategoryException;
 import com.choo.blog.security.UserAuthentication;
 import com.choo.blog.util.WebTokenUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -208,7 +209,7 @@ class CategoryServiceTest {
         class Context_woth_non_exist_categoryId{
 
             @Test
-            @DisplayName("케테고리를 찾을 수 없다는 예외를 던진다.")
+            @DisplayName("카테고리를 찾을 수 없다는 예외를 던진다.")
             void it_throw_categoryNotFoundException(){
                 assertThatThrownBy(() -> categoryService.update(-1L, updateData))
                         .isInstanceOf(CategoryNotFoundException.class);
@@ -218,24 +219,43 @@ class CategoryServiceTest {
         @Nested
         @DisplayName("중복된 이름을 입력받으면")
         class Context_with_dupliacted_title{
-
+            Category category;
             @BeforeEach
             void setUp(){
-                categoryRespository.save(updateData.toEntity(user.getId()));
+                category = categoryRespository.save(prepareRequestData("").toEntity(user.getId()));
             }
 
             @Test
             @DisplayName("이름이 중복되었다는 예외를 던진다")
             void it_throw_duplicatedTitleException(){
-                assertThatThrownBy(() -> categoryService.save(updateData))
+                assertThatThrownBy(() -> categoryService.update(category.getId(), updateData))
                         .isInstanceOf(DuplicateTitleException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("카테고리 생성자와 다른 인증정보가 주어진다면")
+        class Context_with_diffrent_authentication{
+            Category category;
+
+            @BeforeEach
+            void setUp(){
+                User otherUser = prepareUser("other");
+                category = categoryRespository.save(prepareRequestData("").toEntity(otherUser.getId()));
+            }
+
+            @Test
+            @DisplayName("카테고리 접근권한이 없다는 예외를 던진다.")
+            void it_throw_forbiddenCategoryException(){
+                assertThatThrownBy(() -> categoryService.update(category.getId(), updateData))
+                        .isInstanceOf(ForbiddenCategoryException.class);
             }
         }
     }
 
     private CategoryRequestData prepareRequestData(String suffix){
         return CategoryRequestData.builder()
-                .title(TITLE + "")
+                .title(TITLE + suffix)
                 .build();
     }
 
@@ -245,11 +265,11 @@ class CategoryServiceTest {
 
     public UserRegistData prepareUserRegistData(String suffix){
         return UserRegistData.builder()
-                .email(EMAIL)
+                .email(EMAIL + suffix)
                 .password(PASSWORD)
-                .nickname(NICKNAME)
+                .nickname(NICKNAME + suffix)
                 .birthdate(BIRTH_DATE)
-                .description(DESCRIPTION)
+                .description(DESCRIPTION + suffix)
                 .build();
     }
 }

@@ -5,6 +5,7 @@ import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
 import com.choo.blog.exceptions.CategoryNotFoundException;
 import com.choo.blog.exceptions.DuplicateTitleException;
+import com.choo.blog.exceptions.ForbiddenCategoryException;
 import com.choo.blog.security.UserAuthentication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,10 @@ public class CategoryService {
     public Category update(Long categoryId, CategoryRequestData updateData){
         Category category = categoryRespository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+
+        if(!category.getUserId().equals(getLoginUserId())){
+            throw new ForbiddenCategoryException(categoryId);
+        }
 
         if(!category.getTitle().equals(updateData.getTitle())){
             checkDuplicatedTitle(updateData);
