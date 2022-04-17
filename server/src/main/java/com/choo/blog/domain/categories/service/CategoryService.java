@@ -27,12 +27,9 @@ public class CategoryService {
     }
 
     public Category update(Long categoryId, CategoryRequestData updateData){
-        Category category = categoryRespository.findById(categoryId)
-                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+        Category category = getCategoryById(categoryId);
 
-        if(!category.getUserId().equals(getLoginUserId())){
-            throw new ForbiddenCategoryException(categoryId);
-        }
+        chcekModifyPermission(category);
 
         if(!category.getTitle().equals(updateData.getTitle())){
             checkDuplicatedTitle(updateData);
@@ -40,6 +37,21 @@ public class CategoryService {
         }
 
         return category;
+    }
+
+    public Category delete(Long categoryId){
+        Category category = getCategoryById(categoryId);
+
+        chcekModifyPermission(category);
+
+        categoryRespository.delete(category);
+        return category;
+    }
+
+    private void chcekModifyPermission(Category category) {
+        if(!category.hasModifyPermission(getLoginUserId())){
+            throw new ForbiddenCategoryException(category.getId());
+        }
     }
 
     public List<Category> getCategories(Long userId){
@@ -64,5 +76,11 @@ public class CategoryService {
 
     private UserAuthentication getLoginInfo(){
         return (UserAuthentication) SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    private Category getCategoryById(Long categoryId) {
+        Category category = categoryRespository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+        return category;
     }
 }

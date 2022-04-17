@@ -1,5 +1,6 @@
 package com.choo.blog.domain.categories;
 
+import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.posts.Post;
 import com.choo.blog.domain.users.User;
 import lombok.*;
@@ -30,4 +31,8 @@ public class Category {
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Post> postList;
+
+    public boolean hasModifyPermission(Long userId){
+        return userId.equals(userId);
+    }
 }

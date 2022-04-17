@@ -183,6 +183,7 @@ class CategoryServiceTest {
         void setUp(){
             updateData = prepareRequestData("_NEW");
         }
+
         @Nested
         @DisplayName("수정 데이터를 입력 받으면")
         class Context_with_update_data{
@@ -223,6 +224,7 @@ class CategoryServiceTest {
             @BeforeEach
             void setUp(){
                 category = categoryRespository.save(prepareRequestData("").toEntity(user.getId()));
+                categoryRespository.save(updateData.toEntity(user.getId()));
             }
 
             @Test
@@ -248,6 +250,59 @@ class CategoryServiceTest {
             @DisplayName("카테고리 접근권한이 없다는 예외를 던진다.")
             void it_throw_forbiddenCategoryException(){
                 assertThatThrownBy(() -> categoryService.update(category.getId(), updateData))
+                        .isInstanceOf(ForbiddenCategoryException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("카테고리 삭제는")
+    class Descrive_delete{
+        @Nested
+        @DisplayName("userId 와 categoryId가 주어지면")
+        class Context_with_userId_and_categoryId{
+            Category category;
+
+            @BeforeEach
+            void setUp(){
+                category = categoryRespository.save(prepareRequestData("").toEntity(user.getId()));
+            }
+            @Test
+            @DisplayName("카테고리를 삭제하고 삭제된 카테고리를 반환한다.")
+            void it_return_category(){
+                categoryService.delete(category.getId());
+
+                assertThat(categoryRespository.findById(category.getId()).isPresent()).isFalse();
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 categoryId가 주어진다면")
+        class Context_with_non_exist_categoryId{
+
+            @Test
+            @DisplayName("카테고리를 찾을 수 없다는 예외를 던진다.")
+            void it_throw_categoryNotFoundException(){
+                assertThatThrownBy(() -> categoryService.delete(-1L))
+                        .isInstanceOf(CategoryNotFoundException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("카테고리 생성자와 다른 인증정보가 주어진다면")
+        class Context_with_diffrent_authentication{
+            Category category;
+
+            @BeforeEach
+            void setUp(){
+                User otherUser = prepareUser("other");
+                category = categoryRespository.save(prepareRequestData("").toEntity(otherUser.getId()));
+            }
+
+            @Test
+            @DisplayName("카테고리 접근권한이 없다는 예외를 던진다.")
+            void it_throw_forbiddenCategoryException(){
+                assertThatThrownBy(() -> categoryService.delete(category.getId()))
                         .isInstanceOf(ForbiddenCategoryException.class);
             }
         }
