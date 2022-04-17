@@ -1,5 +1,9 @@
 package com.choo.blog.service.posts;
 
+import com.choo.blog.domain.categories.Category;
+import com.choo.blog.domain.categories.dto.CategoryRequestData;
+import com.choo.blog.domain.categories.repository.CategoryRespository;
+import com.choo.blog.domain.categories.service.CategoryService;
 import com.choo.blog.domain.posts.Post;
 import com.choo.blog.domain.posts.PostOpenType;
 import com.choo.blog.domain.posts.dto.PostRequestData;
@@ -10,11 +14,13 @@ import com.choo.blog.domain.users.UserRole;
 import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.domain.users.service.UserService;
+import com.choo.blog.exceptions.CategoryNotFoundException;
 import com.choo.blog.exceptions.ForbiddenPostException;
 import com.choo.blog.exceptions.PostNotFoundException;
 import com.choo.blog.security.UserAuthentication;
 import com.choo.blog.session.WithMockCustomUser;
 import com.choo.blog.util.WebTokenUtil;
+import com.sun.xml.bind.v2.model.core.Ref;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -25,6 +31,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -60,28 +67,35 @@ class PostServiceTest {
     UserService userService;
 
     @Autowired
+    CategoryRespository categoryRespository;
+
+    @Autowired
     WebTokenUtil webTokenUtil;
+
+    Category category;
+
+    User user;
 
     @BeforeEach
     void setUp(){
-        User user = prepareUser("");
-        String accessToken = webTokenUtil.encode(user.getId());
-        SecurityContextHolder.getContext().setAuthentication(new UserAuthentication(UserRole.Authorized, accessToken, user.getId()));
+        user = setAuthentication("");
+
+        category = prepareCategory("", user);
     }
 
     @Nested
     @DisplayName("게시물 저장은")
     class Descrive_save{
 
+        PostRequestData saveData;
+        @BeforeEach
+        void setUp(){
+            saveData = prepareRequestData("");
+        }
+
         @Nested
         @DisplayName("게시물을 입력받으면")
         class Context_with_post{
-            PostRequestData saveData;
-
-            @BeforeEach
-            void setUp(){
-                saveData = prepareRequestData("");
-            }
 
             @Test
             @DisplayName("저장하고 저장된 게시물을 반환한다.")
@@ -97,47 +111,82 @@ class PostServiceTest {
 
                 UserAuthentication authentication = (UserAuthentication) SecurityContextHolder.getContext().getAuthentication();
                 assertThat(posts.getAuthor().getId()).isEqualTo(authentication.getUserId());
+                assertThat(posts.getCategory().getTitle()).isEqualTo(category.getTitle());
+            }
+            @Nested
+            @DisplayName("존재하지 않는 categoryId가 주어진다면")
+            class Context_with_non_exist_categoryId{
+
+                @BeforeEach
+                void setUp(){
+                    ReflectionTestUtils.setField(saveData, "categoryId", -1L);
+                }
+                @Test
+                @DisplayName("카테고리를 찾을 수 없다는 예외를 던진다.")
+                void it_throw_categoryNotFoundException(){
+                    assertThatThrownBy(() -> postService.save(saveData))
+                            .isInstanceOf(CategoryNotFoundException.class);
+                }
+
+            }
+        }
+        @Nested
+        @DisplayName("주어진 categoryId의 userId가 인증정보와 다르다면")
+        class Context_with_diffren_userId{
+            @BeforeEach
+            void setUp(){
+                setAuthentication("other");
+            }
+
+            @Test
+            @DisplayName("카테고리를 찾을 수 없다는 예외를 던진다.")
+            void it_throw_categoryNotFoundExceptoin(){
+                assertThatThrownBy(() -> postService.save(saveData))
+                        .isInstanceOf(CategoryNotFoundException.class);
             }
         }
     }
-
     @Nested
     @DisplayName("게시물 수정은")
-    class Descrive_update{
+    class Descrive_update {
+
         PostRequestData updateData;
 
         @BeforeEach
-        public void setUp(){
+        public void setUp() {
             updateData = prepareRequestData("_NEW");
         }
 
         @Nested
         @DisplayName("등록된 게시물 id가 주어진다면")
-        class Context_with_exist_postId{
+        class Context_with_exist_postId {
+
             Post posts;
 
             @BeforeEach
-            public void setUp(){
+            public void setUp() {
                 posts = postService.save(prepareRequestData(""));
             }
 
             @Test
             @DisplayName("id에 해당하는 게시물을 수정하고 수정된 게시물을 반환한다.")
-            void it_update_post_return(){
+            void it_update_post_return() {
                 Post updatePost = postService.update(posts.getId(), updateData);
 
                 assertThat(updatePost.getTitle()).isEqualTo(updateData.getTitle());
                 assertThat(updatePost.getContent()).isEqualTo(updateData.getContent());
                 assertThat(updatePost.getOpenType()).isEqualTo(updateData.getOpenType());
             }
+
         }
 
         @Nested
         @DisplayName("등록되지 않은 게시물 id가 주어진다면")
-        class Context_with_not_exist_postId{
+        class Context_with_not_exist_postId {
+
             @Test
             @DisplayName("게시물을 찾을 수 없다는 예외를 던진다")
-            public void it_throw_postNotFoundException(){
+            public void it_throw_postNotFoundException() {
                 assertThatThrownBy(() -> postService.update(1111L, updateData))
                         .isInstanceOf(PostNotFoundException.class);
             }
@@ -145,12 +194,12 @@ class PostServiceTest {
 
         @Nested
         @DisplayName("게시물 생성 저자와 다른 인증정보가 주어진다면")
-        class Context_with_wrong_authentication{
+        class Context_with_wrong_authentication {
             Post post;
             PostRequestData updateData;
 
             @BeforeEach
-            void setUp(){
+            void setUp() {
                 User author = prepareUser("other");
                 updateData = prepareRequestData("_NEW");
                 post = postRepository.save(prepareRequestData("").createEntity(author));
@@ -159,22 +208,62 @@ class PostServiceTest {
 
             @Test
             @DisplayName("게시물 수정권한이 없다는 예외를 던진다.")
-            public void it_throw_accessForbiddenModifyPost(){
+            public void it_throw_accessForbiddenModifyPost() {
                 assertThatThrownBy(() -> postService.update(post.getId(), updateData))
                         .isInstanceOf(ForbiddenPostException.class)
                         .hasMessageContaining(post.getId().toString());
             }
         }
-    }
 
+        @Nested
+        @DisplayName("존재하지 않는 categoryId가 주어진다면")
+        class Context_with_non_exist_categoryId {
+            Post post;
+
+            @BeforeEach
+            void setUp() {
+                post = postService.save(prepareRequestData(""));
+                ReflectionTestUtils.setField(updateData, "categoryId", -1L);
+            }
+
+            @Test
+            @DisplayName("카테고리를 찾을 수 없다는 예외를 던진다.")
+            void it_throw_categoryNotFoundException() {
+                assertThatThrownBy(() -> postService.update(post.getId(), updateData))
+                        .isInstanceOf(CategoryNotFoundException.class);
+            }
+
+        }
+
+        @Nested
+        @DisplayName("주어진 categoryId의 userId가 인증정보와 다르다면")
+        class Context_with_diffren_userId {
+            Post post;
+
+            @BeforeEach
+            void setUp() {
+                User othreUser = prepareUser("");
+                Category otherCategory = prepareCategory("_other", othreUser);
+                ReflectionTestUtils.setField(updateData, "categoryId", otherCategory.getId());
+                post = postService.save(prepareRequestData(""));
+            }
+
+            @Test
+            @DisplayName("카테고리를 찾을 수 없다는 예외를 던진다.")
+            void it_throw_categoryNotFoundExceptoin() {
+                assertThatThrownBy(() -> postService.update(post.getId(), updateData))
+                        .isInstanceOf(CategoryNotFoundException.class);
+            }
+        }
+    }
     @Nested
     @DisplayName("게시물 상세 조회는")
     class Describe_find{
+
         @Nested
         @DisplayName("존재하는 게시물 id가 주어지면")
         class Context_with_exist_postId{
             Post post;
-
             @BeforeEach
             void setUp() throws Exception {
                 post = postService.save(prepareRequestData(""));
@@ -189,11 +278,12 @@ class PostServiceTest {
                 assertThat(findPost.getContent()).isEqualTo(post.getContent());
                 assertThat(findPost.getOpenType()).isEqualTo(post.getOpenType());
             }
-        }
 
+        }
         @Nested
         @DisplayName("존재하지 않는 게시물 id가 주어지면")
         class Context_with_non_exsit_postId{
+
             @Test
             @DisplayName("게시물을 찾을 수 없다는 예외를 던진다")
             void it_throw_postNotFoundException(){
@@ -202,18 +292,18 @@ class PostServiceTest {
             }
         }
     }
-
     @Nested
     @DisplayName("게시물 목록 조회는")
     class Descrive_findAll{
+
         int page = 0;
         int pageSize = 10;
         int size = 30;
-
         Pageable pageable;
 
         @BeforeEach
         public void setUp(){
+            postRepository.deleteAll();
             pageable = PageRequest.of(page,pageSize);
 
             User author = prepareUser("");
@@ -226,6 +316,7 @@ class PostServiceTest {
         @Nested
         @DisplayName("조회조건을 입력받으면")
         class Context_with_search_condition{
+
             @Test
             @DisplayName("조회 결과를 반환한다.")
             public void it_return_paging_posts(){
@@ -236,18 +327,17 @@ class PostServiceTest {
             }
         }
     }
-
     @Nested
     @DisplayName("게시물 삭제는")
     class Descrive_delete{
+
         @Nested
         @DisplayName("등록된 게시물 id가 주어진다면")
         class context_with_exist_postId{
             Post posts;
             @BeforeEach
             public void setUp(){
-                User author = userService.join(prepareUserRegistData(""));
-                posts = postRepository.save(prepareRequestData("").createEntity(author));
+                posts = postRepository.save(prepareRequestData("").createEntity(user));
             }
             @Test
             @DisplayName("게시물을 삭제한다.")
@@ -258,10 +348,10 @@ class PostServiceTest {
                 assertThat(optionalPosts).isEmpty();
             }
         }
-
         @Nested
         @DisplayName("등록되지 않은 게시물 id가 주어진다면")
         class Context_with_non_exise_postId{
+
             @Test
             @DisplayName("게시물을 찾을 수 없다는 예외를 던진다")
             public void it_throw_postNotFoundException(){
@@ -269,12 +359,11 @@ class PostServiceTest {
                         .isInstanceOf(PostNotFoundException.class);
             }
         }
-
         @Nested
         @DisplayName("게시물 생성 저자와 다른 인증정보가 주어진다면")
         class Context_with_wrong_authentication{
-            Post post;
 
+            Post post;
             @BeforeEach
             void setUp(){
                 User author = prepareUser("other");
@@ -289,12 +378,20 @@ class PostServiceTest {
                         .isInstanceOf(ForbiddenPostException.class)
                         .hasMessageContaining(post.getId().toString());
             }
+
         }
 
     }
-
     public User prepareUser(String suffix){
         return userService.join(prepareUserRegistData(suffix));
+    }
+
+    public Category prepareCategory(String suffiex, User user){
+        Category category = CategoryRequestData.builder()
+                .title("category 제목" +suffiex)
+                .build().toEntity(user.getId());
+
+        return categoryRespository.save(category);
     }
 
     public UserRegistData prepareUserRegistData(String suffix){
@@ -312,6 +409,14 @@ class PostServiceTest {
                 .title(TITLE + suffix)
                 .openType(PostOpenType.ALL)
                 .content(CONTENT + suffix)
+                .categoryId(category.getId())
                 .build();
+    }
+
+    private User setAuthentication(String prefix) {
+        User user = prepareUser(prefix);
+        String accessToken = webTokenUtil.encode(user.getId());
+        SecurityContextHolder.getContext().setAuthentication(new UserAuthentication(UserRole.Authorized, accessToken, user.getId()));
+        return user;
     }
 }

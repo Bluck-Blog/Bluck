@@ -5,10 +5,7 @@ import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.comments.Comments;
 import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.users.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -33,6 +30,7 @@ public class Post extends BaseEntity {
     @Lob
     private String content;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
