@@ -1,5 +1,6 @@
 package com.choo.blog.service.posts;
 
+import com.choo.blog.common.UserProperties;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
@@ -31,6 +32,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
@@ -42,17 +44,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @DisplayName("게시물 관리")
+@ActiveProfiles("test")
 @WithMockCustomUser
 class PostServiceTest {
     private static final String TITLE = "게시물 제목";
     private static final String CONTENT = "게시물 내용";
-
-    private static final String EMAIL = "choo@email.com";
-    private static final String PASSWORD = "password";
-    private static final String NICKNAME = "choo";
-    private static final LocalDate BIRTH_DATE = LocalDate.of(1995,11,18);
-    private static final String DESCRIPTION = "description";
-
 
     @Autowired
     PostService postService;
@@ -68,6 +64,9 @@ class PostServiceTest {
 
     @Autowired
     CategoryRespository categoryRespository;
+
+    @Autowired
+    UserProperties userProperties;
 
     @Autowired
     WebTokenUtil webTokenUtil;
@@ -383,7 +382,7 @@ class PostServiceTest {
 
     }
     public User prepareUser(String suffix){
-        return userService.join(prepareUserRegistData(suffix));
+        return userService.join(userProperties.prepareUserRegistData(suffix));
     }
 
     public Category prepareCategory(String suffiex, User user){
@@ -392,16 +391,6 @@ class PostServiceTest {
                 .build().toEntity(user.getId());
 
         return categoryRespository.save(category);
-    }
-
-    public UserRegistData prepareUserRegistData(String suffix){
-        return UserRegistData.builder()
-                .email(EMAIL)
-                .password(PASSWORD)
-                .nickname(NICKNAME)
-                .birthdate(BIRTH_DATE)
-                .description(DESCRIPTION)
-                .build();
     }
 
     private PostRequestData prepareRequestData(String suffix){

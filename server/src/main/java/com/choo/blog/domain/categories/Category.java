@@ -35,6 +35,6 @@ public class Category {
     private List<Post> postList;
 
     public boolean hasModifyPermission(Long userId){
-        return userId.equals(userId);
+        return this.userId.equals(userId);
     }
 }

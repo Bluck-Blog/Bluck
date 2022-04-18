@@ -1,5 +1,6 @@
 package com.choo.blog.domain.users;
 
+import com.choo.blog.common.UserProperties;
 import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,22 +10,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @DisplayName("회원 관리")
 class UserServiceTest {
-    private static final String EMAIL = "choo@email.com";
-    private static final String PASSWORD = "password";
-    private static final String NICKNAME = "choo";
-    private static final LocalDate BIRTH_DATE = LocalDate.of(1995,11,18);
-    private static final String DESCRIPTION = "description";
-
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserProperties userProperties;
 
     @Nested
     @DisplayName("회원 가입은")
@@ -39,7 +38,7 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp(){
-                registData = prepareUserRegistData("");
+                registData = userProperties.prepareUserRegistData("");
             }
 
             @Test
@@ -54,15 +53,5 @@ class UserServiceTest {
                 assertThat(passwordEncoder.matches(registData.getPassword(), user.getPassword())).isTrue();
             }
         }
-    }
-
-    public UserRegistData prepareUserRegistData(String suffix){
-        return UserRegistData.builder()
-                .email(EMAIL)
-                .password(PASSWORD)
-                .nickname(NICKNAME)
-                .birthdate(BIRTH_DATE)
-                .description(DESCRIPTION)
-                .build();
     }
 }
