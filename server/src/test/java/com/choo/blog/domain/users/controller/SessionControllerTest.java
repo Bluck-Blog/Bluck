@@ -1,26 +1,23 @@
 package com.choo.blog.domain.users.controller;
 
+import com.choo.blog.common.UserProperties;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.dto.UserLoginData;
-import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.util.WebTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.time.LocalDate;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,12 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("세션 관리")
+@ActiveProfiles("test")
 class SessionControllerTest {
-    private static final String EMAIL = "choo@email.com";
-    private static final String PASSWORD = "choo@1234";
-    private static final String NICKNAME = "choo";
-    private static final LocalDate BIRTH_DATE = LocalDate.of(1995,11,18);
-    private static final String DESCRIPTION = "description";
+    @Autowired
+    UserProperties userProperties;
 
     @Autowired
     MockMvc mockMvc;
@@ -57,6 +52,11 @@ class SessionControllerTest {
             user = prepareUser("");
         }
 
+        @AfterEach
+        void cleanUp() throws Exception {
+            userRepository.deleteAll();;
+        }
+
         @Nested
         @DisplayName("유효한 로그인 정보가 주어지면")
         class Context_with_loginData{
@@ -65,8 +65,8 @@ class SessionControllerTest {
             @BeforeEach
             void setUp(){
                 loginData = UserLoginData.builder()
-                        .email(EMAIL)
-                        .password(PASSWORD)
+                        .email(userProperties.getEmail())
+                        .password(userProperties.getPassword())
                         .build();
             }
 
@@ -90,8 +90,8 @@ class SessionControllerTest {
             @BeforeEach
             void setUp(){
                 invalidEmailLoginData = UserLoginData.builder()
-                        .email(EMAIL + "wrong")
-                        .password(PASSWORD)
+                        .email(userProperties.getEmail() + "wrong")
+                        .password(userProperties.getPassword())
                         .build();
             }
             @Test
@@ -114,8 +114,8 @@ class SessionControllerTest {
             @BeforeEach
             void setUp(){
                 wrongPasswordLoginData = UserLoginData.builder()
-                        .email(EMAIL)
-                        .password(PASSWORD + "wrong")
+                        .email(user.getEmail())
+                        .password(user.getPassword() + "wrong")
                         .build();
             }
             @Test
@@ -149,19 +149,9 @@ class SessionControllerTest {
         MvcResult result = mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaTypes.HAL_JSON)
-                .content(objectMapper.writeValueAsString(prepareUserRegistData(suffix)))).andReturn();
+                .content(objectMapper.writeValueAsString(userProperties.prepareUserRegistData(suffix)))).andReturn();
         String content = result.getResponse().getContentAsString();
         System.out.println(content);
         return objectMapper.readValue(content, User.class);
-    }
-
-    public UserRegistData prepareUserRegistData(String suffix){
-        return UserRegistData.builder()
-                .email(EMAIL)
-                .password(PASSWORD)
-                .nickname(NICKNAME)
-                .birthdate(BIRTH_DATE)
-                .description(DESCRIPTION)
-                .build();
     }
 }

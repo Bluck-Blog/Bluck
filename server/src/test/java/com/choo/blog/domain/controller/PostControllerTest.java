@@ -1,6 +1,10 @@
 package com.choo.blog.domain.controller;
 
 import com.choo.blog.common.RestDocsConfiguration;
+import com.choo.blog.common.UserProperties;
+import com.choo.blog.domain.categories.Category;
+import com.choo.blog.domain.categories.dto.CategoryRequestData;
+import com.choo.blog.domain.categories.repository.CategoryRespository;
 import com.choo.blog.domain.posts.Post;
 import com.choo.blog.domain.posts.PostOpenType;
 import com.choo.blog.domain.posts.dto.PostRequestData;
@@ -8,7 +12,6 @@ import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.dto.SessionResponseData;
 import com.choo.blog.domain.users.dto.UserLoginData;
-import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
@@ -23,10 +26,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import java.time.LocalDate;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
@@ -40,19 +42,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @Import(RestDocsConfiguration.class)
+@ActiveProfiles("test")
 @DisplayName("게시물 관리")
 class PostControllerTest {
     private static final String TITLE = "게시물 제목";
     private static final String CONTENT = "게시물 내용";
 
-    private static final String EMAIL = "choo@email.com";
-    private static final String PASSWORD = "choo@1234";
-    private static final String NICKNAME = "choo";
-    private static final LocalDate BIRTH_DATE = LocalDate.of(1995,11,18);
-    private static final String DESCRIPTION = "description";
-
     private User user;
     private SessionResponseData session;
+    private Category category;
+
+    @Autowired
+    UserProperties userProperties;
 
     @Autowired
     MockMvc mockMvc;
@@ -66,10 +67,14 @@ class PostControllerTest {
     @Autowired
     PostRepository postRepository;
 
+    @Autowired
+    CategoryRespository categoryRespository;
+
     @BeforeEach
     void setUp() throws Exception {
         user = prepareUser("");
         session = login(prepareLoginData());
+        category = prepareCategory("");
     }
 
     @AfterEach
@@ -544,6 +549,13 @@ class PostControllerTest {
         return objectMapper.readValue(content, SessionResponseData.class);
     }
 
+    private Category prepareCategory(String suffix){
+        CategoryRequestData saveData = CategoryRequestData.builder()
+                .title(TITLE + suffix)
+                .build();
+        return categoryRespository.save(saveData.toEntity(user.getId()));
+    }
+
     private PostRequestData prepareRequestData(String suffix){
         return PostRequestData.builder()
                 .title(TITLE + suffix)
@@ -554,8 +566,8 @@ class PostControllerTest {
 
     private UserLoginData prepareLoginData(){
         return UserLoginData.builder()
-                .email(EMAIL)
-                .password(PASSWORD)
+                .email(userProperties.getEmail())
+                .password(userProperties.getPassword())
                 .build();
     }
 
@@ -563,18 +575,8 @@ class PostControllerTest {
         MvcResult result = mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaTypes.HAL_JSON)
-                .content(objectMapper.writeValueAsString(prepareUserRegistData(suffix)))).andReturn();
+                .content(objectMapper.writeValueAsString(userProperties.prepareUserRegistData(suffix)))).andReturn();
         String content = result.getResponse().getContentAsString();
         return objectMapper.readValue(content, User.class);
-    }
-
-    public UserRegistData prepareUserRegistData(String suffix){
-        return UserRegistData.builder()
-                .email(EMAIL)
-                .password(PASSWORD)
-                .nickname(NICKNAME)
-                .birthdate(BIRTH_DATE)
-                .description(DESCRIPTION)
-                .build();
     }
 }
