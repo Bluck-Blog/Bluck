@@ -1,8 +1,8 @@
 package com.choo.blog.domain.users.service;
 
+import com.choo.blog.common.UserProperties;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.dto.UserLoginData;
-import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.exceptions.InvalidTokenException;
 import com.choo.blog.exceptions.LoginFailException;
@@ -11,23 +11,20 @@ import com.choo.blog.util.WebTokenUtil;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.time.LocalDate;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("인증관리")
+@ActiveProfiles("test")
 @SpringBootTest
 class AuthenticationServiceTest {
-    private static final String EMAIL = "choo@email.com";
-    private static final String PASSWORD = "choo@1234";
-    private static final String NICKNAME = "choo";
-    private static final LocalDate BIRTH_DATE = LocalDate.of(1995,11,18);
-    private static final String DESCRIPTION = "description";
-
     @Autowired
     private UserService userService;
+
+    @Autowired
+    UserProperties userProperties;
 
     @Autowired
     private WebTokenUtil webTokenUtil;
@@ -42,7 +39,7 @@ class AuthenticationServiceTest {
 
     @BeforeEach
     public void setUp(){
-        user = userService.join(prepareUserRegistData(""));
+        user = userService.join(userProperties.prepareUserRegistData(""));
     }
 
     @AfterEach
@@ -61,8 +58,8 @@ class AuthenticationServiceTest {
             @BeforeEach
             public void setUp(){
                 userLoginData = UserLoginData.builder()
-                        .email(EMAIL)
-                        .password(PASSWORD)
+                        .email(userProperties.getEmail())
+                        .password(userProperties.getPassword())
                         .build();
             }
             @Test
@@ -81,8 +78,8 @@ class AuthenticationServiceTest {
             @BeforeEach
             public void setUp(){
                 userLoginData = UserLoginData.builder()
-                        .email(EMAIL + "wrong")
-                        .password(PASSWORD)
+                        .email(userProperties.getEmail() + "wrong")
+                        .password(userProperties.getPassword())
                         .build();
             }
             @Test
@@ -100,8 +97,8 @@ class AuthenticationServiceTest {
             @BeforeEach
             public void setUp(){
                 userLoginData = UserLoginData.builder()
-                        .email(EMAIL)
-                        .password(PASSWORD + "wrong")
+                        .email(userProperties.getEmail())
+                        .password(userProperties.getPassword() + "wrong")
                         .build();
             }
             @Test
@@ -153,15 +150,5 @@ class AuthenticationServiceTest {
                         .hasMessageContaining(invalidToken);
             }
         }
-    }
-
-    public UserRegistData prepareUserRegistData(String suffix){
-        return UserRegistData.builder()
-                .email(EMAIL)
-                .password(PASSWORD)
-                .nickname(NICKNAME)
-                .birthdate(BIRTH_DATE)
-                .description(DESCRIPTION)
-                .build();
     }
 }

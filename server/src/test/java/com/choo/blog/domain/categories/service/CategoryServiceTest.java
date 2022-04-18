@@ -1,11 +1,11 @@
 package com.choo.blog.domain.categories.service;
 
+import com.choo.blog.common.UserProperties;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.UserRole;
-import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.service.UserService;
 import com.choo.blog.exceptions.CategoryNotFoundException;
 import com.choo.blog.exceptions.DuplicateTitleException;
@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,15 +29,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @DisplayName("카테고리 관리")
 class CategoryServiceTest {
     private static final String TITLE = "카테고리 제목";
-
-    private static final String EMAIL = "choo@email.com";
-    private static final String PASSWORD = "password";
-    private static final String NICKNAME = "choo";
-    private static final LocalDate BIRTH_DATE = LocalDate.of(1995,11,18);
-    private static final String DESCRIPTION = "description";
 
     @Autowired
     private CategoryService categoryService;
@@ -46,6 +42,8 @@ class CategoryServiceTest {
     private WebTokenUtil webTokenUtil;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserProperties userProperties;
 
     private User user;
 
@@ -163,7 +161,8 @@ class CategoryServiceTest {
             Category category;
             @BeforeEach
             void setUp(){
-                category = categoryRespository.save(prepareRequestData("").toEntity(user.getId()));
+                User otherUser = prepareUser("other");
+                category = categoryRespository.save(prepareRequestData("").toEntity(otherUser.getId()));
             }
             @Test
             @DisplayName("카테고리를 찾을 수 없다는 예외를 던진다.")
@@ -315,16 +314,6 @@ class CategoryServiceTest {
     }
 
     private User prepareUser(String suffix){
-        return userService.join(prepareUserRegistData(suffix));
-    }
-
-    public UserRegistData prepareUserRegistData(String suffix){
-        return UserRegistData.builder()
-                .email(EMAIL + suffix)
-                .password(PASSWORD)
-                .nickname(NICKNAME + suffix)
-                .birthdate(BIRTH_DATE)
-                .description(DESCRIPTION + suffix)
-                .build();
+        return userService.join(userProperties.prepareUserRegistData(suffix));
     }
 }
