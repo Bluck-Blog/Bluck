@@ -26,7 +26,7 @@ export async function getServerSideProps() {
     {
       id: 1,
       title: "제목을 적어주세용",
-      body: "내용입니다. 쏼라쏼라 쏼라쏼라쏼라",
+      body: "내용입니다. 쏼라쏼라 쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라",
       date: "2022.03.08",
       autor: "발빠른토깽이",
       commend: 20,
@@ -38,7 +38,7 @@ export async function getServerSideProps() {
     {
       id: 2,
       title: "제목을 적어주세용",
-      body: "내용입니다. 쏼라쏼라 쏼라쏼라쏼라",
+      body: "내용입니다. 쏼라쏼라 쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라",
       date: "2022.03.08",
       autor: "발빠른토깽이",
       commend: 20,
@@ -50,7 +50,7 @@ export async function getServerSideProps() {
     {
       id: 3,
       title: "제목을 적어주세용",
-      body: "내용입니다. 쏼라쏼라 쏼라쏼라쏼라",
+      body: "내용입니다. 쏼라쏼라 쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라",
       date: "2022.03.08",
       autor: "발빠른토깽이",
       commend: 20,
@@ -62,7 +62,7 @@ export async function getServerSideProps() {
     {
       id: 4,
       title: "제목을 적어주세용",
-      body: "내용입니다. 쏼라쏼라 쏼라쏼라쏼라",
+      body: "내용입니다. 쏼라쏼라 쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라",
       date: "2022.03.08",
       autor: "발빠른토깽이",
       commend: 20,
@@ -74,7 +74,7 @@ export async function getServerSideProps() {
     {
       id: 5,
       title: "제목을 적어주세용",
-      body: "내용입니다. 쏼라쏼라 쏼라쏼라쏼라",
+      body: "내용입니다. 쏼라쏼라 쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라쏼라",
       date: "2022.03.08",
       autor: "발빠른토깽이",
       commend: 20,

@@ -32,12 +32,12 @@ export default function Nav() {
 
 const Login = styled.span`
   cursor: pointer;
-  color: #1f295a;
+  color: ${(props) => props.theme.textColor};
 `;
 
 const LogOut = styled.span`
   cursor: pointer;
-  color: #1f295a;
+  color: ${(props) => props.theme.textColor};
 `;
 
 const LogBox = styled.div`
@@ -59,7 +59,7 @@ const Navi = styled.nav`
 `;
 
 const Logo = styled.a`
-  color: #1f295a;
+  color: ${(props) => props.theme.textColor};
   font-weight: bold;
   font-size: 42px;
   margin: 20px 0 30px 0;
@@ -68,7 +68,7 @@ const Logo = styled.a`
 const ProfilBox = styled.figure`
   width: 180px;
   height: 180px;
-  background: #1f295a;
+  background: ${(props) => props.theme.textColor};
   border-radius: 100px;
   overflow: hidden;
   display: flex;
@@ -78,7 +78,7 @@ const ProfilBox = styled.figure`
 `;
 
 const Name = styled.span`
-  color: #1f295a;
+  color: ${(props) => props.theme.textColor};
   font-weight: bold;
   font-size: 28px;
 `;

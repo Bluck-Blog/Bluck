@@ -38,7 +38,7 @@ export default function Notice() {
 const NoticeWrapper = styled.div`
   margin-top: 40px;
   padding: 15px 10px;
-  background-color: ${(props) => props.theme.ctBgColor};
+  background-color: ${(props) => props.theme.noticeColor};
   width: 12vw;
   height: 30vh;
   border-radius: 20px;

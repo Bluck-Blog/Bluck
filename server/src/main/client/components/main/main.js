@@ -32,5 +32,5 @@ const Wrapper = styled.section`
 const RightSection = styled.div`
   width: 50%;
   height: 100%;
-  background: yellow;
+  /* background: yellow; */
 `;

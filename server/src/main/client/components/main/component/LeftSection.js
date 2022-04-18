@@ -26,7 +26,7 @@ export default function LeftSection({ content }) {
   useEffect(() => {
     setContentList([...content]);
   }, []);
-
+  console.log(contentList);
   return (
     <Section>
       <Title>HOME</Title>
@@ -35,9 +35,8 @@ export default function LeftSection({ content }) {
         <SelectBox list={filterList2} />
       </Menu>
       <Content>
-        {/* {contentList.length > 0 &&
-          contentList.map((item) => <div>{item.title}</div>)} */}
-        <ContentCard />
+        {contentList.length > 0 &&
+          contentList.map((item) => <ContentCard item={item} />)}
       </Content>
     </Section>
   );

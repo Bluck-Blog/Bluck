@@ -1,5 +1,7 @@
 export const lightTheme = {
-  ctColor: "white",
+  navText: "#1f295a",
+  navBgColor: "#cfd1dd",
+  noticeColor: "white",
   textColor: "#1f295a",
   bgColor: "#cfd1dd",
   ctBgColor: "white",
@@ -7,9 +9,11 @@ export const lightTheme = {
 };
 
 export const darkTheme = {
-  ctColor: "white",
+  navText: "white",
+  navBgColor: "#1f295a",
+  noticeColor: "#cfd1dd",
   textColor: "white",
-  bgColor: "#cfd1dd",
+  bgColor: "#1f295a",
   ctBgColor: "#1f295a",
   menuBgColor: "#4c547b",
 };
