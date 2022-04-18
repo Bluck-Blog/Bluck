@@ -73,13 +73,14 @@ class PostControllerTest {
     @BeforeEach
     void setUp() throws Exception {
         user = prepareUser("");
-        session = login(prepareLoginData());
         category = prepareCategory("");
+        session = login(prepareLoginData());
     }
 
     @AfterEach
     void cleanUp(){
         postRepository.deleteAll();
+        categoryRespository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -127,7 +128,8 @@ class PostControllerTest {
                                 requestFields(
                                         fieldWithPath("title").description("게시물 제목"),
                                         fieldWithPath("content").description("게시물 내용"),
-                                        fieldWithPath("openType").description("게시물 공개 범위")
+                                        fieldWithPath("openType").description("게시물 공개 범위"),
+                                        fieldWithPath("categoryId").description("카테고리 id")
                                 ),
                                 responseHeaders(
                                         headerWithName(HttpHeaders.LOCATION).description("Location header"),
@@ -138,7 +140,7 @@ class PostControllerTest {
                                         fieldWithPath("author").description("게시물 작성자"),
                                         fieldWithPath("title").description("게시물 제목"),
                                         fieldWithPath("content").description("게시물 내용"),
-                                        fieldWithPath("category").description("게시물 카테고리"),
+                                        //fieldWithPath("category").description("게시물 카테고리"),
                                         fieldWithPath("likes").description("게시물 좋아요 갯수"),
                                         fieldWithPath("dislikes").description("게시물 싫어요 갯수"),
                                         fieldWithPath("view").description("게시물 조회 수"),
@@ -561,6 +563,7 @@ class PostControllerTest {
                 .title(TITLE + suffix)
                 .content(CONTENT + suffix)
                 .openType(PostOpenType.ALL)
+                .categoryId(category.getId())
                 .build();
     }
 
