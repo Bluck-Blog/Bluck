@@ -38,7 +38,8 @@ public class ErrorResponse {
             customFieldErrors.add(new CustomFieldError(
                     error.getObjectName(),
                     error.getCode(),
-                    error.getRejectedValue()
+                    error.getRejectedValue(),
+                    error.getField()
             ));
         });
     }
@@ -48,10 +49,12 @@ public class ErrorResponse {
         private String objectName;
         private Object code;
         private String rejectedValue;
+        private String field;
 
-        public CustomFieldError(String objectName, String code, Object rejectedValue){
+        public CustomFieldError(String objectName, String code, Object rejectedValue, String field){
             this.objectName = objectName;
             this.code = code;
+            this.field = field;
             if(rejectedValue != null)
                 this.rejectedValue = rejectedValue.toString();
         }
