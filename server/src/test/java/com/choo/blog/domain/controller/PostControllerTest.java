@@ -1,8 +1,6 @@
 package com.choo.blog.domain.controller;
 
 import com.choo.blog.common.BaseControllerTest;
-import com.choo.blog.common.RestDocsConfiguration;
-import com.choo.blog.common.UserProperties;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
@@ -12,23 +10,15 @@ import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.dto.SessionResponseData;
-import com.choo.blog.domain.users.dto.UserLoginData;
 import com.choo.blog.domain.users.repository.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -45,7 +35,6 @@ class PostControllerTest extends BaseControllerTest {
     private static final String CONTENT = "게시물 내용";
 
     private User user;
-    private SessionResponseData session;
     private Category category;
 
     @Autowired
@@ -528,16 +517,6 @@ class PostControllerTest extends BaseControllerTest {
         return objectMapper.readValue(content, Post.class);
     }
 
-    private SessionResponseData login(UserLoginData loginData) throws Exception{
-        MvcResult result = mockMvc.perform(post("/session")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaTypes.HAL_JSON)
-                .content(objectMapper.writeValueAsString(loginData))).andReturn();
-        String content = result.getResponse().getContentAsString();
-        System.out.println(content);
-        return objectMapper.readValue(content, SessionResponseData.class);
-    }
-
     private Category prepareCategory(String suffix){
         CategoryRequestData saveData = CategoryRequestData.builder()
                 .title(TITLE + suffix)
@@ -551,13 +530,6 @@ class PostControllerTest extends BaseControllerTest {
                 .content(CONTENT + suffix)
                 .openType(PostOpenType.ALL)
                 .categoryId(category.getId())
-                .build();
-    }
-
-    private UserLoginData prepareLoginData(){
-        return UserLoginData.builder()
-                .email(userProperties.getEmail())
-                .password(userProperties.getPassword())
                 .build();
     }
 }

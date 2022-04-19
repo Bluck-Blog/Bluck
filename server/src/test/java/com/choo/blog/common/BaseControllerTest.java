@@ -1,6 +1,8 @@
 package com.choo.blog.common;
 
 import com.choo.blog.domain.users.User;
+import com.choo.blog.domain.users.dto.SessionResponseData;
+import com.choo.blog.domain.users.dto.UserLoginData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,8 @@ public class BaseControllerTest {
     @Autowired
     protected UserProperties userProperties;
 
+    protected SessionResponseData session;
+
     protected User prepareUser(String suffix) throws Exception{
         MvcResult result = mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -40,5 +44,22 @@ public class BaseControllerTest {
         String content = result.getResponse().getContentAsString();
         System.out.println(content);
         return objectMapper.readValue(content, User.class);
+    }
+
+    protected SessionResponseData login(UserLoginData loginData) throws Exception{
+        MvcResult result = mockMvc.perform(post("/session")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaTypes.HAL_JSON)
+                .content(objectMapper.writeValueAsString(loginData))).andReturn();
+        String content = result.getResponse().getContentAsString();
+        System.out.println(content);
+        return objectMapper.readValue(content, SessionResponseData.class);
+    }
+
+    protected UserLoginData prepareLoginData(){
+        return UserLoginData.builder()
+                .email(userProperties.getEmail())
+                .password(userProperties.getPassword())
+                .build();
     }
 }
