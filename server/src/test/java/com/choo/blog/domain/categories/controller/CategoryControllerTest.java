@@ -38,6 +38,7 @@ class CategoryControllerTest extends BaseControllerTest {
 
     @AfterEach
     void cleanUp() throws Exception{
+        categoryRespository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -58,6 +59,7 @@ class CategoryControllerTest extends BaseControllerTest {
             @Test
             @DisplayName("카테고리를 생성하고 생성된 카테고리를 반환한다.")
             void it_return_new_category() throws Exception{
+                System.out.println(saveData.getTitle());
                 mockMvc.perform(post("/api/category")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaTypes.HAL_JSON)
