@@ -1,46 +1,21 @@
 package com.choo.blog.domain.users;
 
-import com.choo.blog.common.UserProperties;
+import com.choo.blog.common.BaseControllerTest;
 import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.repository.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-
-import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
 @DisplayName("회원 관리")
-@ActiveProfiles("test")
-class UserControllerTest {
-//    private static final String EMAIL = "choo@email.com";
-//    private static final String PASSWORD = "choo@1234";
-//    private static final String NICKNAME = "choo";
-//    private static final LocalDate BIRTH_DATE = LocalDate.of(1995,11,18);
-//    private static final String DESCRIPTION = "description";
-    @Autowired
-    private UserProperties userProperties;
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
+class UserControllerTest extends BaseControllerTest {
     @Autowired
     private UserRepository userRepository;
 
@@ -125,15 +100,5 @@ class UserControllerTest {
                         .andExpect(jsonPath("errors[0].rejectedValue").hasJsonPath());
             }
         }
-    }
-
-    private User prepareUser(String suffix) throws Exception{
-        MvcResult result = mockMvc.perform(post("/api/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaTypes.HAL_JSON)
-                .content(objectMapper.writeValueAsString(userProperties.prepareUserRegistData(suffix)))).andReturn();
-        String content = result.getResponse().getContentAsString();
-        System.out.println(content);
-        return objectMapper.readValue(content, User.class);
     }
 }

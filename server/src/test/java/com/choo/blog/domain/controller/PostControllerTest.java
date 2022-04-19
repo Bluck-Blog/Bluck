@@ -1,5 +1,6 @@
 package com.choo.blog.domain.controller;
 
+import com.choo.blog.common.BaseControllerTest;
 import com.choo.blog.common.RestDocsConfiguration;
 import com.choo.blog.common.UserProperties;
 import com.choo.blog.domain.categories.Category;
@@ -38,28 +39,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs
-@Import(RestDocsConfiguration.class)
-@ActiveProfiles("test")
 @DisplayName("게시물 관리")
-class PostControllerTest {
+class PostControllerTest extends BaseControllerTest {
     private static final String TITLE = "게시물 제목";
     private static final String CONTENT = "게시물 내용";
 
     private User user;
     private SessionResponseData session;
     private Category category;
-
-    @Autowired
-    UserProperties userProperties;
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Autowired
     UserRepository userRepository;
@@ -572,14 +559,5 @@ class PostControllerTest {
                 .email(userProperties.getEmail())
                 .password(userProperties.getPassword())
                 .build();
-    }
-
-    private User prepareUser(String suffix) throws Exception{
-        MvcResult result = mockMvc.perform(post("/api/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaTypes.HAL_JSON)
-                .content(objectMapper.writeValueAsString(userProperties.prepareUserRegistData(suffix)))).andReturn();
-        String content = result.getResponse().getContentAsString();
-        return objectMapper.readValue(content, User.class);
     }
 }
