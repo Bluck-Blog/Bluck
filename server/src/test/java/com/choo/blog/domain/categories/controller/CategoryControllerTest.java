@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -96,6 +97,63 @@ class CategoryControllerTest extends BaseControllerTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("message").exists())
                         ;
+            }
+        }
+
+        @Nested
+        @DisplayName("인증정보가 없으면")
+        class Context_with_non_accessToken{
+            @Test
+            @DisplayName("unAuhtorize 상태코드를 반환한다.")
+            void it_return_status_unAuthorize() throws Exception{
+                mockMvc.perform(post("/api/category")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaTypes.HAL_JSON)
+                        .content(objectMapper.writeValueAsString(saveData))
+                )
+                        .andDo(print())
+                        .andExpect(status().isUnauthorized());
+            }
+        }
+
+        @Nested
+        @DisplayName("입력값이 비어 있다면")
+        class Context_with_empty_input{
+            @Test
+            @DisplayName("badRequest 상태 코드를 반환한다.")
+            void it_return_status_badRequest() throws Exception{
+                mockMvc.perform(post("/api/category")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaTypes.HAL_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAccessToken())
+                )
+                        .andDo(print())
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("title이 비어있으면")
+        class Context_with_empty_title{
+            @BeforeEach
+            void setUp(){
+                ReflectionTestUtils.setField(saveData, "title", "", String.class);
+            }
+
+            @Test
+            @DisplayName("badRequest 상태 코드를 반환한다.")
+            void it_return_status_badRequest() throws Exception{
+                mockMvc.perform(post("/api/category")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaTypes.HAL_JSON)
+                                .content(objectMapper.writeValueAsString(saveData))
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAccessToken())
+                        )
+                        .andDo(print())
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("message").exists())
+                        .andExpect(jsonPath("errors[0].field").value("title"))
+                ;
             }
         }
     }
