@@ -3,11 +3,11 @@ import styled from "styled-components";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 // components
+import SelectBox from "./component/SelectBox";
+import LeftSection from "./component/LeftSection";
 
 //img
 import Arrow from "../../styles/img/aroow.png";
-import SelectBox from "./component/SelectBox";
-import LeftSection from "./component/LeftSection";
 
 export default function Main({ content }) {
   return (
@@ -21,7 +21,7 @@ export default function Main({ content }) {
 const Wrapper = styled.section`
   width: 84vw;
   height: 88vh;
-  background: white;
+  background: ${(props) => props.theme.noticeColor};
   border-radius: 50px;
   display: flex;
   justify-content: center;

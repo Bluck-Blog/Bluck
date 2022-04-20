@@ -1,13 +1,11 @@
 // lib
-import Head from "next/head";
-import Image from "next/image";
 import styled from "styled-components";
 import Footer from "../components/footer/Footer";
 
 //components
 import Nav from "../components/index/Nav";
 import Main from "../components/main/main";
-import Poster from "../styles/img/profile.png";
+import Poster from "../styles/img/whiteProfile.png";
 
 export default function Home({ content }) {
   return (

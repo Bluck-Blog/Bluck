@@ -55,10 +55,11 @@ const Filter1 = styled.div`
     position: absolute;
     left: 0;
     top: 150%;
-    background: ${(props) => props.theme.textColor};
+    background: #1f295a;
     opacity: 0.8;
     width: 100%;
     border-radius: 10px;
+    z-index: 2;
     li {
       color: white;
       text-align: center;

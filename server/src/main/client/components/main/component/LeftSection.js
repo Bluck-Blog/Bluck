@@ -6,7 +6,6 @@ import SelectBox from "./SelectBox";
 //components
 
 //img
-import Poster from "../../../styles/img/profile.png";
 import ContentCard from "./ContentCard";
 
 export default function LeftSection({ content }) {
@@ -26,7 +25,7 @@ export default function LeftSection({ content }) {
   useEffect(() => {
     setContentList([...content]);
   }, []);
-  console.log(contentList);
+
   return (
     <Section>
       <Title>HOME</Title>
@@ -36,7 +35,7 @@ export default function LeftSection({ content }) {
       </Menu>
       <Content>
         {contentList.length > 0 &&
-          contentList.map((item) => <ContentCard item={item} />)}
+          contentList.map((item) => <ContentCard key={item.id} item={item} />)}
       </Content>
     </Section>
   );
@@ -63,17 +62,18 @@ const Menu = styled.div`
 const Content = styled.div`
   width: 100%;
   margin-top: 10px;
-  height: 600px;
-  overflow-y: scroll;
+  /* height: 600px; */
+  height: 60vh;
+  overflow-y: auto;
   &::-webkit-scrollbar {
     width: 5px;
   }
   &::-webkit-scrollbar-thumb {
     background-color: #aaa;
     background-clip: padding-box;
-    border: 2px solid transparet;
-    border-top-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border: 1px solid transparet;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
   &::-webkit-scrollbar-track {
     /* background-color: grey; */

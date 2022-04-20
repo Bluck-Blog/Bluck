@@ -4,7 +4,7 @@ export const lightTheme = {
   noticeColor: "white",
   textColor: "#1f295a",
   bgColor: "#cfd1dd",
-  ctBgColor: "white",
+  ctBgColor: "#f9f9f9",
   menuBgColor: "#4c547b",
 };
 

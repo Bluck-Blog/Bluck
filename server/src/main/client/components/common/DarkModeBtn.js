@@ -1,21 +1,18 @@
 import styled from "styled-components";
 import Image from "next/image";
 import { useRecoilState } from "recoil";
-import { darkMode } from "../../state/atom";
+import { darkMode, darkModeHandle } from "../../state/atom";
 
 //img
 import Moon from "../../styles/img/moon.png";
+import Sun from "../../styles/img/sun.png";
 
 export default function DarkModeBtn() {
-  const [isDark, setIsDark] = useRecoilState(darkMode);
-
-  const changeDarkMode = () => {
-    setIsDark((prev) => !prev);
-  };
+  const [isDark, setIsDark] = useRecoilState(darkModeHandle);
 
   return (
-    <DarkMode onClick={changeDarkMode}>
-      <Image width={25} height={25} src={Moon} />
+    <DarkMode onClick={() => setIsDark(isDark)}>
+      <Image width={25} height={25} src={isDark ? Sun : Moon} />
       <Dark>다크모드</Dark>
     </DarkMode>
   );
@@ -24,6 +21,7 @@ export default function DarkModeBtn() {
 const Dark = styled.span`
   font-weight: bold;
   font-size: 20px;
+  color: ${(props) => props.theme.navText};
 `;
 
 const DarkMode = styled.button`
@@ -31,7 +29,7 @@ const DarkMode = styled.button`
   height: 6vh;
   margin-top: 10px;
   border-radius: 5vw;
-  border: 4px solid #1f295a;
+  border: 4px solid ${(props) => props.theme.navText};
   display: flex;
   justify-content: space-around;
   align-items: center;

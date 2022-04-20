@@ -2,15 +2,19 @@
 import Image from "next/image";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { useRecoilValue } from "recoil";
 
 //component
 import NoticeItem from "./NoticeItem";
+import { darkMode } from "../../../state/atom";
 
 //img
-import Bell from "../../../styles/img/bell.png";
+import WhiteBell from "../../../styles/img/whiteBell.png";
+import BlackBell from "../../../styles/img/blackBell.png";
 
 export default function Notice() {
   const [noticeList, setNoticeList] = useState([]);
+  const isDark = useRecoilValue(darkMode);
 
   useEffect(() => {
     const list = [
@@ -25,7 +29,7 @@ export default function Notice() {
 
   return (
     <NoticeWrapper>
-      <Image width={30} height={30} src={Bell} />
+      <Image width={30} height={30} src={isDark ? WhiteBell : BlackBell} />
       <List>
         {noticeList.map((item) => (
           <NoticeItem key={item.id} item={item} />

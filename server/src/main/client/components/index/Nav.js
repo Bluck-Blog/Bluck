@@ -2,22 +2,30 @@
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
-
+import { useRecoilValue } from "recoil";
 //components
 import DarkModeBtn from "../common/DarkModeBtn";
 import Notice from "./component/Notice";
+import { darkMode } from "../../state/atom";
 
 //imgs
-import Person from "../../styles/img/profile.png";
+import WhitePerson from "../../styles/img/whiteProfile.png";
+import BlackPerson from "../../styles/img/blackProfile.png";
 
 export default function Nav() {
+  const isDark = useRecoilValue(darkMode);
+
   return (
     <Navi>
       <Link href={"/"}>
         <Logo>BLUCK</Logo>
       </Link>
       <ProfilBox>
-        <Image width={200} height={200} src={Person} />
+        <Image
+          width={160}
+          height={160}
+          src={isDark ? BlackPerson : WhitePerson}
+        />
       </ProfilBox>
       <Name>발빠른토깽이 님</Name>
       <Notice />
