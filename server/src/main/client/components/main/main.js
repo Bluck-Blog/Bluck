@@ -8,12 +8,13 @@ import LeftSection from "./component/LeftSection";
 
 //img
 import Arrow from "../../styles/img/aroow.png";
+import RightSection from "./component/RightSection";
 
 export default function Main({ content }) {
   return (
     <Wrapper>
       <LeftSection content={content} />
-      <RightSection></RightSection>
+      <RightSection />
     </Wrapper>
   );
 }
@@ -27,10 +28,4 @@ const Wrapper = styled.section`
   justify-content: center;
   align-items: center;
   overflow: hidden;
-`;
-
-const RightSection = styled.div`
-  width: 50%;
-  height: 100%;
-  /* background: yellow; */
 `;
