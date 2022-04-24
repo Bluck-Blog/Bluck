@@ -62,7 +62,6 @@ const Menu = styled.div`
 const Content = styled.div`
   width: 100%;
   margin-top: 10px;
-  /* height: 600px; */
   height: 60vh;
   overflow-y: auto;
   &::-webkit-scrollbar {

@@ -1,7 +1,7 @@
 export const lightTheme = {
   navText: "#1f295a",
   navBgColor: "#cfd1dd",
-  noticeColor: "white",
+  noticeColor: "rgba(255, 255, 255, 1)",
   textColor: "#1f295a",
   bgColor: "#cfd1dd",
   ctBgColor: "#f9f9f9",
@@ -11,7 +11,7 @@ export const lightTheme = {
 export const darkTheme = {
   navText: "white",
   navBgColor: "#1f295a",
-  noticeColor: "#cfd1dd",
+  noticeColor: "rgba(255, 255, 255, 0.3)",
   textColor: "white",
   bgColor: "#1f295a",
   ctBgColor: "#1f295a",
