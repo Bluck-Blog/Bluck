@@ -11,6 +11,7 @@ import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.dto.SessionResponseData;
 import com.choo.blog.domain.users.repository.UserRepository;
+import com.choo.blog.util.WebTokenUtil;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,9 @@ class PostControllerTest extends BaseControllerTest {
 
     @Autowired
     CategoryRespository categoryRespository;
+
+    @Autowired
+    WebTokenUtil webTokenUtil;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -92,10 +96,14 @@ class PostControllerTest extends BaseControllerTest {
                         .andExpect(jsonPath("openType").value(saveData.getOpenType().toString()))
                         .andExpect(jsonPath("view").value(0))
                         .andExpect(jsonPath("_links.self").exists())
+                        .andExpect(jsonPath("_links.update-url").exists())
+                        .andExpect(jsonPath("_links.delete-url").exists())
                         .andDo(document(
                                 "create-posts",
                                 links(halLinks(),
-                                        linkWithRel("self").description("Link to self")
+                                        linkWithRel("self").description("Link to self"),
+                                        linkWithRel("update-url").description("Link to update"),
+                                        linkWithRel("delete-url").description("Link to delete")
                                 ),
                                 requestHeaders(
                                         headerWithName(HttpHeaders.ACCEPT).description("accept header"),
@@ -234,7 +242,9 @@ class PostControllerTest extends BaseControllerTest {
                         .andExpect(jsonPath("dislikes").value(post.getDislikes()))
                         .andExpect(jsonPath("openType").value(updateData.getOpenType().toString()))
                         .andExpect(jsonPath("view").value(post.getView()))
-                        .andExpect(jsonPath("_links.self").exists());
+                        .andExpect(jsonPath("_links.self").exists())
+                        .andExpect(jsonPath("_links.update-url").exists())
+                        .andExpect(jsonPath("_links.delete-url").exists());
             }
 
             @Nested
@@ -343,25 +353,24 @@ class PostControllerTest extends BaseControllerTest {
     @Nested
     @DisplayName("게시물 목록 조회는")
     class Descrive_get_posts{
+        int page = 0;
+        int pageSize = 10;
+        int size = 30;
+
+        Pageable pageable;
+
+        @BeforeEach
+        public void setUp() throws Exception{
+            pageable = PageRequest.of(page, pageSize);
+
+            for(int i = 0; i < size; i++){
+                preparePost(i + "");
+            }
+        }
+
         @Nested
         @DisplayName("게시물 조회 조건을 입력받으면")
         class Context_with_search_condition{
-            int page = 0;
-            int pageSize = 10;
-            int size = 30;
-
-
-            Pageable pageable;
-
-            @BeforeEach
-            public void setUp() throws Exception{
-                pageable = PageRequest.of(page, pageSize);
-
-                for(int i = 0; i < size; i++){
-                    preparePost(i + "");
-                }
-            }
-
             @Test
             @DisplayName("조회 결과를 반환한다.")
             public void it_return_paging_posts() throws Exception {
@@ -374,7 +383,37 @@ class PostControllerTest extends BaseControllerTest {
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("page").exists())
                         .andExpect(jsonPath("_links.self").exists())
-                        .andExpect(jsonPath("_embedded.posts[0]._links.self").exists());
+                        .andExpect(jsonPath("_embedded.posts[0]._links.self").exists())
+                        .andExpect(jsonPath("_embedded.posts[0]._links.update-url").exists())
+                        .andExpect(jsonPath("_embedded.posts[0]._links.delete-url").exists());
+            }
+        }
+
+        @Nested
+        @DisplayName("게시물 저자와 다른 인증정보로 요청하면")
+        class Context_with_other_authentication{
+            String accessToken;
+
+            @BeforeEach
+            public void setUp() throws Exception{
+                User other = prepareUser("other");
+                accessToken = webTokenUtil.encode(other.getId());
+            }
+            @Test
+            @DisplayName("update-url과 delete-url을 포함하지 않는다")
+            public void it_return_paging_posts_without_deleteUrl_and_updateUrl() throws Exception{
+                mockMvc.perform(get("/api/posts")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaTypes.HAL_JSON)
+                                .content(objectMapper.writeValueAsString(pageable))
+                                .header(HttpHeaders.AUTHORIZATION,  "Bearer " + accessToken))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("page").exists())
+                        .andExpect(jsonPath("_links.self").exists())
+                        .andExpect(jsonPath("_embedded.posts[0]._links.self").exists())
+                        .andExpect(jsonPath("_embedded.posts[0]._links.update-url").doesNotExist())
+                        .andExpect(jsonPath("_embedded.posts[0]._links.delete-url").doesNotExist());
             }
         }
     }
@@ -382,15 +421,16 @@ class PostControllerTest extends BaseControllerTest {
     @Nested
     @DisplayName("게시물 조회는")
     class Describe_get_post{
+        Post post;
+
+        @BeforeEach
+        public void setUp() throws Exception {
+            post = preparePost("");
+        }
+
         @Nested
         @DisplayName("존재하는 게시물 id가 주어지면")
         class Context_with_exist_postId{
-            Post post;
-
-            @BeforeEach
-            public void setUp() throws Exception {
-                post = preparePost("");
-            }
 
             @Test
             @DisplayName("id에 해당하는 게시물을 반환한다.")
@@ -405,7 +445,37 @@ class PostControllerTest extends BaseControllerTest {
                         .andExpect(jsonPath("content").value(post.getContent()))
                         .andExpect(jsonPath("likes").value(post.getLikes()))
                         .andExpect(jsonPath("dislikes").value(post.getDislikes()))
-                        .andExpect(jsonPath("view").value(post.getView()));
+                        .andExpect(jsonPath("view").value(post.getView()))
+                        .andExpect(jsonPath("_links.update-url").exists())
+                        .andExpect(jsonPath("_links.delete-url").exists());
+            }
+        }
+
+        @Nested
+        @DisplayName("게시물 저자와 다른 인증정보로 요청하면")
+        class Context_with_other_authentication{
+            String accessToken;
+            @BeforeEach
+            public void setUp() throws Exception{
+                User other = prepareUser("other");
+                accessToken = webTokenUtil.encode(other.getId());
+            }
+            @Test
+            @DisplayName("id에 해당하는 게시물을 반환한다.")
+            void it_return_post() throws Exception {
+                mockMvc.perform(get("/api/posts/{id}", post.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaTypes.HAL_JSON)
+                                .header(HttpHeaders.AUTHORIZATION,  "Bearer " + accessToken))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("_links.self").exists())
+                        .andExpect(jsonPath("title").value(post.getTitle()))
+                        .andExpect(jsonPath("content").value(post.getContent()))
+                        .andExpect(jsonPath("likes").value(post.getLikes()))
+                        .andExpect(jsonPath("dislikes").value(post.getDislikes()))
+                        .andExpect(jsonPath("view").value(post.getView()))
+                        .andExpect(jsonPath("_links.update-url").doesNotExist())
+                        .andExpect(jsonPath("_links.delete-url").doesNotExist());
             }
         }
 

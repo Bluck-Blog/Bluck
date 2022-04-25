@@ -39,6 +39,7 @@ public class PostController {
         PostModel postModel = new PostModel(posts);
 
         WebMvcLinkBuilder selfLinkBuilder = linkTo(PostController.class).slash(posts.getId());
+
         URI createdUri = selfLinkBuilder.toUri();
 
         return ResponseEntity.created(createdUri).body(postModel);
