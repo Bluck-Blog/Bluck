@@ -3,6 +3,7 @@ package com.choo.blog.common;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.dto.SessionResponseData;
 import com.choo.blog.domain.users.dto.UserLoginData;
+import com.choo.blog.util.WebTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class BaseControllerTest {
 
     @Autowired
     protected UserProperties userProperties;
+
+    @Autowired
+    protected WebTokenUtil webTokenUtil;
 
     protected SessionResponseData session;
 

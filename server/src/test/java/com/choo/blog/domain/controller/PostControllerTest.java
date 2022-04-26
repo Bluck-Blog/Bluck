@@ -47,9 +47,6 @@ class PostControllerTest extends BaseControllerTest {
     @Autowired
     CategoryRespository categoryRespository;
 
-    @Autowired
-    WebTokenUtil webTokenUtil;
-
     @BeforeEach
     void setUp() throws Exception {
         user = prepareUser("");
