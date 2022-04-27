@@ -70,7 +70,10 @@ class CategoryControllerTest extends BaseControllerTest {
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("id").exists())
                         .andExpect(jsonPath("title").value(saveData.getTitle()))
-                        .andExpect(jsonPath("userId").value(user.getId()));
+                        .andExpect(jsonPath("userId").value(user.getId()))
+                        .andExpect(jsonPath("_links.self").exists())
+                        .andExpect(jsonPath("_links.update-url").exists())
+                        .andExpect(jsonPath("_links.delete-url").exists());
 
             }
         }
@@ -186,7 +189,10 @@ class CategoryControllerTest extends BaseControllerTest {
                         .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("id").exists())
-                        .andExpect(jsonPath("title").value(updateData.getTitle()));
+                        .andExpect(jsonPath("title").value(updateData.getTitle()))
+                        .andExpect(jsonPath("_links.self").exists())
+                        .andExpect(jsonPath("_links.update-url").exists())
+                        .andExpect(jsonPath("_links.delete-url").exists());
             }
         }
 

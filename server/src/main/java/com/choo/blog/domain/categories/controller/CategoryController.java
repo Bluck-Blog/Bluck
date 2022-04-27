@@ -1,8 +1,10 @@
 package com.choo.blog.domain.categories.controller;
 
 import com.choo.blog.domain.categories.Category;
+import com.choo.blog.domain.categories.dto.CategoryModel;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.service.CategoryService;
+import com.choo.blog.domain.posts.dto.PostModel;
 import com.choo.blog.exceptions.InvalidParameterException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
@@ -32,10 +34,12 @@ public class CategoryController{
         }
         Category category = categoryService.save(saveData);
 
+        CategoryModel categoryModel = new CategoryModel(category);
+
         WebMvcLinkBuilder selfLinkBuilder = linkTo(CategoryController.class).slash(category.getId());
         URI creartedUrl = selfLinkBuilder.toUri();
 
-        return ResponseEntity.created(creartedUrl).body(category);
+        return ResponseEntity.created(creartedUrl).body(categoryModel);
     }
 
     @PatchMapping("/{categoryId}")
@@ -48,7 +52,9 @@ public class CategoryController{
         }
         Category category = categoryService.update(categoryId, updateData);
 
-        return ResponseEntity.ok(category);
+        CategoryModel categoryModel = new CategoryModel(category);
+
+        return ResponseEntity.ok(categoryModel);
     }
 
     @DeleteMapping("/{categoryId}")
