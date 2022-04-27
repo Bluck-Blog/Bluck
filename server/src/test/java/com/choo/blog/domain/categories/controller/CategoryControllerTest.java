@@ -4,11 +4,8 @@ import com.choo.blog.common.BaseControllerTest;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
-import com.choo.blog.domain.posts.Post;
 import com.choo.blog.domain.users.User;
-import com.choo.blog.domain.users.dto.SessionResponseData;
 import com.choo.blog.domain.users.repository.UserRepository;
-import com.choo.blog.util.WebTokenUtil;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
@@ -41,7 +38,7 @@ class CategoryControllerTest extends BaseControllerTest {
     }
 
     @AfterEach
-    void cleanUp() throws Exception{
+    void cleanUp() {
         categoryRespository.deleteAll();
         userRepository.deleteAll();
     }
@@ -181,12 +178,13 @@ class CategoryControllerTest extends BaseControllerTest {
             @Test
             @DisplayName("카테고리를 수정하고 수정된 카테고리를 반환한다.")
             void it_return_category() throws Exception{
-                mockMvc.perform(patch("/api/category/{}", category.getId())
+                mockMvc.perform(patch("/api/category/{id}", category.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaTypes.HAL_JSON)
                             .content(objectMapper.writeValueAsString(updateData))
                             .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken())
                         )
+                        .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("id").exists())
                         .andExpect(jsonPath("title").value(updateData.getTitle()));
@@ -199,7 +197,7 @@ class CategoryControllerTest extends BaseControllerTest {
             @Test
             @DisplayName("unAuhtorize 상태코드를 반환한다.")
             void it_return_status_unAuthorize() throws Exception{
-                mockMvc.perform(patch("/api/category", category.getId())
+                mockMvc.perform(patch("/api/category/{id}", category.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaTypes.HAL_JSON)
                                 .content(objectMapper.writeValueAsString(updateData))
@@ -215,10 +213,11 @@ class CategoryControllerTest extends BaseControllerTest {
             @Test
             @DisplayName("404 상태코드를 반환한다.")
             void it_return_status_notFound() throws Exception{
-                mockMvc.perform(patch("/api/category", -1)
+                mockMvc.perform(patch("/api/category/{id}", -1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaTypes.HAL_JSON)
                         .content(objectMapper.writeValueAsString(updateData))
+                        .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken())
                 )
                         .andDo(print())
                         .andExpect(status().isNotFound())
@@ -237,7 +236,7 @@ class CategoryControllerTest extends BaseControllerTest {
             @Test
             @DisplayName("badRequest 상태 코드를 반환한다.")
             void it_return_status_badRequest() throws Exception{
-                mockMvc.perform(patch("/api/category", category.getId())
+                mockMvc.perform(patch("/api/category/{id}", category.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaTypes.HAL_JSON)
                                 .content(objectMapper.writeValueAsString(updateData))
@@ -262,7 +261,7 @@ class CategoryControllerTest extends BaseControllerTest {
             @Test
             @DisplayName("badRequest를 반환한다.")
             void it_return_badRequest() throws Exception{
-                mockMvc.perform(patch("/api/category", category.getId())
+                mockMvc.perform(patch("/api/category/{id}", category.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaTypes.HAL_JSON)
                                 .content(objectMapper.writeValueAsString(updateData))
@@ -277,7 +276,7 @@ class CategoryControllerTest extends BaseControllerTest {
 
         @Nested
         @DisplayName("카테고리 생성자와 다른 인증정보가 주어진다면")
-        class Context_with_differnt_autentication(){
+        class Context_with_differnt_autentication{
             String accessToken;
 
             @BeforeEach
@@ -289,14 +288,14 @@ class CategoryControllerTest extends BaseControllerTest {
             @Test
             @DisplayName("403 에러코드를 반환한다,")
             void it_return_status_unAuhorize() throws Exception{
-                mockMvc.perform(patch("/api/category", category.getId())
+                mockMvc.perform(patch("/api/category/{id}", category.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaTypes.HAL_JSON)
                                 .content(objectMapper.writeValueAsString(updateData))
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         )
                         .andDo(print())
-                        .andExpect(status().isBadRequest())
+                        .andExpect(status().isUnauthorized())
                         .andExpect(jsonPath("message").exists());
             }
         }

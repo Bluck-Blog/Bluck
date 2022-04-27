@@ -37,4 +37,17 @@ public class CategoryController{
 
         return ResponseEntity.created(creartedUrl).body(category);
     }
+
+    @PatchMapping("/{categoryId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity updateCategory(@PathVariable Long categoryId,
+                                         @RequestBody @Valid CategoryRequestData updateData,
+                                         BindingResult result){
+        if(result.hasErrors()){
+            throw new InvalidParameterException(result);
+        }
+        Category category = categoryService.update(categoryId, updateData);
+
+        return ResponseEntity.ok(category);
+    }
 }
