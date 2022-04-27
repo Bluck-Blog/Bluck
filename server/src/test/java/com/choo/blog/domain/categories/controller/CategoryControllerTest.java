@@ -13,8 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -287,7 +286,7 @@ class CategoryControllerTest extends BaseControllerTest {
 
             @Test
             @DisplayName("403 에러코드를 반환한다,")
-            void it_return_status_unAuhorize() throws Exception{
+            void it_return_status_forbidden() throws Exception{
                 mockMvc.perform(patch("/api/category/{id}", category.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaTypes.HAL_JSON)
@@ -295,10 +294,94 @@ class CategoryControllerTest extends BaseControllerTest {
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         )
                         .andDo(print())
-                        .andExpect(status().isUnauthorized())
+                        .andExpect(status().isForbidden())
                         .andExpect(jsonPath("message").exists());
             }
         }
+    }
+
+    @Nested
+    @DisplayName("카테고리 삭제는")
+    class Descrive_delete{
+        Category category;
+
+        @BeforeEach
+        void setUp(){
+            category = prepareCategory("");
+        }
+
+        @Nested
+        @DisplayName("존재하는 카테고리 id가 주어지면")
+        class Context_with_exist_categoryId{
+            @Test
+            @DisplayName("카테고리를 삭제하고 상태 코드 200을 반환한다.")
+            void it_return_status_ok() throws Exception{
+                mockMvc.perform(delete("/api/category/{id}", category.getId())
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAccessToken())
+                )
+                        .andDo(print())
+                        .andExpect(status().isOk());
+
+            }
+        }
+        @Nested
+        @DisplayName("존재하지 않는 카테고리 id가 주어지면")
+        class Context_with_non_exist_categoryId{
+            @Test
+            @DisplayName("에러코드 404를 반환한다.")
+            void it_return_status_notFound() throws Exception{
+                mockMvc.perform(delete("/api/category/{id}", -1)
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAccessToken())
+                )
+                        .andDo(print())
+                        .andExpect(status().isNotFound());
+            }
+        }
+        @Nested
+        @DisplayName("잘못된 인증정보로 요청하면")
+        class Context_with_wrong_accessToken {
+            @Test
+            @DisplayName("에러코드 401을 반환한다.")
+            void it_return_status_unAuthroized() throws Exception{
+                mockMvc.perform(delete("/api/category/{id}", -1)
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAccessToken() + "wrong")
+                )
+                        .andDo(print())
+                        .andExpect(status().isUnauthorized());
+            }
+        }
+        @Nested
+        @DisplayName("인증정보가 없으면")
+        class Context_with_non_accessToken{
+            @Test
+            @DisplayName("에러코드 401을 반환한다.")
+            void it_return_status_unAuthorized() throws Exception{
+                mockMvc.perform(delete("/api/category/{id}", category.getId()))
+                        .andExpect(status().isUnauthorized());
+            }
+        }
+
+        @Nested
+        @DisplayName("카테고리 생성자와 다른 인증정보가 주어지면")
+        class Context_with_different_accessToken{
+            String accessToken;
+
+            @BeforeEach
+            void setUp() throws Exception{
+                User other = prepareUser("other");
+                accessToken = webTokenUtil.encode(other.getId());
+            }
+
+            @Test
+            @DisplayName("에러코드 403을 반환한다.")
+            void it_return_status_unAuthorized() throws Exception{
+                mockMvc.perform(delete("/api/category/{id}", category.getId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                )
+                        .andExpect(status().isForbidden());
+            }
+        }
+
     }
 
     private CategoryRequestData prepareRquestData(String suffix){

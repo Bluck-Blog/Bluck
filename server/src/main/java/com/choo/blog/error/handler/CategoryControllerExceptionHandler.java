@@ -24,7 +24,7 @@ public class CategoryControllerExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleForbiddenCategoryException(ForbiddenCategoryException e){
         ErrorResponse error = ErrorResponse.create()
                 .message(e.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 
     @ExceptionHandler(value = CategoryNotFoundException.class)

@@ -50,4 +50,12 @@ public class CategoryController{
 
         return ResponseEntity.ok(category);
     }
+
+    @DeleteMapping("/{categoryId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity deleteCategory(@PathVariable Long categoryId){
+        categoryService.delete(categoryId);
+
+        return ResponseEntity.ok().build();
+    }
 }
