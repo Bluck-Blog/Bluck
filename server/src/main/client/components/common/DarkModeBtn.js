@@ -28,6 +28,7 @@ const DarkMode = styled.button`
   width: 9vw;
   height: 6vh;
   margin-top: 10px;
+  margin-bottom: 30px;
   border-radius: 5vw;
   border: 4px solid ${(props) => props.theme.navText};
   display: flex;

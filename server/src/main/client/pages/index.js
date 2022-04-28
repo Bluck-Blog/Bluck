@@ -8,15 +8,7 @@ import Main from "../components/main/main";
 import Poster from "../styles/img/whiteProfile.png";
 
 export default function Home({ content }) {
-  return (
-    <Wapper>
-      <Nav />
-      <RightSection>
-        <Main content={content} />
-        <Footer />
-      </RightSection>
-    </Wapper>
-  );
+  return <Main content={content} />;
 }
 
 export async function getServerSideProps() {

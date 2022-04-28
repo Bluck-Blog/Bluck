@@ -1,7 +1,7 @@
 //lib
 import styled from "styled-components";
 import DetailContent from "./DetailContent";
-import SearchBox from "./SearchBox";
+import SearchBox from "../../common/SearchBox";
 
 //components
 

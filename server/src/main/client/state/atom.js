@@ -5,6 +5,11 @@ export const darkMode = atom({
   default: false,
 });
 
+export const isLogged = atom({
+  key: "isLogged",
+  default: false,
+});
+
 export const darkModeHandle = selector({
   key: "darkModeHandle",
   get: ({ get }) => {

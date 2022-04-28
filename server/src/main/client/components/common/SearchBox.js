@@ -1,15 +1,15 @@
 //lib
 import styled from "styled-components";
-import SelectBox from "./SelectBox";
+import SelectBox from "../main/component/SelectBox";
 import Image from "next/image";
-import { darkModeHandle } from "../../../state/atom";
 import { useRecoilValue } from "recoil";
+import { darkModeHandle } from "../../state/atom";
 
 //components
 
 //img
-import WhiteLenz from "../../../styles/img/whiteLenz.png";
-import BlackLenz from "../../../styles/img/blackLenz.png";
+import WhiteLenz from "../../styles/img/whiteLenz.png";
+import BlackLenz from "../../styles/img/blackLenz.png";
 
 export default function SearchBox() {
   const filter = ["작성자", "제목", "태그"];
@@ -35,7 +35,8 @@ export default function SearchBox() {
 
 const Wrapper = styled.form`
   position: relative;
-  width: 25%;
+  /* width: 25%; */
+  width: 12vw;
   height: 30px;
   border-radius: 10px;
   background: ${(props) => props.theme.bgColor};

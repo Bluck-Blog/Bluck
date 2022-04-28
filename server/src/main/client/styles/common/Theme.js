@@ -6,6 +6,7 @@ export const lightTheme = {
   bgColor: "#cfd1dd",
   ctBgColor: "#f9f9f9",
   menuBgColor: "#4c547b",
+  white: "white",
 };
 
 export const darkTheme = {
@@ -16,4 +17,5 @@ export const darkTheme = {
   bgColor: "#1f295a",
   ctBgColor: "#1f295a",
   menuBgColor: "#4c547b",
+  white: "white",
 };

@@ -6,7 +6,7 @@ import { useRecoilValue } from "recoil";
 //components
 import DarkModeBtn from "../common/DarkModeBtn";
 import Notice from "./component/Notice";
-import { darkMode } from "../../state/atom";
+import { darkMode, isLogged } from "../../state/atom";
 
 //imgs
 import WhitePerson from "../../styles/img/whiteProfile.png";
@@ -14,6 +14,7 @@ import BlackPerson from "../../styles/img/blackProfile.png";
 
 export default function Nav() {
   const isDark = useRecoilValue(darkMode);
+  const isLog = useRecoilValue(isLogged);
 
   return (
     <Navi>
@@ -27,11 +28,15 @@ export default function Nav() {
           src={isDark ? BlackPerson : WhitePerson}
         />
       </ProfilBox>
-      <Name>발빠른토깽이 님</Name>
+      <Name>{isLog ? "발빠른토깽이 님" : "로그인을 해주세요"}</Name>
       <Notice />
       <LogBox>
-        <Login>LOGIN</Login>
-        <LogOut>JOIN</LogOut>
+        <Link href={"/login"}>
+          <Login>LOGIN</Login>
+        </Link>
+        <Link href={"/"}>
+          <LogOut>JOIN</LogOut>
+        </Link>
       </LogBox>
       <DarkModeBtn />
     </Navi>
@@ -88,5 +93,5 @@ const ProfilBox = styled.figure`
 const Name = styled.span`
   color: ${(props) => props.theme.textColor};
   font-weight: bold;
-  font-size: 28px;
+  font-size: 24px;
 `;

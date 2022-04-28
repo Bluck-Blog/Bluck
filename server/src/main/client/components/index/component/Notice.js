@@ -6,7 +6,7 @@ import { useRecoilValue } from "recoil";
 
 //component
 import NoticeItem from "./NoticeItem";
-import { darkMode } from "../../../state/atom";
+import { darkMode, isLogged } from "../../../state/atom";
 
 //img
 import WhiteBell from "../../../styles/img/whiteBell.png";
@@ -15,6 +15,7 @@ import BlackBell from "../../../styles/img/blackBell.png";
 export default function Notice() {
   const [noticeList, setNoticeList] = useState([]);
   const isDark = useRecoilValue(darkMode);
+  const isLog = useRecoilValue(isLogged);
 
   useEffect(() => {
     const list = [
@@ -28,13 +29,17 @@ export default function Notice() {
   }, []);
 
   return (
-    <NoticeWrapper>
-      <Image width={30} height={30} src={isDark ? WhiteBell : BlackBell} />
-      <List>
-        {noticeList.map((item) => (
-          <NoticeItem key={item.id} item={item} />
-        ))}
-      </List>
+    <NoticeWrapper isLog={isLog}>
+      <ImgBox>
+        <Image width={30} height={30} src={isDark ? WhiteBell : BlackBell} />
+      </ImgBox>
+      {isLog && (
+        <List>
+          {noticeList.map((item) => (
+            <NoticeItem key={item.id} item={item} />
+          ))}
+        </List>
+      )}
     </NoticeWrapper>
   );
 }
@@ -42,7 +47,8 @@ export default function Notice() {
 const NoticeWrapper = styled.div`
   margin-top: 40px;
   padding: 15px 10px;
-  background-color: ${(props) => props.theme.noticeColor};
+  background-color: ${(props) =>
+    props.isLog ? props.theme.noticeColor : null};
   width: 12vw;
   height: 30vh;
   border-radius: 20px;
@@ -56,4 +62,14 @@ const List = styled.ul`
   list-style-type: disc;
   margin-top: 10px;
   padding-left: 5px;
+`;
+
+const ImgBox = styled.figure`
+  width: 50px;
+  height: 50px;
+  background: ${(props) => props.theme.noticeColor};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
 `;
