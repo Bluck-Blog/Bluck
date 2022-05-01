@@ -13,6 +13,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.stream.IntStream;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -387,7 +389,35 @@ class CategoryControllerTest extends BaseControllerTest {
                         .andExpect(status().isForbidden());
             }
         }
+    }
 
+    @Nested
+    @DisplayName("카테고리 리스트 조회는")
+    class Descrive_get_categories{
+        int size = 30;
+
+        @BeforeEach
+        void setUp(){
+            IntStream.range(0, size).forEach(i ->{
+                prepareCategory(String.valueOf(i));
+            });
+        }
+
+        @Nested
+        @DisplayName("userId를 입력받으면")
+        class Context_with_userId{
+            @Test
+            @DisplayName("해당 유저의 카테고리를 반환한다.")
+            void it_return_categories() throws Exception{
+                mockMvc.perform(get("/api/category/user/{userId}", user.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaTypes.HAL_JSON))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("_links.self").exists())
+                        .andExpect(jsonPath("_embedded.categories[0]._links.self").exists());
+            }
+        }
     }
 
     private CategoryRequestData prepareRquestData(String suffix){
