@@ -418,6 +418,21 @@ class CategoryControllerTest extends BaseControllerTest {
                         .andExpect(jsonPath("_embedded.categories[0]._links.self").exists());
             }
         }
+
+        @Nested
+        @DisplayName("존재하지 않는 userId를 입력받으면")
+        class Context_with_non_exist_userId{
+            @Test
+            @DisplayName("에러코드 404를 반환한다")
+            void it_return_status_not_found() throws Exception{
+                mockMvc.perform(get("/api/category/user/{userId}", -1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaTypes.HAL_JSON))
+                        .andDo(print())
+                        .andExpect(status().isNotFound())
+                        .andExpect(jsonPath("message").exists());
+            }
+        }
     }
 
     private CategoryRequestData prepareRquestData(String suffix){
