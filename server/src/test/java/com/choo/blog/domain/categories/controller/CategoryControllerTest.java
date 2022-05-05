@@ -1,9 +1,13 @@
 package com.choo.blog.domain.categories.controller;
 
 import com.choo.blog.common.BaseControllerTest;
+import com.choo.blog.common.PostProperties;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
+import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.posts.PostOpenType;
+import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.repository.UserRepository;
 import org.junit.jupiter.api.*;
@@ -12,6 +16,7 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Stack;
 import java.util.stream.IntStream;
@@ -29,6 +34,9 @@ class CategoryControllerTest extends BaseControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    protected PostProperties postProperties;
 
     @Autowired
     CategoryRespository categoryRespository;
@@ -432,29 +440,6 @@ class CategoryControllerTest extends BaseControllerTest {
                         .andDo(print())
                         .andExpect(status().isNotFound())
                         .andExpect(jsonPath("message").exists());
-            }
-        }
-    }
-
-    @Nested
-    @DisplayName("카테고리 조회는")
-    class Descrive_get_category{
-        @Nested
-        @DisplayName("userId와 categoryId를 입력받으면 ")
-        class Context_with_userId_and_categoryId{
-            Category category;
-
-            @BeforeEach
-            void setUp(){
-                category = prepareCategory("");
-            }
-
-            @Test
-            @DisplayName("해당 카테고리를 반환한다.")
-            void it_return_category() throws Exception{
-                mockMvc.perform(get("/cagetory/{userId}/{categoryId}", user.getId(), category.getId()))
-                        .andDo(print())
-                        .andExpect(status().isOk());
             }
         }
     }

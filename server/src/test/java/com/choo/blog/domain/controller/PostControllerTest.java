@@ -1,6 +1,7 @@
 package com.choo.blog.domain.controller;
 
 import com.choo.blog.common.BaseControllerTest;
+import com.choo.blog.common.PostProperties;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
@@ -9,9 +10,7 @@ import com.choo.blog.domain.posts.PostOpenType;
 import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.users.User;
-import com.choo.blog.domain.users.dto.SessionResponseData;
 import com.choo.blog.domain.users.repository.UserRepository;
-import com.choo.blog.util.WebTokenUtil;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("게시물 관리")
 class PostControllerTest extends BaseControllerTest {
-    private static final String TITLE = "게시물 제목";
-    private static final String CONTENT = "게시물 내용";
+    private static final String TITLE = "카테고리 제목";
 
     private User user;
     private Category category;
@@ -46,6 +44,9 @@ class PostControllerTest extends BaseControllerTest {
 
     @Autowired
     CategoryRespository categoryRespository;
+
+    @Autowired
+    PostProperties postProperties;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -71,7 +72,7 @@ class PostControllerTest extends BaseControllerTest {
 
             @BeforeEach
             public void setUp() throws Exception {
-                saveData = prepareRequestData("");
+                saveData = postProperties.generateRequestData(category, "");
             }
 
             @Test
@@ -167,7 +168,7 @@ class PostControllerTest extends BaseControllerTest {
 
             @BeforeEach
             public void setUp() throws Exception {
-                saveData = prepareRequestData("");
+                saveData = postProperties.generateRequestData(category, "");
             }
 
             @Test
@@ -190,7 +191,7 @@ class PostControllerTest extends BaseControllerTest {
 
             @BeforeEach
             public void setUp() throws Exception {
-                saveData = prepareRequestData("");
+                saveData = postProperties.generateRequestData(category, "");
             }
 
             @Test
@@ -218,7 +219,7 @@ class PostControllerTest extends BaseControllerTest {
 
             @BeforeEach
             void setUp() throws Exception {
-                updateData = prepareRequestData("_NEW");
+                updateData = postProperties.generateRequestData(category, "_NEW");
                 post = preparePost("");
             }
 
@@ -253,7 +254,7 @@ class PostControllerTest extends BaseControllerTest {
                 @BeforeEach
                 public void setUp() throws Exception {
                     post = preparePost("");
-                    updateData = prepareRequestData("_NEW");
+                    updateData = postProperties.generateRequestData(category, "_NEW");
                 }
 
                 @Test
@@ -278,7 +279,7 @@ class PostControllerTest extends BaseControllerTest {
                 @BeforeEach
                 public void setUp() throws Exception {
                     post = preparePost("");
-                    updateData = prepareRequestData("NEW");
+                    updateData = postProperties.generateRequestData(category, "NEW");
                 }
 
                 @Test
@@ -302,7 +303,7 @@ class PostControllerTest extends BaseControllerTest {
 
             @BeforeEach
             public void setUp(){
-                updateData = prepareRequestData("_NEW");
+                updateData = postProperties.generateRequestData(category, "_NEW");
             }
             @Test
             @DisplayName("에러코드 404를 반환한다.")
@@ -576,7 +577,7 @@ class PostControllerTest extends BaseControllerTest {
         MvcResult result = mockMvc.perform(post("/api/posts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaTypes.HAL_JSON)
-                .content(objectMapper.writeValueAsString(prepareRequestData(suffix)))
+                .content(objectMapper.writeValueAsString(postProperties.generateRequestData(category, suffix)))
                 .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken()))
                 .andReturn();
         String content = result.getResponse().getContentAsString();
@@ -589,14 +590,5 @@ class PostControllerTest extends BaseControllerTest {
                 .title(TITLE + suffix)
                 .build();
         return categoryRespository.save(saveData.toEntity(user.getId()));
-    }
-
-    private PostRequestData prepareRequestData(String suffix){
-        return PostRequestData.builder()
-                .title(TITLE + suffix)
-                .content(CONTENT + suffix)
-                .openType(PostOpenType.ALL)
-                .categoryId(category.getId())
-                .build();
     }
 }
