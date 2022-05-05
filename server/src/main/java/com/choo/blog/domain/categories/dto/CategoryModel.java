@@ -15,13 +15,13 @@ public class CategoryModel extends EntityModel<Category> {
     public CategoryModel(Category category, Link... links){
         super(category, (Iterable) Arrays.asList(links));
         add(linkTo(CategoryController.class).slash(category.getId()).withSelfRel());
+        if(SecurityContextHolder.getContext().getAuthentication() instanceof UserAuthentication) {
+            Long userId = ((UserAuthentication) SecurityContextHolder.getContext().getAuthentication()).getUserId();
 
-        Long userId = ((UserAuthentication) SecurityContextHolder.getContext().getAuthentication()).getUserId();
-
-        if(category.hasModifyPermission(userId)) {
-            add(linkTo(CategoryController.class).slash(category.getId()).withRel("update-url"));
-            add(linkTo(CategoryController.class).slash(category.getId()).withRel("delete-url"));
+            if (category.hasModifyPermission(userId)) {
+                add(linkTo(CategoryController.class).slash(category.getId()).withRel("update-url"));
+                add(linkTo(CategoryController.class).slash(category.getId()).withRel("delete-url"));
+            }
         }
-
     }
 }

@@ -4,7 +4,6 @@ import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryModel;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.service.CategoryService;
-import com.choo.blog.domain.posts.dto.PostModel;
 import com.choo.blog.exceptions.InvalidParameterException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -63,5 +64,18 @@ public class CategoryController{
         categoryService.delete(categoryId);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity getCategories(@PathVariable Long userId){
+        List<Category> categories = categoryService.getCategories(userId);
+
+        //TODO : RepresentationModelAssembler 활용
+        List<CategoryModel> categoryModels = categories
+                .stream()
+                .map(CategoryModel::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(categoryModels);
     }
 }
