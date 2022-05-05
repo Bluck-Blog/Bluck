@@ -29,11 +29,7 @@ public class Category {
 
     @Column(name = "user_id")
     private Long userId;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<Post> postList;
-
+    
     public boolean hasModifyPermission(Long userId){
         return this.userId.equals(userId);
     }

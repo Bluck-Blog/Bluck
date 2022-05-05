@@ -31,10 +31,8 @@ public class Post extends BaseEntity {
     @Lob
     private String content;
 
-    @JsonBackReference
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
     private Category category;
 
     private int likes;
