@@ -10,6 +10,7 @@ import com.choo.blog.domain.users.service.UserService;
 import com.choo.blog.exceptions.CategoryNotFoundException;
 import com.choo.blog.exceptions.DuplicateTitleException;
 import com.choo.blog.exceptions.ForbiddenCategoryException;
+import com.choo.blog.exceptions.UserNotFoundException;
 import com.choo.blog.security.UserAuthentication;
 import com.choo.blog.util.WebTokenUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -116,6 +117,17 @@ class CategoryServiceTest {
             void it_return_category_list_of_user(){
                 List<Category> categories = categoryService.getCategories(user.getId());
                 assertThat(categories.size()).isEqualTo(size);
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 userId를 입력받으면")
+        class Context_with_non_exist_userId{
+            @Test
+            @DisplayName("유저를 찾을 수 없다는 예외를 던진다.")
+            void it_throw_userNotFoundException(){
+                assertThatThrownBy(() -> categoryService.getCategories(-1L))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }

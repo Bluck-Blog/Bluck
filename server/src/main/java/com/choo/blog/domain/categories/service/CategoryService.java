@@ -3,9 +3,11 @@ package com.choo.blog.domain.categories.service;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
+import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.exceptions.CategoryNotFoundException;
 import com.choo.blog.exceptions.DuplicateTitleException;
 import com.choo.blog.exceptions.ForbiddenCategoryException;
+import com.choo.blog.exceptions.UserNotFoundException;
 import com.choo.blog.security.UserAuthentication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRespository categoryRespository;
+    private final UserRepository userRepository;
 
     public Category save(CategoryRequestData saveData){
         UserAuthentication user = getLoginInfo();
@@ -55,6 +58,8 @@ public class CategoryService {
     }
 
     public List<Category> getCategories(Long userId){
+        userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
         return categoryRespository.findCategoryByUserId(userId);
     }
 
