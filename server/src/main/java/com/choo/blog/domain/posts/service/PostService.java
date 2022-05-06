@@ -3,8 +3,11 @@ package com.choo.blog.domain.posts.service;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
 import com.choo.blog.domain.categories.service.CategoryService;
+import com.choo.blog.domain.enums.LikeType;
 import com.choo.blog.domain.posts.Post;
 import com.choo.blog.domain.posts.dto.PostRequestData;
+import com.choo.blog.domain.posts.enums.PostLikes;
+import com.choo.blog.domain.posts.repository.PostLikesRepository;
 import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.repository.UserRepository;
@@ -27,6 +30,8 @@ public class PostService {
     private final UserRepository userRepository;
 
     private final CategoryRespository categoryRespository;
+
+    private final PostLikesRepository postLikesRepository;
 
     public Page<Post> getPosts(Pageable pageable){
         return postRepository.findAll(pageable);
@@ -85,6 +90,17 @@ public class PostService {
     }
 
     public int like(Long postId){
+        Long userId = getLoginInfo().getUserId();
+
+        Post post = getPost(postId);
+
+        if(postLikesRepository.existsByPostIdAndUserId(postId, userId)){
+            postLikesRepository.deletePostLikesByPostIdAndUserId(postId, userId);
+        }
+
+        PostLikes postLikes = new PostLikes(postId, userId, LikeType.LIKE);
+        postLikesRepository.save(postLikes);
+
         return 0;
     }
 
