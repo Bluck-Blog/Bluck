@@ -56,4 +56,8 @@ public class Post extends BaseEntity {
         content = requestData.getContent();
         openType = requestData.getOpenType();
     }
+
+    public void increaseViewCount(){
+        view++;
+    }
 }

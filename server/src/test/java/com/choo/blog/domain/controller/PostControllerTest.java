@@ -442,7 +442,7 @@ class PostControllerTest extends BaseControllerTest {
                         .andExpect(jsonPath("content").value(post.getContent()))
                         .andExpect(jsonPath("likes").value(post.getLikes()))
                         .andExpect(jsonPath("dislikes").value(post.getDislikes()))
-                        .andExpect(jsonPath("view").value(post.getView()))
+                        .andExpect(jsonPath("view").value(post.getView() + 1))
                         .andExpect(jsonPath("_links.update-url").exists())
                         .andExpect(jsonPath("_links.delete-url").exists());
             }

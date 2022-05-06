@@ -267,9 +267,11 @@ class PostServiceTest {
             void it_return_post(){
                 Post findPost = postService.getPost(this.post.getId());
 
+                assertThat(findPost.getView()).isEqualTo(post.getView() + 1);
                 assertThat(findPost.getTitle()).isEqualTo(post.getTitle());
                 assertThat(findPost.getContent()).isEqualTo(post.getContent());
                 assertThat(findPost.getOpenType()).isEqualTo(post.getOpenType());
+
             }
 
         }

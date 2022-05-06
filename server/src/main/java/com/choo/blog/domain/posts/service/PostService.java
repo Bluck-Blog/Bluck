@@ -33,7 +33,10 @@ public class PostService {
     }
 
     public Post getPost(Long id){
-        return postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        post.increaseViewCount();
+
+        return post;
     }
 
     public Post save(PostRequestData saveData){
