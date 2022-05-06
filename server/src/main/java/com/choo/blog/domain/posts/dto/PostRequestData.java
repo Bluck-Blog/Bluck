@@ -1,6 +1,6 @@
 package com.choo.blog.domain.posts.dto;
 
-import com.choo.blog.domain.posts.PostOpenType;
+import com.choo.blog.domain.posts.enums.PostOpenType;
 import com.choo.blog.domain.posts.Post;
 import com.choo.blog.domain.users.User;
 import lombok.AllArgsConstructor;
@@ -31,8 +31,6 @@ public class PostRequestData {
         return Post.builder()
                 .title(title)
                 .content(content)
-                .likes(0)
-                .dislikes(0)
                 .view(0)
                 .openType(openType)
                 .author(author)

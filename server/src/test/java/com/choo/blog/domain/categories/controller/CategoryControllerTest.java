@@ -5,9 +5,6 @@ import com.choo.blog.common.PostProperties;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
-import com.choo.blog.domain.posts.Post;
-import com.choo.blog.domain.posts.PostOpenType;
-import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.repository.UserRepository;
 import org.junit.jupiter.api.*;
@@ -16,9 +13,7 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Stack;
 import java.util.stream.IntStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

@@ -4,15 +4,13 @@ import com.choo.blog.common.UserProperties;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
-import com.choo.blog.domain.categories.service.CategoryService;
 import com.choo.blog.domain.posts.Post;
-import com.choo.blog.domain.posts.PostOpenType;
+import com.choo.blog.domain.posts.enums.PostOpenType;
 import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.posts.service.PostService;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.UserRole;
-import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.domain.users.service.UserService;
 import com.choo.blog.exceptions.CategoryNotFoundException;
@@ -21,7 +19,6 @@ import com.choo.blog.exceptions.PostNotFoundException;
 import com.choo.blog.security.UserAuthentication;
 import com.choo.blog.session.WithMockCustomUser;
 import com.choo.blog.util.WebTokenUtil;
-import com.sun.xml.bind.v2.model.core.Ref;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -35,7 +32,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -104,8 +100,6 @@ class PostServiceTest {
                 assertThat(posts.getTitle()).isEqualTo(saveData.getTitle());
                 assertThat(posts.getContent()).isEqualTo(saveData.getContent());
                 assertThat(posts.getOpenType()).isEqualTo(saveData.getOpenType());
-                assertThat(posts.getLikes()).isEqualTo(0);
-                assertThat(posts.getDislikes()).isEqualTo(0);
                 assertThat(posts.getView()).isEqualTo(0);
 
                 UserAuthentication authentication = (UserAuthentication) SecurityContextHolder.getContext().getAuthentication();
@@ -377,9 +371,52 @@ class PostServiceTest {
                         .isInstanceOf(ForbiddenPostException.class)
                         .hasMessageContaining(post.getId().toString());
             }
+        }
+    }
 
+    @Nested
+    @DisplayName("게시물 좋아요는")
+    class Describe_like{
+        Post post;
+
+        @BeforeEach
+        void setUp(){
+            post = preparePost("");
         }
 
+        @Nested
+        @DisplayName("게시물 id가 주어지면")
+        class Context_with_postId{
+            @Test
+            @DisplayName("해당 게시물의 좋아요를 추가하고 좋아요수를 반환한다.")
+            void it_append_post_likes_and_return_likeCnt(){
+                int beforeLikeCnt = post.getLikes();
+                int likeCnt = postService.like(post.getId());
+                assertThat(likeCnt).isEqualTo(beforeLikeCnt + 1);
+            }
+        }
+
+        @Nested
+        @DisplayName("이미 좋아요를 누른 걔정으로 좋아요를 요청하면")
+        class Context_with_already_request{
+            @Test
+            @DisplayName("해당 게시물의 좋아요를 제거하고 좋아요 수를 반환한다.")
+            void it_remove_post_likes_and_return_likeCnt(){
+                int beforeLikeCnt = post.getLikes();
+                int likeCnt = postService.like(post.getId());
+                assertThat(likeCnt).isEqualTo(beforeLikeCnt - 1);
+            }
+        }
+        @Nested
+        @DisplayName("존재하지 않는 게시물 id가 주어지면")
+        class Context_with_non_exist_postId{
+            @Test
+            @DisplayName("게시물을 찾을 수 없다는 예외를 던진다")
+            void it_throw_postNotFoundException(){
+                assertThatThrownBy(() -> postService.like(-1L))
+                        .isInstanceOf(PostNotFoundException.class);
+            }
+        }
     }
     public User prepareUser(String suffix){
         return userService.join(userProperties.prepareUserRegistData(suffix));
@@ -400,6 +437,10 @@ class PostServiceTest {
                 .content(CONTENT + suffix)
                 .categoryId(category.getId())
                 .build();
+    }
+
+    private Post preparePost(String suffix){
+        return postService.save(prepareRequestData(suffix));
     }
 
     private User setAuthentication(String prefix) {

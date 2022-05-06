@@ -4,8 +4,8 @@ import com.choo.blog.domain.BaseEntity;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.comments.Comments;
 import com.choo.blog.domain.posts.dto.PostRequestData;
+import com.choo.blog.domain.posts.enums.PostOpenType;
 import com.choo.blog.domain.users.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;

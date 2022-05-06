@@ -81,6 +81,16 @@ public class PostService {
         postRepository.delete(post);
     }
 
+    public int like(Long postId){
+        return 0;
+    }
+
+    public int dislike(Long postId){
+        return 0;
+    }
+
+
+
     private UserAuthentication getLoginInfo(){
         return (UserAuthentication) SecurityContextHolder.getContext().getAuthentication();
     }
