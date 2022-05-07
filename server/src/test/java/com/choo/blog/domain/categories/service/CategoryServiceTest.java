@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 @ActiveProfiles("test")
 @DisplayName("카테고리 관리")
-class CategoryServiceTest {
+public class CategoryServiceTest {
     private static final String TITLE = "카테고리 제목";
 
     @Autowired
@@ -319,7 +319,7 @@ class CategoryServiceTest {
         }
     }
 
-    private CategoryRequestData prepareRequestData(String suffix){
+    public static CategoryRequestData prepareRequestData(String suffix){
         return CategoryRequestData.builder()
                 .title(TITLE + suffix)
                 .build();
