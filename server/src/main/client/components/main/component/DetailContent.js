@@ -18,7 +18,7 @@ export default function DetailContent() {
 const Wapper = styled.section`
   width: 100%;
   height: 77vh;
-  background: ${(props) => props.theme.navBgColor};
+  background: ${(props) => props.theme.bgColor};
   border-radius: 50px;
   ${(props) => {
     if (props.isContent) {

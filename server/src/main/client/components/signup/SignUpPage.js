@@ -1,22 +1,21 @@
 // lib
 import styled from "styled-components";
 import SearchBox from "../common/SearchBox";
-import FomBox from "./component/FomBox";
-import RightSection from "./component/RightSection";
 import Title from "../common/Title";
+import JoinForm from "./components/JoinForm";
 
 //components
 
 //img
 
-export default function LoginPage() {
+export default function SignUpPage() {
   return (
     <Wrapper>
       <Left>
-        <Title title={"LOGIN"} />
-        <RightSection />
+        <Title title={"JOIN"} />
+        <SearchBox />
       </Left>
-      <FomBox />
+      <JoinForm />
     </Wrapper>
   );
 }
@@ -27,13 +26,14 @@ const Wrapper = styled.div`
   border-radius: 50px;
   background: ${(props) => props.theme.noticeColor};
   display: flex;
-  justify-content: flex-start;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   padding: 0 1% 0 0;
 `;
 
 const Left = styled.section`
+  /* padding: 3%; */
   padding: 2% 1% 3% 3%;
   width: 100%;
   height: 20%;
