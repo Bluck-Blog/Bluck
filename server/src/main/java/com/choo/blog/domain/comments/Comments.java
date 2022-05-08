@@ -2,10 +2,16 @@ package com.choo.blog.domain.comments;
 
 import com.choo.blog.domain.BaseEntity;
 import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.users.User;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Comments extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "comment_id")
@@ -17,7 +23,9 @@ public class Comments extends BaseEntity {
 
     private String content;
 
-    private String author;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User author;
 
     private boolean secret;
 

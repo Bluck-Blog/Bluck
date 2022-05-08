@@ -3,6 +3,7 @@ package com.choo.blog.domain.users.service;
 import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.User;
+import com.choo.blog.exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,5 +24,11 @@ public class UserService {
         user.encrypte(passwordEncoder);
 
         return userRepository.save(user);
+    }
+
+    public User getUser(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        return user;
     }
 }
