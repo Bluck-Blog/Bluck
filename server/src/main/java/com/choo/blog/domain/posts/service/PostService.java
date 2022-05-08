@@ -11,6 +11,7 @@ import com.choo.blog.domain.posts.repository.PostLikesRepository;
 import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.repository.UserRepository;
+import com.choo.blog.domain.users.service.UserService;
 import com.choo.blog.exceptions.CategoryNotFoundException;
 import com.choo.blog.exceptions.ForbiddenPostException;
 import com.choo.blog.exceptions.PostNotFoundException;
@@ -27,7 +28,7 @@ import org.springframework.stereotype.Service;
 public class PostService {
     private final PostRepository postRepository;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     private final CategoryRespository categoryRespository;
 
@@ -46,8 +47,8 @@ public class PostService {
 
     public Post save(PostRequestData saveData){
         UserAuthentication authentication = getLoginInfo();
-        User author = userRepository.findById(authentication.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(authentication.getUserId()));
+
+        User author = userService.getUser(getLoginInfo().getUserId());
 
         Category category = getCategory(saveData);
 
