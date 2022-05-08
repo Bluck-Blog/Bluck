@@ -34,7 +34,7 @@ export default function Nav() {
         <Link href={"/login"}>
           <Login>LOGIN</Login>
         </Link>
-        <Link href={"/"}>
+        <Link href={"/signup"}>
           <LogOut>JOIN</LogOut>
         </Link>
       </LogBox>

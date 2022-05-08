@@ -14,8 +14,10 @@ export const darkTheme = {
   navBgColor: "#1f295a",
   noticeColor: "rgba(255, 255, 255, 0.3)",
   textColor: "white",
-  bgColor: "#1f295a",
-  ctBgColor: "#1f295a",
+  // bgColor: "#1f295a",
+  bgColor: "#000000",
+  // ctBgColor: "#1f295a",
+  ctBgColor: "#000000",
   menuBgColor: "#4c547b",
   white: "white",
 };

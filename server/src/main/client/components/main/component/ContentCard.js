@@ -93,7 +93,7 @@ export default function ContentCard({ item }) {
 
 const Wrapper = styled.div`
   width: 99%;
-  height: 190px;
+  height: 185px;
   margin-bottom: 20px;
   border-radius: 50px;
   display: flex;

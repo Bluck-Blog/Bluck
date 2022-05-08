@@ -7,6 +7,7 @@ import SelectBox from "./SelectBox";
 
 //img
 import ContentCard from "./ContentCard";
+import Title from "../../common/Title";
 
 export default function LeftSection({ content }) {
   const filterList1 = [
@@ -28,7 +29,9 @@ export default function LeftSection({ content }) {
 
   return (
     <Section>
-      <Title>HOME</Title>
+      <TitleBox>
+        <Title title={"HOME"} />
+      </TitleBox>
       <Menu>
         <SelectBox list={filterList1} />
         <SelectBox list={filterList2} />
@@ -47,10 +50,10 @@ const Section = styled.div`
   padding: 3%;
 `;
 
-const Title = styled.p`
+const TitleBox = styled.p`
   font-size: 48px;
   font-weight: bold;
-  margin: 20px 0 80px 0;
+  margin: 0px 0 80px 0;
 `;
 
 const Menu = styled.div`
@@ -62,7 +65,7 @@ const Menu = styled.div`
 const Content = styled.div`
   width: 100%;
   margin-top: 10px;
-  height: 60vh;
+  height: 63vh;
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 5px;
