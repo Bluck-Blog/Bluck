@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -38,16 +39,20 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
+    @Transactional
+    public Post viewPost(Long id){
+        Post post = getPost(id);
+        post.increaseViewCount();
+        return post;
+    }
+
     public Post getPost(Long id){
         Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
-        post.increaseViewCount();
 
         return post;
     }
 
     public Post save(PostRequestData saveData){
-        UserAuthentication authentication = getLoginInfo();
-
         User author = userService.getUser(getLoginInfo().getUserId());
 
         Category category = getCategory(saveData);

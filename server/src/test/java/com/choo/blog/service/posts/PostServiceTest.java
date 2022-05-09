@@ -265,7 +265,7 @@ class PostServiceTest {
             @Test
             @DisplayName("id 에 해당하는 게시물을 반환한다")
             void it_return_post(){
-                Post findPost = postService.getPost(this.post.getId());
+                Post findPost = postService.viewPost(this.post.getId());
 
                 assertThat(findPost.getView()).isEqualTo(post.getView() + 1);
                 assertThat(findPost.getTitle()).isEqualTo(post.getTitle());
@@ -282,7 +282,7 @@ class PostServiceTest {
             @Test
             @DisplayName("게시물을 찾을 수 없다는 예외를 던진다")
             void it_throw_postNotFoundException(){
-                assertThatThrownBy(() -> postService.getPost(-1L))
+                assertThatThrownBy(() -> postService.viewPost(-1L))
                         .isInstanceOf(PostNotFoundException.class);
             }
         }

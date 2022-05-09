@@ -71,7 +71,7 @@ public class PostController {
 
     @GetMapping("{id}")
     public ResponseEntity getPost(@PathVariable Long id){
-        Post post = postService.getPost(id);
+        Post post = postService.viewPost(id);
 
         PostModel postModel = new PostModel(post);
 
