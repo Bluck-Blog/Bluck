@@ -3,6 +3,7 @@ package com.choo.blog.config;
 import com.choo.blog.domain.users.service.AuthenticationService;
 import com.choo.blog.filter.AuthenticationErrorFilter;
 import com.choo.blog.filter.AuthenticationFilter;
+import com.choo.blog.filter.CorsFilter;
 import com.choo.blog.security.CustomeBasicAuthenticationEntryPoint;
 import com.choo.blog.security.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.Filter;
@@ -26,13 +28,21 @@ import javax.servlet.Filter;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthenticationService authenticationService;
+    private final CorsFilter corsFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         Filter authenticationErrorFilter = new AuthenticationErrorFilter();
 
+
         http
+                .authorizeRequests()
+                .antMatchers("/**").permitAll()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .anyRequest().permitAll()
+                .and()
                 .csrf().disable()
+                .addFilterBefore(corsFilter, AuthenticationFilter.class)
                 .addFilter(authenticationFilter())
                 .addFilterBefore(authenticationErrorFilter,
                         AuthenticationFilter.class)
