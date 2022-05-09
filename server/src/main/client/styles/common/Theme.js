@@ -15,9 +15,9 @@ export const darkTheme = {
   noticeColor: "rgba(255, 255, 255, 0.3)",
   textColor: "white",
   // bgColor: "#1f295a",
-  bgColor: "#000000",
+  bgColor: "rgba(0, 0, 0, 0.8)",
   // ctBgColor: "#1f295a",
-  ctBgColor: "#000000",
+  ctBgColor: "rgba(0, 0, 0, 0.8)",
   menuBgColor: "#4c547b",
   white: "white",
 };

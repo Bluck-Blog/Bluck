@@ -706,8 +706,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     -H 'Accept: application/hal+json' \
     -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjIxfQ.IIq8NJsVTxpcjVz45SAaDiiso3wFrFbyciXR9WnpueI' \
     -d '{
-  "title" : "게시물 제목",
-  "content" : "게시물 내용",
+  "title" : "\"??? ??\"",
+  "content" : "\"??? ??\"",
   "categoryId" : 18,
   "openType" : "ALL"
 }'</code></pre>
@@ -722,12 +722,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 Content-Type: application/json;charset=UTF-8
 Accept: application/hal+json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjIxfQ.IIq8NJsVTxpcjVz45SAaDiiso3wFrFbyciXR9WnpueI
-Content-Length: 116
+Content-Length: 104
 Host: localhost:8080
 
 {
-  "title" : "게시물 제목",
-  "content" : "게시물 내용",
+  "title" : "\"??? ??\"",
+  "content" : "\"??? ??\"",
   "categoryId" : 18,
   "openType" : "ALL"
 }</code></pre>
@@ -772,15 +772,15 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 836
+Content-Length: 1227
 
 {
-  "createDate" : "2022-05-03T10:28:43.0856925",
-  "modifiedDate" : "2022-05-03T10:28:43.0856925",
+  "createDate" : "2022-05-09T19:14:56.3124567",
+  "modifiedDate" : "2022-05-09T19:14:56.3124567",
   "id" : 72,
   "author" : {
-    "createDate" : "2022-05-03T10:28:42.937907",
-    "modifiedDate" : "2022-05-03T10:28:42.937907",
+    "createDate" : "2022-05-09T19:14:56.179093",
+    "modifiedDate" : "2022-05-09T19:14:56.179093",
     "id" : 21,
     "email" : "choo@email.com",
     "nickname" : "choo",
@@ -788,8 +788,23 @@ Content-Length: 836
     "birthdate" : "1995-11-18",
     "description" : "description"
   },
-  "title" : "게시물 제목",
-  "content" : "게시물 내용",
+  "title" : "\"??? ??\"",
+  "content" : "\"??? ??\"",
+  "category" : {
+    "id" : 18,
+    "title" : "카테고리 제목",
+    "user" : {
+      "createDate" : "2022-05-09T19:14:56.179093",
+      "modifiedDate" : "2022-05-09T19:14:56.179093",
+      "id" : 21,
+      "email" : "choo@email.com",
+      "nickname" : "choo",
+      "image" : null,
+      "birthdate" : "1995-11-18",
+      "description" : "description"
+    },
+    "userId" : 21
+  },
   "likes" : 0,
   "dislikes" : 0,
   "openType" : "ALL",

@@ -3,20 +3,24 @@ import Layout from "../components/Layout";
 import styled from "styled-components";
 import Nav from "../components/index/Nav";
 import Footer from "../components/footer/Footer";
+import { QueryClient, QueryClientProvider } from "react-query";
 
+export const root = new QueryClient();
 function MyApp({ Component, pageProps }) {
   return (
-    <RecoilRoot>
-      <Layout>
-        <Wapper>
-          <Nav />
-          <RightSection>
-            <Component {...pageProps} />
-            <Footer />
-          </RightSection>
-        </Wapper>
-      </Layout>
-    </RecoilRoot>
+    <QueryClientProvider client={root}>
+      <RecoilRoot>
+        <Layout>
+          <Wapper>
+            <Nav />
+            <RightSection>
+              <Component {...pageProps} />
+              <Footer />
+            </RightSection>
+          </Wapper>
+        </Layout>
+      </RecoilRoot>
+    </QueryClientProvider>
   );
 }
 

@@ -1,13 +1,23 @@
 // lib
 import styled from "styled-components";
-import Footer from "../components/footer/Footer";
-
+import { useState } from "react";
 //components
-import Nav from "../components/index/Nav";
 import Main from "../components/main/main";
+import { GET } from "./api/Get";
+
+//img
 import Poster from "../styles/img/whiteProfile.png";
+import { useQuery } from "react-query";
+import { Axios } from "./api/Axios";
 
 export default function Home({ content }) {
+  const aaa = useQuery("posts", () =>
+    fetch("http://localhost:8080/api/posts/72").then((res) => res.json())
+  );
+
+  // const aaa = GET.useAllPosts("posts", "/api/posts/72");
+  console.log("aaa==");
+  console.log(aaa);
   return <Main content={content} />;
 }
 
@@ -81,11 +91,3 @@ export async function getServerSideProps() {
     },
   };
 }
-
-const Wapper = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-const RightSection = styled.div``;
