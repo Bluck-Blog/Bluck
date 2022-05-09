@@ -3,7 +3,6 @@ package com.choo.blog.config;
 import com.choo.blog.domain.users.service.AuthenticationService;
 import com.choo.blog.filter.AuthenticationErrorFilter;
 import com.choo.blog.filter.AuthenticationFilter;
-import com.choo.blog.filter.CorsFilter;
 import com.choo.blog.security.CustomeBasicAuthenticationEntryPoint;
 import com.choo.blog.security.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.Filter;
 
