@@ -72,16 +72,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CustomeBasicAuthenticationEntryPoint authenticationEntryPoint(){
         return new CustomeBasicAuthenticationEntryPoint();
     }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOriginPattern("*");
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
 }
