@@ -82,6 +82,8 @@ class UserServiceTest {
             @Nested
             @DisplayName("존재하지 않는 userId를 입력받으면")
             class Context_with_non_exist_userId{
+                @Test
+                @DisplayName("user를 찾을 수 없다는 예외를 던진다.")
                 void it_throw_userNotFoundException(){
                     assertThatThrownBy(() -> userService.getUser(-1L))
                             .isInstanceOf(UserNotFoundException.class);
