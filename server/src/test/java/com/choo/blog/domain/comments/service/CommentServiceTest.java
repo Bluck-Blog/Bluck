@@ -13,8 +13,8 @@ import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.posts.service.PostService;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.UserRole;
-import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.service.UserService;
+import com.choo.blog.exceptions.CommentNotFoundException;
 import com.choo.blog.exceptions.PostNotFoundException;
 import com.choo.blog.security.UserAuthentication;
 import com.choo.blog.util.WebTokenUtil;
@@ -29,7 +29,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DisplayName("댓글 관리")
@@ -97,6 +96,54 @@ class CommentServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("댓글 수정은")
+    class Describe_update{
+        Comments comments;
+
+        @BeforeEach
+        void setUp(){
+            comments = prepareComment(post.getId(), false, "");
+        }
+        @Nested
+        @DisplayName("comment id와 댓글 내용이 주어지면")
+        class Context_with_commentId{
+            CommentRequestData updateData;
+
+            @BeforeEach
+            void setUp(){
+                updateData = prepareRequestData(false, "_NEW");
+            }
+
+            @Test
+            @DisplayName("댓글을 수정하고 수정된 댓글을 반환한다.")
+            void it_update_and_return_comment(){
+                Comments updatedComment = commentService.update(comments.getId(), updateData);
+
+                assertThat(updatedComment).isNotNull();
+                assertThat(updatedComment.getContent()).isEqualTo(updateData.getContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 commentId가 주어진다면")
+        class Context_with_non_exist{
+            CommentRequestData updateData;
+
+            @BeforeEach
+            void setUp(){
+                updateData = prepareRequestData(false, "_NEW");
+            }
+
+           @Test
+           @DisplayName("댓글을 찾을 수 없다는 예외를 던진다.")
+           void it_throw_commentNotFoundException(){
+               assertThatThrownBy(() -> commentService.update(-1L, updateData))
+                       .isInstanceOf(CommentNotFoundException.class);
+           }
+        }
+    }
+
     private void login(Long userId){
         String accessToken = webTokenUtil.encode(userId);
         SecurityContextHolder.getContext().setAuthentication(new UserAuthentication(UserRole.Authorized, accessToken, user.getId()));
@@ -121,6 +168,10 @@ class CommentServiceTest {
                 .content(CONTENT + suffix)
                 .secret(secret)
                 .build();
+    }
+
+    private Comments prepareComment(Long postId, boolean secret, String suffix){
+        return commentService.save(postId, prepareRequestData(secret, suffix));
     }
 
 }
