@@ -8,6 +8,7 @@ import com.choo.blog.domain.categories.service.CategoryService;
 import com.choo.blog.domain.categories.service.CategoryServiceTest;
 import com.choo.blog.domain.comments.Comments;
 import com.choo.blog.domain.comments.dto.CommentRequestData;
+import com.choo.blog.domain.comments.exceptions.ForbiddenCommentException;
 import com.choo.blog.domain.posts.Post;
 import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.posts.service.PostService;
@@ -133,6 +134,8 @@ class CommentServiceTest {
             @BeforeEach
             void setUp(){
                 updateData = prepareRequestData(false, "_NEW");
+                User other = prepareUser("_other");
+                login(other.getId());
             }
 
            @Test
@@ -141,6 +144,25 @@ class CommentServiceTest {
                assertThatThrownBy(() -> commentService.update(-1L, updateData))
                        .isInstanceOf(CommentNotFoundException.class);
            }
+        }
+
+        @Nested
+        @DisplayName("댓글 생성자와 다른 인증정보가 주어지면")
+        class Context_with_other_session{
+            CommentRequestData updateData;
+
+            @BeforeEach
+            void setUp(){
+                updateData = prepareRequestData(false, "_NEW");
+
+            }
+
+            @Test
+            @DisplayName("권한이 없다는 예외를 던진다.")
+            void it_throw_forbiddenCommentException(){
+                assertThatThrownBy(() -> commentService.update(comments.getId(), updateData))
+                        .isInstanceOf(ForbiddenCommentException.class);
+            }
         }
     }
 
