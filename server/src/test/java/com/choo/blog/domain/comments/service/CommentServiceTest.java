@@ -106,6 +106,7 @@ class CommentServiceTest {
         void setUp(){
             comments = prepareComment(post.getId(), false, "");
         }
+
         @Nested
         @DisplayName("comment id와 댓글 내용이 주어지면")
         class Context_with_commentId{
@@ -120,7 +121,6 @@ class CommentServiceTest {
             @DisplayName("댓글을 수정하고 수정된 댓글을 반환한다.")
             void it_update_and_return_comment(){
                 Comments updatedComment = commentService.update(comments.getId(), updateData);
-
                 assertThat(updatedComment).isNotNull();
                 assertThat(updatedComment.getContent()).isEqualTo(updateData.getContent());
             }
@@ -153,8 +153,8 @@ class CommentServiceTest {
 
             @BeforeEach
             void setUp(){
+                setAuthentication("other");
                 updateData = prepareRequestData(false, "_NEW");
-
             }
 
             @Test
@@ -194,6 +194,13 @@ class CommentServiceTest {
 
     private Comments prepareComment(Long postId, boolean secret, String suffix){
         return commentService.save(postId, prepareRequestData(secret, suffix));
+    }
+
+    private User setAuthentication(String prefix) {
+        User user = prepareUser(prefix);
+        String accessToken = webTokenUtil.encode(user.getId());
+        SecurityContextHolder.getContext().setAuthentication(new UserAuthentication(UserRole.Authorized, accessToken, user.getId()));
+        return user;
     }
 
 }
