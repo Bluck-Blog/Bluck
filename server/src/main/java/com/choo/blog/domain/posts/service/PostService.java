@@ -100,11 +100,12 @@ public class PostService {
         if(postLikesRepository.existsByPostIdAndUserId(postId, userId)){
             postLikesRepository.deletePostLikesByPostIdAndUserId(postId, userId);
         }
+        else {
+            PostLikes postLikes = new PostLikes(postId, userId, LikeType.LIKE);
+            postLikesRepository.save(postLikes);
+        }
 
-        PostLikes postLikes = new PostLikes(postId, userId, LikeType.LIKE);
-        postLikesRepository.save(postLikes);
-
-        return 0;
+        return postLikesRepository.countByPostIdAndType(postId, LikeType.LIKE);
     }
 
     public int dislike(Long postId){

@@ -9,5 +9,5 @@ public interface PostLikesRepository extends JpaRepository<PostLikes, Long> {
 
     PostLikes deletePostLikesByPostIdAndUserId(Long postId, Long userId);
 
-    int countByPostIdAndUserIdAndType(Long postId, Long userId, LikeType type);
+    int countByPostIdAndType(Long postId, LikeType type);
 }
