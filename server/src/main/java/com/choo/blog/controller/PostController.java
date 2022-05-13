@@ -1,6 +1,6 @@
 package com.choo.blog.controller;
 
-import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.posts.entity.Post;
 import com.choo.blog.domain.posts.dto.PostModel;
 import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.exceptions.InvalidParameterException;

@@ -1,6 +1,6 @@
 package com.choo.blog.domain.posts.dto;
 
-import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.posts.entity.Post;
 import com.choo.blog.security.UserAuthentication;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;

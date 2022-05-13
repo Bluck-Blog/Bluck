@@ -1,7 +1,7 @@
 package com.choo.blog.domain.posts.dto;
 
 import com.choo.blog.domain.posts.enums.PostOpenType;
-import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.posts.entity.Post;
 import com.choo.blog.domain.users.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

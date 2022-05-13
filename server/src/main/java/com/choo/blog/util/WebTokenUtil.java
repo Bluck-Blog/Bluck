@@ -15,7 +15,7 @@ import java.security.Key;
 
 @Component
 @Slf4j
-public class WebTokenUtil {
+public class  WebTokenUtil {
     private Key key;
 
     public WebTokenUtil(@Value("${jwt.secret}") String secret){

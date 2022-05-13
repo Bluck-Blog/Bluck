@@ -1,13 +1,13 @@
-package com.choo.blog.domain.posts.enums;
+package com.choo.blog.domain.posts.entity;
 
 import com.choo.blog.commons.enums.EnumType;
 
-public enum PostOpenType implements EnumType {
-    ALL(0), FRIEND(1), SPECIFIC(2);
+public enum LikeType implements EnumType {
+    LIKE(0), DISLIKE(1);
 
     public final int id;
 
-    PostOpenType(int id) {
+    LikeType(int id) {
         this.id = id;
     }
 

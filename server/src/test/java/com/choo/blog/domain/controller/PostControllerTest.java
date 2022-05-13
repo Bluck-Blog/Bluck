@@ -5,7 +5,7 @@ import com.choo.blog.common.PostProperties;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
-import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.posts.entity.Post;
 import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.users.User;

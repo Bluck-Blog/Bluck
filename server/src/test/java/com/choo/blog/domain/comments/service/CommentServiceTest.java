@@ -9,7 +9,7 @@ import com.choo.blog.domain.categories.service.CategoryServiceTest;
 import com.choo.blog.domain.comments.Comments;
 import com.choo.blog.domain.comments.dto.CommentRequestData;
 import com.choo.blog.domain.comments.exceptions.ForbiddenCommentException;
-import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.posts.entity.Post;
 import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.posts.service.PostService;
 import com.choo.blog.domain.users.User;

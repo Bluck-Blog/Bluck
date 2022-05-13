@@ -1,7 +1,7 @@
 package com.choo.blog.domain.comments;
 
 import com.choo.blog.domain.BaseEntity;
-import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.posts.entity.Post;
 import com.choo.blog.domain.users.User;
 import lombok.*;
 

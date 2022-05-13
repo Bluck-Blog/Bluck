@@ -3,7 +3,7 @@ package com.choo.blog.domain.comments.service;
 import com.choo.blog.domain.comments.Comments;
 import com.choo.blog.domain.comments.dto.CommentRequestData;
 import com.choo.blog.domain.comments.repository.CommentRepository;
-import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.posts.entity.Post;
 import com.choo.blog.domain.posts.service.PostService;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.service.UserService;

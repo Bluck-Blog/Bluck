@@ -1,4 +1,4 @@
-package com.choo.blog.domain.posts;
+package com.choo.blog.domain.posts.entity;
 
 import com.choo.blog.domain.BaseEntity;
 import com.choo.blog.domain.categories.Category;
