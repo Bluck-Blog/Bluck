@@ -46,8 +46,8 @@ public class SwaggerConfiguration {
                 .groupName(version)
                 .apiInfo(this.apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.choo.blog"))
-                .paths(PathSelectors.any())
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.ant("/api/**"))
                 .build();
     }
 
