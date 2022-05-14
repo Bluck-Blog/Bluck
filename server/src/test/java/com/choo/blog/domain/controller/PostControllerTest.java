@@ -5,7 +5,7 @@ import com.choo.blog.common.PostProperties;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
-import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.posts.entity.Post;
 import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.users.User;
@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -107,28 +108,28 @@ class PostControllerTest extends BaseControllerTest {
                                         headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header")
                                 ),
                                 requestFields(
-                                        fieldWithPath("title").description("게시물 제목"),
-                                        fieldWithPath("content").description("게시물 내용"),
-                                        fieldWithPath("openType").description("게시물 공개 범위"),
-                                        fieldWithPath("categoryId").description("카테고리 id")
+                                        fieldWithPath("title").type(JsonFieldType.STRING).description("게시물 제목"),
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("게시물 내용"),
+                                        fieldWithPath("openType").type(JsonFieldType.STRING).description("게시물 공개 범위"),
+                                        fieldWithPath("categoryId").type(JsonFieldType.NUMBER).description("카테고리 id")
                                 ),
                                 responseHeaders(
                                         headerWithName(HttpHeaders.LOCATION).description("Location header"),
                                         headerWithName(HttpHeaders.CONTENT_TYPE).description("Content type")
                                 ),
                                 relaxedResponseFields(
-                                        fieldWithPath("id").description("생성된 게시물 번호"),
-                                        fieldWithPath("author").description("게시물 작성자"),
-                                        fieldWithPath("title").description("게시물 제목"),
-                                        fieldWithPath("content").description("게시물 내용"),
+                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("생성된 게시물 번호"),
+                                        fieldWithPath("author").type(JsonFieldType.STRING).description("게시물 작성자"),
+                                        fieldWithPath("title").type(JsonFieldType.STRING).description("게시물 제목"),
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("게시물 내용"),
                                         //fieldWithPath("category").description("게시물 카테고리"),
-                                        fieldWithPath("likes").description("게시물 좋아요 갯수"),
-                                        fieldWithPath("dislikes").description("게시물 싫어요 갯수"),
-                                        fieldWithPath("view").description("게시물 조회 수"),
-                                        fieldWithPath("openType").description("게시물 공개 범위"),
-                                        fieldWithPath("commentsList").description("게시물 댓글 목록"),
-                                        fieldWithPath("createDate").description("게시물 생성 시간"),
-                                        fieldWithPath("modifiedDate").description("게시물 수정 시간")
+                                        fieldWithPath("likes").type(JsonFieldType.NUMBER).description("게시물 좋아요 갯수"),
+                                        fieldWithPath("dislikes").type(JsonFieldType.NUMBER).description("게시물 싫어요 갯수"),
+                                        fieldWithPath("view").type(JsonFieldType.NUMBER).description("게시물 조회 수"),
+                                        fieldWithPath("openType").type(JsonFieldType.STRING).description("게시물 공개 범위"),
+                                        fieldWithPath("commentsList").type(JsonFieldType.STRING).description("게시물 댓글 목록"),
+                                        fieldWithPath("createDate").type(JsonFieldType.STRING).description("게시물 생성 시간"),
+                                        fieldWithPath("modifiedDate").type(JsonFieldType.STRING).description("게시물 수정 시간")
                                 )
 
                         ));

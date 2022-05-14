@@ -1,13 +1,9 @@
 package com.choo.blog.domain.categories;
 
-import com.choo.blog.domain.categories.dto.CategoryRequestData;
-import com.choo.blog.domain.posts.Post;
 import com.choo.blog.domain.users.User;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Builder

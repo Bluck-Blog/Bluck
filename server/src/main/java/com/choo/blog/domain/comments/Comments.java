@@ -1,7 +1,8 @@
 package com.choo.blog.domain.comments;
 
 import com.choo.blog.domain.BaseEntity;
-import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.comments.dto.CommentRequestData;
+import com.choo.blog.domain.posts.entity.Post;
 import com.choo.blog.domain.users.User;
 import lombok.*;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@ToString
 public class Comments extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "comment_id")
@@ -32,4 +34,12 @@ public class Comments extends BaseEntity {
     private int likes;
 
     private int dislikes;
+
+    public boolean hasModifyPermission(Long userId){
+        return author.getId().equals(userId);
+    }
+
+    public void update(CommentRequestData updateData) {
+        content = updateData.getContent();
+    }
 }

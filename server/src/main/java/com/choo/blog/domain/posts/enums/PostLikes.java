@@ -1,8 +1,7 @@
 package com.choo.blog.domain.posts.enums;
 
-import com.choo.blog.domain.enums.LikeType;
+import com.choo.blog.domain.posts.entity.LikeType;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;

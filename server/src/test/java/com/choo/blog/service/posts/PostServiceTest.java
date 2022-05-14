@@ -4,7 +4,7 @@ import com.choo.blog.common.UserProperties;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
-import com.choo.blog.domain.posts.Post;
+import com.choo.blog.domain.posts.entity.Post;
 import com.choo.blog.domain.posts.enums.PostOpenType;
 import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.posts.repository.PostRepository;
@@ -401,6 +401,10 @@ class PostServiceTest {
         @Nested
         @DisplayName("이미 좋아요를 누른 걔정으로 좋아요를 요청하면")
         class Context_with_already_request{
+            @BeforeEach
+            void setUp(){
+                postService.like(post.getId());
+            }
             @Test
             @DisplayName("해당 게시물의 좋아요를 제거하고 좋아요 수를 반환한다.")
             void it_remove_post_likes_and_return_likeCnt(){
