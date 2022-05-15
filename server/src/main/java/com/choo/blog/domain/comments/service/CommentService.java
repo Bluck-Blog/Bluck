@@ -43,8 +43,14 @@ public class CommentService {
         return comments;
     }
 
-    public Comments delete(Long commentId){
-        return null;
+    public void delete(Long commentId){
+        Comments comments = get(commentId);
+        UserAuthentication authentication = getLoginInfo();
+        if(!comments.hasModifyPermission(authentication.getUserId())){
+            throw new ForbiddenCommentException(commentId);
+        }
+
+        commentRepository.delete(comments);
     }
 
     private Comments get(Long commentId){
