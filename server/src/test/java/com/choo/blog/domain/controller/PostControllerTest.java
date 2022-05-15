@@ -119,7 +119,7 @@ class PostControllerTest extends BaseControllerTest {
                                 ),
                                 relaxedResponseFields(
                                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("생성된 게시물 번호"),
-                                        fieldWithPath("author").type(JsonFieldType.STRING).description("게시물 작성자"),
+                                        fieldWithPath("author").type(JsonFieldType.OBJECT).description("게시물 작성자"),
                                         fieldWithPath("title").type(JsonFieldType.STRING).description("게시물 제목"),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("게시물 내용"),
                                         //fieldWithPath("category").description("게시물 카테고리"),
