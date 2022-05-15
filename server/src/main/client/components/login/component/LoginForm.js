@@ -12,22 +12,57 @@ import Active from "../../../styles/img/activeCheck.png";
 import Check from "../../../styles/img/check.png";
 import BlackActive from "../../../styles/img/blackActiveCheck.png";
 import BlackCheck from "../../../styles/img/blackCheck.png";
+import { useForm } from "react-hook-form";
 
 export default function LoginForm() {
   const isDark = useRecoilValue(darkMode);
 
   const [rememberId, setRememberId] = useState(false);
+  const [id, setId] = useState("");
+  const [pw, setPw] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    setError,
+  } = useForm();
+
+  const onValid = (data) => {
+    console.log("data");
+    console.log(data);
+
+    setError("pw");
+  };
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit(onValid)}>
       <IdBox>
         <Label>아이디</Label>
-        <IdInput type="text" placeholder="아이디를 입력해주세요." />
+        <IdInput
+          {...register("id", {
+            required: "*아이디 및 비밀번호가 잘못되었습니다.",
+          })}
+          value={id}
+          onChange={(e) => setId(e.target.value)}
+          type="text"
+          placeholder="아이디를 입력해주세요."
+        />
       </IdBox>
       <IdBox>
         <Label>비밀번호</Label>
-        <PwInput type="password" placeholder="비밀번호를 입력해주세요." />
+        <PwInput
+          {...register("pw", {
+            required: "*아이디 및 비밀번호가 잘못되었습니다.",
+          })}
+          value={pw}
+          onChange={(e) => setPw(e.target.value)}
+          type="password"
+          placeholder="비밀번호를 입력해주세요."
+        />
       </IdBox>
+      <ErrText>{errors?.pw?.message}</ErrText>
       <IdRememberBox onClick={() => setRememberId((prev) => !prev)}>
         <Image
           src={
@@ -44,8 +79,7 @@ export default function LoginForm() {
         />
         <IdRememberText>로그인 상태 유지</IdRememberText>
       </IdRememberBox>
-
-      <LoginBtn onClick={(e) => e.preventDefault()}>로그인</LoginBtn>
+      <LoginBtn type="submit">로그인</LoginBtn>
     </Form>
   );
 }
@@ -119,4 +153,10 @@ const LoginBtn = styled.button`
   border: 2px solid ${(props) => props.theme.textColor};
   border-radius: 15px;
   cursor: pointer;
+`;
+
+const ErrText = styled.p`
+  font-size: 12px;
+  color: red;
+  margin-top: 10px;
 `;
