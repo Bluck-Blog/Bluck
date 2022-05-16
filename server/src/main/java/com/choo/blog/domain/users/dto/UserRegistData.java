@@ -26,6 +26,9 @@ public class UserRegistData {
     private String password;
 
     @NotEmpty
+    private String name;
+
+    @NotEmpty
     private String nickname;
 
     @NotEmpty
