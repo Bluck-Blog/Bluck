@@ -28,10 +28,19 @@ public class UserRegistData {
     @NotEmpty
     private String nickname;
 
-    private String image;
-
-    private LocalDate birthdate;
+    @NotEmpty
+    private String profileImage;
 
     @NotEmpty
-    private String description;
+    private LocalDate birthdate;
+
+    private String profileMessage;
+
+    private String introduction;
+
+    @NotEmpty
+    private String phone;
+
+    @NotEmpty
+    private String verifyCode;
 }

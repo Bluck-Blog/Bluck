@@ -24,9 +24,11 @@ public class User extends BaseEntity {
 
     private String password;
     private String nickname;
-    private String image;
+    private String profileImage;
     private LocalDate birthdate;
-    private String description;
+    private String profileMessage;
+    private String introduction;
+    private String phone;
 
     @JsonIgnore
     public String getPassword() {
