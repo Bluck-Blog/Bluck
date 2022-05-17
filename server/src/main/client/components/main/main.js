@@ -1,20 +1,17 @@
 // lib
 import styled from "styled-components";
-import Image from "next/image";
-import { useState, useEffect } from "react";
+
 // components
-import SelectBox from "./component/SelectBox";
 import LeftSection from "./component/LeftSection";
 
 //img
-import Arrow from "../../styles/img/aroow.png";
 import RightSection from "./component/RightSection";
 
 export default function Main({ content }) {
   return (
     <Wrapper>
       <LeftSection content={content} />
-      <RightSection />
+      {/* <RightSection /> */}
     </Wrapper>
   );
 }

@@ -76,6 +76,7 @@ const Logo = styled.a`
   font-weight: bold;
   font-size: 42px;
   margin: 20px 0 30px 0;
+  cursor: pointer;
 `;
 
 const ProfilBox = styled.figure`

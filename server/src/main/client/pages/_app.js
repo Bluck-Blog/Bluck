@@ -6,6 +6,7 @@ import Footer from "../components/footer/Footer";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 export const root = new QueryClient();
+
 function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={root}>
@@ -13,10 +14,10 @@ function MyApp({ Component, pageProps }) {
         <Layout>
           <Wapper>
             <Nav />
-            <RightSection>
+            <div>
               <Component {...pageProps} />
               <Footer />
-            </RightSection>
+            </div>
           </Wapper>
         </Layout>
       </RecoilRoot>
@@ -29,7 +30,5 @@ const Wapper = styled.div`
   justify-content: flex-start;
   align-items: center;
 `;
-
-const RightSection = styled.div``;
 
 export default MyApp;

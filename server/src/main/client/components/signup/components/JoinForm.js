@@ -19,7 +19,7 @@ export default function JoinForm() {
   const [check, setCheck] = useState(false);
   return (
     <Section>
-      <Button>+</Button>
+      <PhotoBtn type="file" />
       <Form>
         <InputBox>
           <Label>아이디</Label>
@@ -121,7 +121,7 @@ const Form = styled.form`
   align-items: center;
 `;
 
-const Button = styled.button`
+const PhotoBtn = styled.input`
   width: 120px;
   height: 120px;
   background: ${(props) => props.theme.bgColor};
@@ -194,9 +194,10 @@ const ConfirmBox = styled.div`
 `;
 
 const ConfirmBtn = styled.button`
+  cursor: pointer;
   border: none;
   background: none;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: bold;
   margin-right: 2%;
   width: 20%;

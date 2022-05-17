@@ -18,8 +18,6 @@ export default function LoginForm() {
   const isDark = useRecoilValue(darkMode);
 
   const [rememberId, setRememberId] = useState(false);
-  const [id, setId] = useState("");
-  const [pw, setPw] = useState("");
 
   const {
     register,
@@ -44,8 +42,6 @@ export default function LoginForm() {
           {...register("id", {
             required: "*아이디 및 비밀번호가 잘못되었습니다.",
           })}
-          value={id}
-          onChange={(e) => setId(e.target.value)}
           type="text"
           placeholder="아이디를 입력해주세요."
         />
@@ -56,8 +52,6 @@ export default function LoginForm() {
           {...register("pw", {
             required: "*아이디 및 비밀번호가 잘못되었습니다.",
           })}
-          value={pw}
-          onChange={(e) => setPw(e.target.value)}
           type="password"
           placeholder="비밀번호를 입력해주세요."
         />

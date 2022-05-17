@@ -10,6 +10,13 @@ export const isLogged = atom({
   default: false,
 });
 
+export const userData = atom({
+  key: "userData",
+  default: {
+    id: "",
+  },
+});
+
 export const darkModeHandle = selector({
   key: "darkModeHandle",
   get: ({ get }) => {

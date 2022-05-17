@@ -45,7 +45,7 @@ export default function LeftSection({ content }) {
 }
 
 const Section = styled.div`
-  width: 50%;
+  width: 100%;
   height: 100%;
   padding: 3%;
 `;
@@ -67,6 +67,9 @@ const Content = styled.div`
   margin-top: 10px;
   height: 63vh;
   overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   &::-webkit-scrollbar {
     width: 5px;
   }
