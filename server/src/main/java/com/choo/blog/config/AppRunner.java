@@ -28,7 +28,7 @@ public class AppRunner implements ApplicationRunner {
                 .password("test")
                 .nickname("testNickName")
                 .birthdate(LocalDate.of(2022, 04, 11))
-                .description("testDescription testest")
+                .introduction("testDescription testest")
                 .build();
         User joinUser = userService.join(user);
         log.info("accessKey : {}", webTokenUtil.encode(joinUser.getId()));

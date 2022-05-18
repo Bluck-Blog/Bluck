@@ -2,11 +2,11 @@ package com.choo.blog.common;
 
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.posts.enums.PostOpenType;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import com.choo.blog.domain.posts.dto.PostRequestData;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component

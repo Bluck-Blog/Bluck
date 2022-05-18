@@ -34,7 +34,6 @@ public class UserRegistData {
     @NotEmpty
     private String profileImage;
 
-    @NotEmpty
     private LocalDate birthdate;
 
     private String profileMessage;

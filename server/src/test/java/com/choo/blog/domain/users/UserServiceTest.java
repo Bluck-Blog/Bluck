@@ -50,7 +50,7 @@ class UserServiceTest {
 
                 assertThat(user.getEmail()).isEqualTo(registData.getEmail());
                 assertThat(user.getBirthdate()).isEqualTo(registData.getBirthdate());
-                assertThat(user.getDescription()).isEqualTo(registData.getDescription());
+                assertThat(user.getIntroduction()).isEqualTo(registData.getIntroduction());
                 assertThat(user.getNickname()).isEqualTo(registData.getNickname());
                 assertThat(passwordEncoder.matches(registData.getPassword(), user.getPassword())).isTrue();
             }

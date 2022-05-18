@@ -48,7 +48,7 @@ class UserControllerTest extends BaseControllerTest {
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("email").value(registData.getEmail()))
                         .andExpect(jsonPath("nickname").value(registData.getNickname()))
-                        .andExpect(jsonPath("description").value(registData.getDescription()))
+                        .andExpect(jsonPath("introduction").value(registData.getIntroduction()))
                         .andExpect(jsonPath("password").doesNotExist())
                         .andExpect(jsonPath("_links.self").exists());
             }
