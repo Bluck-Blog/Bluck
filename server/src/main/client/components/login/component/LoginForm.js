@@ -3,6 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { useRecoilValue } from "recoil";
+import { validation } from "../../module/validation";
 
 //components
 import { darkMode } from "../../../state/atom";
@@ -16,6 +17,7 @@ import { useForm } from "react-hook-form";
 
 export default function LoginForm() {
   const isDark = useRecoilValue(darkMode);
+  const ERRORMESSAGE = "*아이디 및 비밀번호가 잘못되었습니다.";
 
   const [rememberId, setRememberId] = useState(false);
 
@@ -40,7 +42,11 @@ export default function LoginForm() {
         <Label>아이디</Label>
         <IdInput
           {...register("id", {
-            required: "*아이디 및 비밀번호가 잘못되었습니다.",
+            required: ERRORMESSAGE,
+            pattern: {
+              value: validation.email,
+              message: ERRORMESSAGE,
+            },
           })}
           type="text"
           placeholder="아이디를 입력해주세요."
@@ -51,6 +57,10 @@ export default function LoginForm() {
         <PwInput
           {...register("pw", {
             required: "*아이디 및 비밀번호가 잘못되었습니다.",
+            pattern: {
+              value: validation.password,
+              message: ERRORMESSAGE,
+            },
           })}
           type="password"
           placeholder="비밀번호를 입력해주세요."
