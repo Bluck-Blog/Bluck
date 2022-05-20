@@ -1,6 +1,5 @@
 package com.choo.blog.exceptions;
 
-import jdk.jshell.ErroneousSnippet;
 import lombok.Getter;
 import org.springframework.validation.Errors;
 
