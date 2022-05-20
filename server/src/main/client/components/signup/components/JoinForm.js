@@ -19,6 +19,7 @@ export default function JoinForm() {
   const isDark = useRecoilValue(darkMode);
 
   const [check, setCheck] = useState(false);
+  const [profile, setProfile] = useState("");
 
   const {
     register,
@@ -30,11 +31,36 @@ export default function JoinForm() {
   const joinSubmit = (data) => {
     console.log("data===");
     console.log(data);
+    console.log(errors);
+  };
+
+  const uploadProfile = (e) => {
+    const {
+      target: { files },
+    } = e;
+
+    const photo = files[0];
+    const reader = new FileReader();
+    reader.onloadend = (finishEvent) => {
+      const {
+        currentTarget: { result },
+      } = finishEvent;
+      setProfile((prev) => result);
+    };
+    reader.readAsDataURL(photo);
   };
 
   return (
     <Section>
-      <PhotoBtn>+</PhotoBtn>
+      <PhotoBtn photo={profile && profile} for="profilePhoto">
+        {profile ? "" : "+"}
+      </PhotoBtn>
+      <FileInput
+        onChange={uploadProfile}
+        accept="image/*"
+        type="file"
+        id="profilePhoto"
+      />
       <Form onSubmit={handleSubmit(joinSubmit)}>
         <InputBox>
           <Label>이메일</Label>
@@ -228,12 +254,19 @@ const Form = styled.form`
   align-items: center;
 `;
 
-const PhotoBtn = styled.button`
+const PhotoBtn = styled.label`
   width: 120px;
   height: 120px;
-  background: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => (props.photo ? null : props.theme.bgColor)};
+  background-image: url(${(props) => props.photo});
+  background-size: ${(props) => (props.photo ? "cover" : null)};
+  background-position: ${(props) => (props.photo ? "center" : null)};
+  background-repeat: no-repeat;
   border: none;
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Label = styled.p`
@@ -364,4 +397,8 @@ const IdRememberBox = styled.div`
 const IdRememberText = styled.span`
   font-size: 14px;
   margin-left: 1%;
+`;
+
+const FileInput = styled.input`
+  display: none;
 `;
