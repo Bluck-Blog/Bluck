@@ -60,7 +60,6 @@ class PostControllerTest extends BaseControllerTest {
         categoryRespository.deleteAll();
         userRepository.deleteAll();
 
-        userRepository.deleteAll();
         user = prepareUser("");
         category = prepareCategory("");
         session = login(prepareLoginData());

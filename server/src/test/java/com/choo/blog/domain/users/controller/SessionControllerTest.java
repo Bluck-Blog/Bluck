@@ -1,6 +1,9 @@
 package com.choo.blog.domain.users.controller;
 
 import com.choo.blog.common.BaseControllerTest;
+import com.choo.blog.domain.categories.repository.CategoryRespository;
+import com.choo.blog.domain.comments.repository.CommentRepository;
+import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.dto.UserLoginData;
 import com.choo.blog.domain.users.repository.UserRepository;
@@ -21,6 +24,15 @@ class SessionControllerTest extends BaseControllerTest {
     UserRepository userRepository;
 
     @Autowired
+    PostRepository postRepository;
+
+    @Autowired
+    CategoryRespository categoryRespository;
+
+    @Autowired
+    CommentRepository commentRepository;
+
+    @Autowired
     WebTokenUtil webTokenUtil;
 
     @Nested
@@ -30,6 +42,11 @@ class SessionControllerTest extends BaseControllerTest {
 
         @BeforeEach
         void setUp() throws Exception {
+            commentRepository.deleteAll();
+            postRepository.deleteAll();
+            categoryRespository.deleteAll();
+            userRepository.deleteAll();
+
             user = prepareUser("");
         }
 
