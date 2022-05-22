@@ -95,8 +95,8 @@ class SessionControllerTest extends BaseControllerTest {
             @BeforeEach
             void setUp(){
                 wrongPasswordLoginData = UserLoginData.builder()
-                        .email(user.getEmail())
-                        .password(user.getPassword() + "wrong")
+                        .email(userProperties.getEmail())
+                        .password(userProperties.getPassword() + "wrong")
                         .build();
             }
             @Test

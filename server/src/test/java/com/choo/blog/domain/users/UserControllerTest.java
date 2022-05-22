@@ -1,6 +1,9 @@
 package com.choo.blog.domain.users;
 
 import com.choo.blog.common.BaseControllerTest;
+import com.choo.blog.domain.categories.repository.CategoryRespository;
+import com.choo.blog.domain.comments.repository.CommentRepository;
+import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.repository.UserRepository;
 import org.junit.jupiter.api.*;
@@ -18,6 +21,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest extends BaseControllerTest {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    PostRepository postRepository;
+
+    @Autowired
+    CategoryRespository categoryRespository;
+
+    @Autowired
+    CommentRepository commentRepository;
+
+    @BeforeEach
+    void setUp(){
+        commentRepository.deleteAll();
+        postRepository.deleteAll();
+        categoryRespository.deleteAll();
+        userRepository.deleteAll();
+    }
 
     @AfterEach
     public void cleanUp(){
@@ -62,7 +82,7 @@ class UserControllerTest extends BaseControllerTest {
                 ReflectionTestUtils.setField(registData, "email", "");
                 ReflectionTestUtils.setField(registData, "password", "");
                 ReflectionTestUtils.setField(registData, "nickname", "");
-                ReflectionTestUtils.setField(registData, "description", "");
+                ReflectionTestUtils.setField(registData, "introduction", "");
             }
             @Test
             @DisplayName("에러 코드 400을 반환한다.")

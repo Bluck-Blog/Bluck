@@ -5,6 +5,7 @@ import com.choo.blog.common.PostProperties;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
+import com.choo.blog.domain.comments.repository.CommentRepository;
 import com.choo.blog.domain.posts.entity.Post;
 import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.posts.repository.PostRepository;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("게시물 관리")
+@Nested
 class PostControllerTest extends BaseControllerTest {
     private static final String TITLE = "카테고리 제목";
 
@@ -46,10 +48,19 @@ class PostControllerTest extends BaseControllerTest {
     CategoryRespository categoryRespository;
 
     @Autowired
+    CommentRepository commentRepository;
+
+    @Autowired
     PostProperties postProperties;
 
     @BeforeEach
     void setUp() throws Exception {
+        commentRepository.deleteAll();
+        postRepository.deleteAll();
+        categoryRespository.deleteAll();
+        userRepository.deleteAll();
+
+        userRepository.deleteAll();
         user = prepareUser("");
         category = prepareCategory("");
         session = login(prepareLoginData());
@@ -127,7 +138,7 @@ class PostControllerTest extends BaseControllerTest {
                                         fieldWithPath("dislikes").type(JsonFieldType.NUMBER).description("게시물 싫어요 갯수"),
                                         fieldWithPath("view").type(JsonFieldType.NUMBER).description("게시물 조회 수"),
                                         fieldWithPath("openType").type(JsonFieldType.STRING).description("게시물 공개 범위"),
-                                        fieldWithPath("commentsList").type(JsonFieldType.STRING).description("게시물 댓글 목록"),
+                                        fieldWithPath("commentsList").type(JsonFieldType.ARRAY).description("게시물 댓글 목록"),
                                         fieldWithPath("createDate").type(JsonFieldType.STRING).description("게시물 생성 시간"),
                                         fieldWithPath("modifiedDate").type(JsonFieldType.STRING).description("게시물 수정 시간")
                                 )
