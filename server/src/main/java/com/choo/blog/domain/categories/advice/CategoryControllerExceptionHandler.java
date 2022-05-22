@@ -1,15 +1,13 @@
-package com.choo.blog.error.handler;
+package com.choo.blog.domain.categories.advice;
 
 import com.choo.blog.error.ErrorResponse;
-import com.choo.blog.exceptions.CategoryNotFoundException;
+import com.choo.blog.domain.categories.exceptions.CategoryNotFoundException;
 import com.choo.blog.exceptions.DuplicateTitleException;
-import com.choo.blog.exceptions.ForbiddenCategoryException;
+import com.choo.blog.domain.categories.exceptions.ForbiddenCategoryException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import javax.validation.Valid;
 
 @RestControllerAdvice
 public class CategoryControllerExceptionHandler {

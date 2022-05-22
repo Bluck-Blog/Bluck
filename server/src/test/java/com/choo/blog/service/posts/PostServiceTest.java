@@ -13,7 +13,7 @@ import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.UserRole;
 import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.domain.users.service.UserService;
-import com.choo.blog.exceptions.CategoryNotFoundException;
+import com.choo.blog.domain.categories.exceptions.CategoryNotFoundException;
 import com.choo.blog.exceptions.ForbiddenPostException;
 import com.choo.blog.exceptions.PostNotFoundException;
 import com.choo.blog.security.UserAuthentication;

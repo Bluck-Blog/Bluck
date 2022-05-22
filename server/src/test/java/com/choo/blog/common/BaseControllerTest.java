@@ -46,7 +46,6 @@ public class BaseControllerTest {
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(userProperties.prepareUserRegistData(suffix)))).andReturn();
         String content = result.getResponse().getContentAsString();
-        System.out.println(content);
         return objectMapper.readValue(content, User.class);
     }
 

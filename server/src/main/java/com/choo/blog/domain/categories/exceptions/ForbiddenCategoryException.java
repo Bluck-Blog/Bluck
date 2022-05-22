@@ -1,4 +1,4 @@
-package com.choo.blog.exceptions;
+package com.choo.blog.domain.categories.exceptions;
 
 public class ForbiddenCategoryException extends RuntimeException {
     public ForbiddenCategoryException(Long id){

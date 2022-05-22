@@ -7,9 +7,9 @@ import com.choo.blog.domain.categories.repository.CategoryRespository;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.UserRole;
 import com.choo.blog.domain.users.service.UserService;
-import com.choo.blog.exceptions.CategoryNotFoundException;
+import com.choo.blog.domain.categories.exceptions.CategoryNotFoundException;
 import com.choo.blog.exceptions.DuplicateTitleException;
-import com.choo.blog.exceptions.ForbiddenCategoryException;
+import com.choo.blog.domain.categories.exceptions.ForbiddenCategoryException;
 import com.choo.blog.exceptions.UserNotFoundException;
 import com.choo.blog.security.UserAuthentication;
 import com.choo.blog.util.WebTokenUtil;
@@ -22,7 +22,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.IntStream;
 
