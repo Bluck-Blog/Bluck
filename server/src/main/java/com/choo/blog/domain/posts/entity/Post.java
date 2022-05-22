@@ -45,6 +45,7 @@ public class Post extends BaseEntity {
     private int view;
 
     @OneToMany(mappedBy = "posts")
+    @Builder.Default
     private List<Comments> commentsList = new ArrayList<>();
 
     public boolean hasModifyPermission(Long userId){
