@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.IContext;
@@ -29,6 +30,7 @@ public class MailProvider {
     }
 
 
+    @Async
     public void send(MailMessage mailMessage) {
         doSend(mailMessage);
     }
