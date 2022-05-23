@@ -1,5 +1,6 @@
 package com.choo.blog.domain.users.service;
 
+import com.choo.blog.domain.users.exceptions.DuplicateEmailException;
 import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.User;
@@ -41,6 +42,10 @@ public class UserService {
     }
 
     public String generateVerifyCode(String email){
+        boolean existEmail = userRepository.existsByEmail(email);
+        if(existEmail){
+            throw new DuplicateEmailException(email);
+        }
         String code = VerifyCodeUtil.generateToken();
         sendEmailVerifyMail(email, code);
         return code;
