@@ -5,6 +5,26 @@
     <title>Title</title>
 </head>
 <body>
-    <p th:text="${code}"></p>
+    <div id="readFrame">
+        <table align="center" width="500" border="0" cellpadding="0" cellspacing="0" style="border:5px solid #EEE">
+            <tbody><tr><td height="50" bgcolor="#FF8000" style="padding-left:15px"><a href="https://www.bithumb.com" style="font-weight:bold;font-size:15px;color:#FFF;text-decoration:none" rel="noreferrer noopener" target="_blank">Bluck 이메일 인증번호</a></td></tr>
+            <tr><td style="padding:20px">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <tbody><tr><td>
+                        <table width="100%" cellpadding="0" cellspacing="0" style="font-weight:bold">
+                            <tr><td valign="top" height="40" style="border-bottom:1px solid #EEE;line-height:20px">
+                                아래 인증번호를 입력하여 이메일 인증을 완료해 주세요.</td></tr>
+                            </tbody></table>
+                    </td></tr>
+                    <tr><td style="padding:20px 0;border-bottom:1px solid #EEE">
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <colgroup><col width="30%"><col width="70%"></colgroup>
+                            <tbody><tr height="25"><td>인증번호 :</td><td>[[${code}]]</td></tr>
+                            </tbody></table>
+                    </td></tr>
+                    </tbody></table>
+            </td></tr>
+            </tbody></table>
+    </div>
 </body>
 </html>
