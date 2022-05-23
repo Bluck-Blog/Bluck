@@ -1,5 +1,6 @@
 package com.choo.blog.domain.users.controller;
 
+import com.choo.blog.commons.response.ApiResponse;
 import com.choo.blog.domain.users.dto.SessionResponseData;
 import com.choo.blog.domain.users.dto.UserLoginData;
 import com.choo.blog.domain.users.service.AuthenticationService;
