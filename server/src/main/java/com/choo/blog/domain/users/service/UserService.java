@@ -42,21 +42,28 @@ public class UserService {
 
     public String generateVerifyCode(String email){
         String code = VerifyCodeUtil.generateToken();
-        sentRegistationMail(email, code);
+        sendEmailVerifyMail(email, code);
         return code;
     }
 
-    public void sentRegistationMail(String email, String code){
+    private void sendEmailVerifyMail(String email, String code){
 
         Map<String,Object> attributes = new HashMap<>();
         attributes.put("code", code);
 
         MailMessage mailMessage = MailMessage.builder()
-                .templateName("verity")
+                .templateName("verify")
                 .to(new String[]{email})
                 .subject("BLUCK 인증번호")
                 .attributes(attributes)
                 .build();
-        mailProvider.send(mailMessage);
+
+        System.out.println(mailMessage);
+        try {
+            mailProvider.send(mailMessage);
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
     }
 }

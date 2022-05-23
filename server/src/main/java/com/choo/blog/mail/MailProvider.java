@@ -77,6 +77,7 @@ public class MailProvider {
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
             // TODO Auto-generated catch
+            e.printStackTrace();
         }
 
     }
