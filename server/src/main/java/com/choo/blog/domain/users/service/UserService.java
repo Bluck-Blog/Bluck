@@ -63,12 +63,6 @@ public class UserService {
                 .attributes(attributes)
                 .build();
 
-        System.out.println(mailMessage);
-        try {
-            mailProvider.send(mailMessage);
-        }
-        catch (Exception e){
-            System.out.println(e);
-        }
+        mailProvider.send(mailMessage);
     }
 }

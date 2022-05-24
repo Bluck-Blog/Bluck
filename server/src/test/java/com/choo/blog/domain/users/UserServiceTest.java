@@ -26,6 +26,8 @@ class UserServiceTest {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserProperties userProperties;
+    @Autowired
+    private UserService userService;
 
     @Nested
     @DisplayName("회원 가입은")
