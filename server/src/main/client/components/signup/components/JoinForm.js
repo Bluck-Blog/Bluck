@@ -14,6 +14,7 @@ import Active from "../../../styles/img/activeCheck.png";
 import Check from "../../../styles/img/check.png";
 import BlackActive from "../../../styles/img/blackActiveCheck.png";
 import BlackCheck from "../../../styles/img/blackCheck.png";
+import { POST } from "../../../pages/api/Post";
 
 export default function JoinForm() {
   const isDark = useRecoilValue(darkMode);
@@ -21,10 +22,14 @@ export default function JoinForm() {
   const [check, setCheck] = useState(false);
   const [profile, setProfile] = useState("");
 
+  const { data, isSuccess, mutate } =
+    POST.useConfirmEmail("api/session/verify");
+
   const {
     register,
     handleSubmit,
     setError,
+    getValues,
     formState: { errors },
   } = useForm();
 
@@ -50,6 +55,14 @@ export default function JoinForm() {
     reader.readAsDataURL(photo);
   };
 
+  const sentEmail = async (e) => {
+    e.preventDefault();
+    const email = getValues("email");
+    const formData = new FormData();
+    formData.append("email", email);
+    mutate(formData, POST.mutateCallBack("confirmEmaill"));
+  };
+
   return (
     <Section>
       <PhotoBtn photo={profile && profile} for="profilePhoto">
@@ -66,7 +79,7 @@ export default function JoinForm() {
           <Label>이메일</Label>
           <Input
             {...register("email", {
-              required: true,
+              required: "*이메일 형식이 잘못되었습니다.*",
               pattern: {
                 value: validation.email,
                 message: "*이메일 형식이 잘못되었습니다.*",
@@ -78,7 +91,7 @@ export default function JoinForm() {
         </InputBox>
         <ErrorMsg>{errors?.email?.message}</ErrorMsg>
         <ConfirmBox>
-          <ConfirmBtn>인증번호</ConfirmBtn>
+          <ConfirmBtn onClick={sentEmail}>인증번호</ConfirmBtn>
           <ConFirmInput type="text" placeholder="인증번호 입력해주세요." />
         </ConfirmBox>
         <InputBox>
@@ -96,7 +109,7 @@ export default function JoinForm() {
           <Label>비밀번호</Label>
           <Input
             {...register("password", {
-              required: true,
+              required: "*비밀번호 형식이 잘못되었습니다.*",
               pattern: {
                 value: validation.password,
                 message: "*비밀번호 형식이 잘못되었습니다.*",
@@ -112,6 +125,10 @@ export default function JoinForm() {
           <Input
             {...register("passwordcheck", {
               required: "*비밀번호와 다릅니다.*",
+              // pattern: {
+              //   value: "",
+              //   message: ""
+              // }
             })}
             type="text"
             placeholder="비밀번호를 다시 입력해주세요."
@@ -134,6 +151,10 @@ export default function JoinForm() {
           <Input
             {...register("birthday", {
               required: "*생년월일 형식이 잘못돼었습니다.*",
+              pattern: {
+                value: validation.birthday,
+                message: "*생년월일 형식이 잘못돼었습니다.*",
+              },
             })}
             type="text"
             placeholder="생년월일 6자리 입력해주세요."
@@ -145,6 +166,10 @@ export default function JoinForm() {
           <Input
             {...register("phone", {
               required: "*휴대전화 번호 형식이 잘못돼었습니다.*",
+              pattern: {
+                value: validation.phone,
+                message: "*휴대전화 번호 형식이 잘못돼었습니다.*",
+              },
             })}
             type="text"
             placeholder="-없이 입력해주세요."
@@ -255,18 +280,19 @@ const Form = styled.form`
 `;
 
 const PhotoBtn = styled.label`
+  cursor: pointer;
   width: 120px;
   height: 120px;
-  background-color: ${(props) => (props.photo ? null : props.theme.bgColor)};
-  background-image: url(${(props) => props.photo});
-  background-size: ${(props) => (props.photo ? "cover" : null)};
-  background-position: ${(props) => (props.photo ? "center" : null)};
-  background-repeat: no-repeat;
   border: none;
   border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: ${(props) => (props.photo ? null : props.theme.bgColor)};
+  background-image: url(${(props) => props.photo});
+  background-size: ${(props) => (props.photo ? "cover" : null)};
+  background-position: ${(props) => (props.photo ? "center" : null)};
+  background-repeat: no-repeat;
 `;
 
 const Label = styled.p`
