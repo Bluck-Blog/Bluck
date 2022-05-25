@@ -1,6 +1,6 @@
 package com.choo.blog.domain.posts.entity;
 
-import com.choo.blog.domain.BaseEntity;
+import com.choo.blog.commons.entity.BaseEntity;
 import com.choo.blog.domain.categories.Category;
 import com.choo.blog.domain.comments.Comments;
 import com.choo.blog.domain.posts.dto.PostRequestData;

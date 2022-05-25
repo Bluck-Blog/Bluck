@@ -1,6 +1,6 @@
 package com.choo.blog.domain.users;
 
-import com.choo.blog.domain.BaseEntity;
+import com.choo.blog.commons.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;

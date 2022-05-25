@@ -1,4 +1,4 @@
-package com.choo.blog.domain;
+package com.choo.blog.commons.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
