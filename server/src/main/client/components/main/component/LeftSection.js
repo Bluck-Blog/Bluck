@@ -8,6 +8,7 @@ import SelectBox from "./SelectBox";
 //img
 import ContentCard from "./ContentCard";
 import Title from "../../common/Title";
+import SearchBox from "../../common/SearchBox";
 
 export default function LeftSection({ content }) {
   const filterList1 = [
@@ -31,6 +32,7 @@ export default function LeftSection({ content }) {
     <Section>
       <TitleBox>
         <Title title={"HOME"} />
+        <SearchBox />
       </TitleBox>
       <Menu>
         <SelectBox list={filterList1} />
@@ -50,10 +52,12 @@ const Section = styled.div`
   padding: 3%;
 `;
 
-const TitleBox = styled.p`
-  font-size: 48px;
+const TitleBox = styled.div`
   font-weight: bold;
   margin: 0px 0 80px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const Menu = styled.div`
