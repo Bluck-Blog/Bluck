@@ -13,7 +13,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ApiResponse<T> {
     private HttpStatus status;
-    private Integer result;
+    private Integer code;
     private T body;
 
     public ApiResponse(HttpStatus status){
@@ -53,11 +53,19 @@ public class ApiResponse<T> {
     }
 
     public static BodyBuilder notFound(){
-        return status(HttpStatus.NOT_FOUND);
+        return notFound(-1);
+    }
+
+    public static BodyBuilder notFound(Integer code){
+        return status(HttpStatus.NOT_FOUND, code);
     }
 
     public static BodyBuilder badRequest(){
-        return status(HttpStatus.BAD_REQUEST);
+        return badRequest(-1);
+    }
+
+    public static BodyBuilder badRequest(Integer code){
+        return status(HttpStatus.BAD_REQUEST, code);
     }
 
     public interface BodyBuilder{
