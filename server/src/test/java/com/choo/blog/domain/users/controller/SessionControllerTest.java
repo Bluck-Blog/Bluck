@@ -11,6 +11,7 @@ import com.choo.blog.util.WebTokenUtil;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -71,7 +72,7 @@ class SessionControllerTest extends BaseControllerTest {
             @Test
             @DisplayName("토큰을 반환한다.")
             void it_return_token() throws Exception {
-                mockMvc.perform(post("/session")
+                mockMvc.perform(post("/api/session")
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaTypes.HAL_JSON)
                             .content(objectMapper.writeValueAsString(loginData)))
@@ -95,12 +96,16 @@ class SessionControllerTest extends BaseControllerTest {
             @Test
             @DisplayName("401에러를 반환한")
             void it_return_unAuthorized() throws Exception{
-                mockMvc.perform(post("/session")
+                mockMvc.perform(post("/api/session")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaTypes.HAL_JSON)
                         .content(objectMapper.writeValueAsString(invalidEmailLoginData)))
                         .andDo(print())
-                        .andExpect(status().isUnauthorized());
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("status").value(HttpStatus.UNAUTHORIZED.name()))
+                        .andExpect(jsonPath("code").isNumber())
+                        .andExpect(jsonPath("body.message").exists())
+                ;
             }
         }
 
@@ -119,12 +124,15 @@ class SessionControllerTest extends BaseControllerTest {
             @Test
             @DisplayName("401 에러를 반환한다.")
             void it_return_unAuthorized() throws Exception{
-                mockMvc.perform(post("/session")
+                mockMvc.perform(post("/api/session")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaTypes.HAL_JSON)
                                 .content(objectMapper.writeValueAsString(wrongPasswordLoginData)))
                         .andDo(print())
-                        .andExpect(status().isUnauthorized());
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("status").value(HttpStatus.UNAUTHORIZED.name()))
+                        .andExpect(jsonPath("code").isNumber())
+                        .andExpect(jsonPath("body.message").exists());
             }
         }
 
@@ -134,7 +142,7 @@ class SessionControllerTest extends BaseControllerTest {
             @Test
             @DisplayName("400에러를 반환한다.")
             void it_return_badRequest() throws Exception{
-                mockMvc.perform(post("/session")
+                mockMvc.perform(post("/api/session")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaTypes.HAL_JSON))
                         .andDo(print())

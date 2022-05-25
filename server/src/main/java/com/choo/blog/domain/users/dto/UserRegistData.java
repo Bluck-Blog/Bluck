@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 public class UserRegistData {
     @NotEmpty
-    @Email(regexp = "/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$/i")
+    @Email
     private String email;
 
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,20}",

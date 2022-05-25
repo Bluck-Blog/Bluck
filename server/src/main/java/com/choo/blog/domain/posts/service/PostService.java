@@ -92,13 +92,14 @@ public class PostService {
         postRepository.delete(post);
     }
 
+    @Transactional
     public int like(Long postId){
         Long userId = getLoginInfo().getUserId();
 
         Post post = getPost(postId);
 
         if(postLikesRepository.existsByPostIdAndUserId(postId, userId)){
-            postLikesRepository.deletePostLikesByPostIdAndUserId(postId, userId);
+            postLikesRepository.deleteByPostIdAndUserId(postId, userId);
         }
         else {
             PostLikes postLikes = new PostLikes(postId, userId, LikeType.LIKE);

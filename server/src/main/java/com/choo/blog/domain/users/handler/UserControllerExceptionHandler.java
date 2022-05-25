@@ -1,4 +1,4 @@
-package com.choo.blog.domain.users.advice;
+package com.choo.blog.domain.users.handler;
 
 import com.choo.blog.domain.users.exceptions.DuplicateEmailException;
 import com.choo.blog.error.ErrorResponse;

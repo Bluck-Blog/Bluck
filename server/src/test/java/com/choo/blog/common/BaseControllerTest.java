@@ -54,7 +54,7 @@ public class BaseControllerTest {
     }
 
     protected SessionResponseData login(UserLoginData loginData) throws Exception{
-        MvcResult result = mockMvc.perform(post("/session")
+        MvcResult result = mockMvc.perform(post("/api/session")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(loginData))).andReturn();

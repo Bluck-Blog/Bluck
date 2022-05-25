@@ -1,6 +1,9 @@
 package com.choo.blog.domain.users.service;
 
 import com.choo.blog.common.UserProperties;
+import com.choo.blog.domain.categories.repository.CategoryRespository;
+import com.choo.blog.domain.comments.repository.CommentRepository;
+import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.dto.UserLoginData;
 import com.choo.blog.domain.users.repository.UserRepository;
@@ -35,6 +38,15 @@ class AuthenticationServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    PostRepository postRepository;
+
+    @Autowired
+    CategoryRespository categoryRespository;
+
+    @Autowired
+    CommentRepository commentRepository;
+
     User user;
 
     @BeforeEach
@@ -44,6 +56,9 @@ class AuthenticationServiceTest {
 
     @AfterEach
     public void cleanUp(){
+        commentRepository.deleteAll();
+        postRepository.deleteAll();
+        categoryRespository.deleteAll();
         userRepository.deleteAll();
     }
 
