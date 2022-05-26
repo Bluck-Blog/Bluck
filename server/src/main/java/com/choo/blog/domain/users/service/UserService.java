@@ -46,13 +46,17 @@ public class UserService {
     }
 
     public String generateVerifyCode(String email){
+        checkDuplicate(email);
+        String code = VerifyCodeUtil.generateToken();
+        sendEmailVerifyMail(email, code);
+        return passwordEncoder.encode(code);
+    }
+
+    private void checkDuplicate(String email) {
         boolean existEmail = userRepository.existsByEmail(email);
         if(existEmail){
             throw new DuplicateEmailException(email);
         }
-        String code = VerifyCodeUtil.generateToken();
-        sendEmailVerifyMail(email, code);
-        return passwordEncoder.encode(code);
     }
 
     private void sendEmailVerifyMail(String email, String code){

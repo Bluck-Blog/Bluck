@@ -4,10 +4,9 @@ import com.choo.blog.common.UserProperties;
 import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.service.UserService;
 import com.choo.blog.exceptions.UserNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import com.choo.blog.util.VerifyCodeUtil;
+import org.junit.jupiter.api.*;
+import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +16,8 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -111,6 +112,39 @@ class UserServiceTest {
             void it_create_and_return_verifyCode(){
                 String code = userService.generateVerifyCode(email);
                 assertThat(code).isNotEmpty();
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("이메일 인증은")
+    class Describe_verify_email{
+        @Nested
+        @DisplayName("인증번호가 주어지면")
+        class Context_with_verify_code{
+            String rawCode;
+            String code;
+            MockedStatic<VerifyCodeUtil> verifyCodeStaticMock;
+
+            @BeforeEach
+            void setUp(){
+                rawCode = "AB1234";
+                verifyCodeStaticMock = mockStatic(VerifyCodeUtil.class);
+                when(VerifyCodeUtil.generateToken()).thenReturn(rawCode);
+
+                code = userService.generateVerifyCode("ddgg9511@naver.com");
+            }
+
+            @AfterEach
+            void cleanUp(){
+                verifyCodeStaticMock.close();
+            }
+
+            @Test
+            @DisplayName("true를 반환한다.")
+            void it_return_true(){
+                boolean result = userService.verifyEmail(rawCode, code);
+                assertThat(result).isTrue();
             }
         }
     }
