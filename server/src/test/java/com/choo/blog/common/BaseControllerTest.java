@@ -5,6 +5,8 @@ import com.choo.blog.domain.users.dto.SessionResponseData;
 import com.choo.blog.domain.users.dto.UserLoginData;
 import com.choo.blog.util.WebTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -18,6 +20,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.UnsupportedEncodingException;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -49,8 +53,15 @@ public class BaseControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(userProperties.prepareUserRegistData(suffix)))).andReturn();
-        String content = result.getResponse().getContentAsString();
+        //String content = result.getResponse().getContentAsString();
+        String content = getBody(result);
         return objectMapper.readValue(content, User.class);
+    }
+
+    private String getBody(MvcResult result) throws JSONException, UnsupportedEncodingException {
+        JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
+        String content = jsonObject.getString("body");
+        return content;
     }
 
     protected SessionResponseData login(UserLoginData loginData) throws Exception{

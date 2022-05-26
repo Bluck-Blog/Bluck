@@ -1,5 +1,6 @@
 package com.choo.blog.domain.users.controller;
 
+import com.choo.blog.commons.response.ApiResponse;
 import com.choo.blog.domain.users.dto.UserModel;
 import com.choo.blog.domain.users.service.UserService;
 import com.choo.blog.domain.users.dto.UserRegistData;
@@ -9,6 +10,7 @@ import com.choo.blog.exceptions.InvalidParameterException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -42,6 +44,8 @@ public class UserController {
         WebMvcLinkBuilder selfLinkBuilder = WebMvcLinkBuilder.linkTo(UserController.class).slash(user.getId());
         URI createdUri = selfLinkBuilder.toUri();
 
-        return ResponseEntity.created(createdUri).body(userModel);
+        return ApiResponse.status(HttpStatus.CREATED).body(userModel).toResponse();
+
+        //return ResponseEntity.created(createdUri).body(userModel);
     }
 }

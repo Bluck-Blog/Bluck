@@ -21,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class PostService {
@@ -44,7 +46,9 @@ public class PostService {
     }
 
     public Post getPost(Long id){
-        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        Optional<Post> a;
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFoundException(id));
 
         return post;
     }

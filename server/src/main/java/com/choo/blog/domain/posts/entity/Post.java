@@ -35,6 +35,7 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 
+    //TODO : 좋아요 갯수 -> count like Table
     private int likes;
 
     private int dislikes;

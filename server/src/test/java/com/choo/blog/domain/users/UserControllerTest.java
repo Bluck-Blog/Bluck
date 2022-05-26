@@ -9,6 +9,7 @@ import com.choo.blog.domain.users.repository.UserRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -65,12 +66,12 @@ class UserControllerTest extends BaseControllerTest {
                             .accept(MediaTypes.HAL_JSON)
                             .content(objectMapper.writeValueAsString(registData)))
                         .andDo(print())
-                        .andExpect(status().isCreated())
-                        .andExpect(jsonPath("email").value(registData.getEmail()))
-                        .andExpect(jsonPath("nickname").value(registData.getNickname()))
-                        .andExpect(jsonPath("introduction").value(registData.getIntroduction()))
-                        .andExpect(jsonPath("password").doesNotExist())
-                        .andExpect(jsonPath("_links.self").exists());
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("status").value(HttpStatus.CREATED.name()))
+                        .andExpect(jsonPath("body.email").value(registData.getEmail()))
+                        .andExpect(jsonPath("body.nickname").value(registData.getNickname()))
+                        .andExpect(jsonPath("body.introduction").value(registData.getIntroduction()))
+                        .andExpect(jsonPath("body.password").doesNotExist());
             }
         }
 
