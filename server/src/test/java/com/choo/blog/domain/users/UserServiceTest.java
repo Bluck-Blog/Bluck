@@ -93,4 +93,25 @@ class UserServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("인증번호 생성은")
+    class Describe_create_verify_code{
+        @Nested
+        @DisplayName("이메일이 주어지면")
+        class Context_with_email{
+            String email;
+
+            @BeforeEach
+            void setUp(){
+                email = "ddgg9511@naver.com";
+            }
+            @Test
+            @DisplayName("인증번호를 생성하고 생성된 인증번호를 반환한다.")
+            void it_create_and_return_verifyCode(){
+                String code = userService.generateVerifyCode(email);
+                assertThat(code).isNotEmpty();
+            }
+        }
+    }
 }

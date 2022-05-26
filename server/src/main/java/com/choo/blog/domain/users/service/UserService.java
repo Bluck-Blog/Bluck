@@ -41,6 +41,10 @@ public class UserService {
         return user;
     }
 
+    public boolean verifyEmail(String rawCode, String code){
+        return passwordEncoder.matches(rawCode, code);
+    }
+
     public String generateVerifyCode(String email){
         boolean existEmail = userRepository.existsByEmail(email);
         if(existEmail){
@@ -48,7 +52,7 @@ public class UserService {
         }
         String code = VerifyCodeUtil.generateToken();
         sendEmailVerifyMail(email, code);
-        return code;
+        return passwordEncoder.encode(code);
     }
 
     private void sendEmailVerifyMail(String email, String code){

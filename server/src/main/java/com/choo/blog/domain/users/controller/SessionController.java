@@ -37,12 +37,12 @@ public class SessionController {
                 .build();
     }
 
-    @PostMapping("/verify")
+    @GetMapping("/verify")
     public ResponseEntity generateVerifyCode(String email, HttpServletRequest request){
         HttpSession session = request.getSession();
         String code = userService.generateVerifyCode(email);
         session.setAttribute("code", code);
 
-        return ResponseEntity.ok().build();
+        return ApiResponse.status(HttpStatus.CREATED).body(code).toResponse();
     }
 }

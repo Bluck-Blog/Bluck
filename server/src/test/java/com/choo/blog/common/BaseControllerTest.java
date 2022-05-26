@@ -58,7 +58,7 @@ public class BaseControllerTest {
         return objectMapper.readValue(content, User.class);
     }
 
-    private String getBody(MvcResult result) throws JSONException, UnsupportedEncodingException {
+     protected String getBody(MvcResult result) throws JSONException, UnsupportedEncodingException {
         JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
         String content = jsonObject.getString("body");
         return content;

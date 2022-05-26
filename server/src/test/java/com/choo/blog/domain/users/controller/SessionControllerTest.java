@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -147,6 +149,85 @@ class SessionControllerTest extends BaseControllerTest {
                                 .accept(MediaTypes.HAL_JSON))
                         .andDo(print())
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("이메일 인증 요청은")
+    class Describe_request_verify_email{
+        @Nested
+        @DisplayName("이메일이 주어지면")
+        class Context_with_email {
+            String email;
+
+            @Test
+            @DisplayName("이메일 인증번호를 반환한다.")
+            void it_return_verifyCode() throws Exception {
+                mockMvc.perform(get("/api/session/verify")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaTypes.HAL_JSON)
+                                .param("email", email)
+                        )
+                        .andDo(print())
+                        .andExpect(jsonPath("status").value(HttpStatus.OK.name()));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("이메일 인증은")
+    class Describe_verify_email{
+        @Nested
+        @DisplayName("올바른 인증번호가 주어지면")
+        class Context_with_valid_verify_code{
+            String verifyCode;
+
+            @BeforeEach
+            void setUp() throws Exception{
+                MvcResult result = mockMvc.perform(get("/api/session/verify")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaTypes.HAL_JSON)
+                        .param("email", "ddgg9511@naver.com")
+                ).andReturn();
+
+                verifyCode = getBody(result);
+            }
+            @Test
+            @DisplayName("Http 200 을 반환한다.")
+            void it_return_status_ok() throws Exception{
+                mockMvc.perform(post("/api/session/verify")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaTypes.HAL_JSON)
+                        .param("code", verifyCode)
+                )
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("status").value(HttpStatus.OK.name()));
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지 않은 인증번호가 주어지면")
+        class Context_with_invalid_verify_code{
+            String verifyCode;
+
+            @BeforeEach
+            void setUp(){
+                verifyCode = "invalidCode";
+            }
+
+            @Test
+            @DisplayName("Http 200 을 반환한다.")
+            void it_return_status_ok() throws Exception{
+                mockMvc.perform(post("/api/session/verify")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaTypes.HAL_JSON)
+                                .param("code", verifyCode)
+                        )
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("status").value(HttpStatus.BAD_REQUEST.name()));
             }
         }
     }
