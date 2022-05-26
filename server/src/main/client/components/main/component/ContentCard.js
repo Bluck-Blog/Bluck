@@ -95,12 +95,16 @@ const Wrapper = styled.div`
   width: 49%;
   height: 185px;
   margin-bottom: 20px;
-  border-radius: 50px;
+  border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
   cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const Banner = styled.div`
