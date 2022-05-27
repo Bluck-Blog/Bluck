@@ -7,14 +7,21 @@ import com.choo.blog.domain.posts.repository.PostRepository;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.dto.UserLoginData;
 import com.choo.blog.domain.users.repository.UserRepository;
+import com.choo.blog.domain.users.service.UserService;
+import com.choo.blog.util.VerifyCodeUtil;
 import com.choo.blog.util.WebTokenUtil;
 import org.junit.jupiter.api.*;
+import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MvcResult;
 
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -37,6 +44,12 @@ class SessionControllerTest extends BaseControllerTest {
 
     @Autowired
     WebTokenUtil webTokenUtil;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Nested
     @DisplayName("로그인은")
@@ -178,31 +191,37 @@ class SessionControllerTest extends BaseControllerTest {
     @Nested
     @DisplayName("이메일 인증은")
     class Describe_verify_email{
+        MockHttpSession session;
+
+        String rawCode;
+
+        @BeforeEach
+        void setUp(){
+            rawCode = "A1234";
+            session = new MockHttpSession();
+            session.setAttribute("code", passwordEncoder.encode(rawCode));
+        }
+
+        @AfterEach
+        void cleanUp(){
+            session.clearAttributes();
+        }
+
         @Nested
         @DisplayName("올바른 인증번호가 주어지면")
         class Context_with_valid_verify_code{
-            String verifyCode;
-
-            @BeforeEach
-            void setUp() throws Exception{
-                MvcResult result = mockMvc.perform(post("/api/session/verify")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaTypes.HAL_JSON)
-                        .param("email", "ddgg9511@naver.com")
-                ).andReturn();
-
-                verifyCode = getBody(result);
-            }
             @Test
             @DisplayName("Http 200 을 반환한다.")
             void it_return_status_ok() throws Exception{
                 mockMvc.perform(post("/api/session/verify")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .session(session)
                         .accept(MediaTypes.HAL_JSON)
-                        .param("code", verifyCode)
+                        .param("code", rawCode)
                 )
                         .andDo(print())
                         .andExpect(status().isOk())
+                        .andExpect(jsonPath("body").value("true"))
                         .andExpect(jsonPath("status").value(HttpStatus.OK.name()));
             }
         }
@@ -210,24 +229,19 @@ class SessionControllerTest extends BaseControllerTest {
         @Nested
         @DisplayName("유효하지 않은 인증번호가 주어지면")
         class Context_with_invalid_verify_code{
-            String verifyCode;
-
-            @BeforeEach
-            void setUp(){
-                verifyCode = "invalidCode";
-            }
-
             @Test
             @DisplayName("Http 200 을 반환한다.")
             void it_return_status_ok() throws Exception{
                 mockMvc.perform(post("/api/session/verify")
                                 .contentType(MediaType.APPLICATION_JSON)
+                                .session(session)
                                 .accept(MediaTypes.HAL_JSON)
-                                .param("code", verifyCode)
+                                .param("code", "wrongCode")
                         )
                         .andDo(print())
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("status").value(HttpStatus.BAD_REQUEST.name()));
+                        .andExpect(jsonPath("body").value("false"))
+                        .andExpect(jsonPath("status").value(HttpStatus.OK.name()));
             }
         }
     }
