@@ -3,6 +3,7 @@ package com.choo.blog.domain.users.controller;
 import com.choo.blog.commons.response.ApiResponse;
 import com.choo.blog.domain.users.dto.SessionResponseData;
 import com.choo.blog.domain.users.dto.UserLoginData;
+import com.choo.blog.domain.users.exceptions.CodeNotFoundException;
 import com.choo.blog.domain.users.service.AuthenticationService;
 import com.choo.blog.domain.users.service.UserService;
 import com.choo.blog.exceptions.InvalidParameterException;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,5 +46,19 @@ public class SessionController {
         session.setAttribute("code", code);
 
         return ApiResponse.status(HttpStatus.CREATED).body(code).toResponse();
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity verifyEmail(String code, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Object sessionCode = session.getAttribute("code");
+        if(sessionCode == null){
+            throw new CodeNotFoundException();
+        }
+        String encodedCode = String.valueOf(sessionCode);
+
+        boolean result = userService.verifyEmail(code, encodedCode);
+
+        return ApiResponse.status(HttpStatus.OK).body(result).toResponse();
     }
 }

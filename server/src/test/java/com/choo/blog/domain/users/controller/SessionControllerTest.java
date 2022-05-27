@@ -185,7 +185,7 @@ class SessionControllerTest extends BaseControllerTest {
 
             @BeforeEach
             void setUp() throws Exception{
-                MvcResult result = mockMvc.perform(get("/api/session/verify")
+                MvcResult result = mockMvc.perform(post("/api/session/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaTypes.HAL_JSON)
                         .param("email", "ddgg9511@naver.com")

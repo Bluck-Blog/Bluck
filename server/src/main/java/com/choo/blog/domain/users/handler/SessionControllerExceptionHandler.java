@@ -1,6 +1,7 @@
 package com.choo.blog.domain.users.handler;
 
 import com.choo.blog.commons.response.ApiResponse;
+import com.choo.blog.domain.users.exceptions.CodeNotFoundException;
 import com.choo.blog.error.ErrorResponse;
 import com.choo.blog.exceptions.LoginFailException;
 import com.choo.blog.exceptions.PasswordNotMatchException;
@@ -24,5 +25,12 @@ public class SessionControllerExceptionHandler {
         ErrorResponse error = ErrorResponse.create()
                 .message(ex.getMessage());
         return ApiResponse.status(HttpStatus.UNAUTHORIZED).body(error).toResponse();
+    }
+
+    @ExceptionHandler(CodeNotFoundException.class)
+    public ResponseEntity handleCodeNotFoundException(CodeNotFoundException ex) {
+        ErrorResponse error = ErrorResponse.create()
+                .message(ex.getMessage());
+        return ApiResponse.status(HttpStatus.BAD_REQUEST).body(error).toResponse();
     }
 }
