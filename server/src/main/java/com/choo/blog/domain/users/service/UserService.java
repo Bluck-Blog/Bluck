@@ -1,6 +1,7 @@
 package com.choo.blog.domain.users.service;
 
 import com.choo.blog.domain.users.exceptions.DuplicateEmailException;
+import com.choo.blog.domain.users.exceptions.InvalidVerifyCodeException;
 import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.User;
@@ -10,9 +11,13 @@ import com.choo.blog.mail.MailProvider;
 import com.choo.blog.util.VerifyCodeUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,11 +33,22 @@ public class UserService {
     private final MailProvider mailProvider;
 
     public User join(UserRegistData registData){
+        checkVerifyCode(registData.getVerifyCode());
+
         User user = modelMapper.map(registData, User.class);
 
         user.encrypte(passwordEncoder);
 
         return userRepository.save(user);
+    }
+
+    private void checkVerifyCode(String code) {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpSession session = servletRequestAttributes.getRequest().getSession();
+        String encryptCode = (String) session.getAttribute("code");
+        if(!passwordEncoder.matches(code, encryptCode)){
+            throw new InvalidVerifyCodeException();
+        }
     }
 
     public User getUser(Long userId){

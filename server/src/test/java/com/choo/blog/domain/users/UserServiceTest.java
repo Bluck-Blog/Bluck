@@ -2,6 +2,7 @@ package com.choo.blog.domain.users;
 
 import com.choo.blog.common.UserProperties;
 import com.choo.blog.domain.users.dto.UserRegistData;
+import com.choo.blog.domain.users.exceptions.InvalidVerifyCodeException;
 import com.choo.blog.domain.users.service.UserService;
 import com.choo.blog.exceptions.UserNotFoundException;
 import com.choo.blog.util.VerifyCodeUtil;
@@ -9,8 +10,13 @@ import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDate;
 
@@ -30,21 +36,28 @@ class UserServiceTest {
     @Autowired
     private UserService userService;
 
+    MockHttpSession session;
     @Nested
     @DisplayName("회원 가입은")
     class Descrive_join{
-        @Autowired
-        UserService userService;
+        UserRegistData registData;
+        MockHttpSession session;
 
+        @BeforeEach
+        void setUp(){
+            String code = "a1234";
+            session = userProperties.generateVerifySession(passwordEncoder, code);
+            registData = userProperties.prepareUserRegistData("");
+            MockHttpServletRequest request = new MockHttpServletRequest();
+            request.setSession(session);
+            RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+            ReflectionTestUtils.setField(registData, "verifyCode", code);
+        }
         @Nested
         @DisplayName("회원 정보를 입력받으면")
         class context_with_user_info{
-            UserRegistData registData;
 
-            @BeforeEach
-            void setUp(){
-                registData = userProperties.prepareUserRegistData("");
-            }
 
             @Test
             @DisplayName("회원을 등록하고 등록된 회원 정보를 반환한다.")
@@ -60,37 +73,56 @@ class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("회원 조회는")
-        class Describe_get{
-            @Nested
-            @DisplayName("userId를 입력받으면")
-            class Context_with_userId{
-                User user;
+        @DisplayName("잘못된 인증번호가 주어지면")
+        class Context_with_wrong_verify_code{
 
-                @BeforeEach
-                void setUp(){
-                    user = userService.join(userProperties.prepareUserRegistData(""));
-                }
-
-                @Test
-                @DisplayName("id에 해당하는 user를 반환한다")
-                void it_return_user(){
-                    User findUser = userService.getUser(this.user.getId());
-
-                    assertThat(findUser).isNotNull();
-                    assertThat(findUser.getId()).isNotZero();
-                }
+            @BeforeEach
+            void setUp(){
+                ReflectionTestUtils.setField(registData,"verifyCode", "wrong code");
             }
 
-            @Nested
-            @DisplayName("존재하지 않는 userId를 입력받으면")
-            class Context_with_non_exist_userId{
-                @Test
-                @DisplayName("user를 찾을 수 없다는 예외를 던진다.")
-                void it_throw_userNotFoundException(){
-                    assertThatThrownBy(() -> userService.getUser(-1L))
-                            .isInstanceOf(UserNotFoundException.class);
-                }
+            @Test
+            @DisplayName("유효하지 않은 인증번호라는 예외를 던진다.")
+            void it_throw_invalidVerifyException(){
+                assertThatThrownBy(() -> userService.join(registData))
+                        .isInstanceOf(InvalidVerifyCodeException.class);
+            }
+        }
+
+
+    }
+
+    @Nested
+    @DisplayName("회원 조회는")
+    class Describe_get{
+        @Nested
+        @DisplayName("userId를 입력받으면")
+        class Context_with_userId{
+            User user;
+
+            @BeforeEach
+            void setUp(){
+                user = userService.join(userProperties.prepareUserRegistData(""));
+            }
+
+            @Test
+            @DisplayName("id에 해당하는 user를 반환한다")
+            void it_return_user(){
+                User findUser = userService.getUser(this.user.getId());
+
+                assertThat(findUser).isNotNull();
+                assertThat(findUser.getId()).isNotZero();
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 userId를 입력받으면")
+        class Context_with_non_exist_userId{
+            @Test
+            @DisplayName("user를 찾을 수 없다는 예외를 던진다.")
+            void it_throw_userNotFoundException(){
+                assertThatThrownBy(() -> userService.getUser(-1L))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }

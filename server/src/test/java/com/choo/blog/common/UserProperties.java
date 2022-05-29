@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -40,5 +42,12 @@ public class UserProperties {
                 .phone(phone)
                 .verifyCode(verifyCode)
                 .build();
+    }
+
+    public MockHttpSession generateVerifySession(PasswordEncoder passwordEncoder, String code){
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("code", passwordEncoder.encode(code));
+
+        return session;
     }
 }
