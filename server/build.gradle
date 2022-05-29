@@ -23,19 +23,36 @@ remotes {
     backend {
         host = 'localhost'
         user = 'ubuntu'
-        identity = file("${System.properties['user.home']}/.ssh/key.pem")
+        identity = file("${System.properties['user.home']}/.ssh/pref.pem")
+    }
+
+    frontend {
+        host = 'localhost'
+        user = 'ubuntu'
+        identity = file("${System.properties['user.home']}/.ssh/pref.pem")
     }
 }
 
 task deployBE{
+//    doFirst {
+//        buildReactServer
+//    }
+//
+//    ssh.run{
+//        session(remotes.frontend){
+//            put from: "${projectDir}/src/main/client/build", into:"./3000"
+//        }
+//    }
+
     doLast {
         ssh.run{
             session(remotes.backend){
-                execute("sudo sh ./auton/scripts/stop.sh")
+
+                executeSudo("sudo sh ./auton/scripts/stop.sh")
 
                 put from: "${projectDir}/build/libs/blog-0.0.1-SNAPSHOT.jar", into: "./auton/app"
 
-                execute("sudo nohup java -jar ./auton/app/blog-0.0.1-SNAPSHOT.jar nohup.out 2>&1 &")
+                executeScript file("start.sh")
             }
         }
     }
