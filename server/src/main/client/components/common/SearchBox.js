@@ -35,8 +35,7 @@ export default function SearchBox() {
 
 const Wrapper = styled.form`
   position: relative;
-  /* width: 25%; */
-  width: 12vw;
+  width: 16vw;
   height: 30px;
   border-radius: 10px;
   background: ${(props) => props.theme.bgColor};

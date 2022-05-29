@@ -6,40 +6,25 @@ import Link from "next/link";
 
 //img
 import LoginForm from "./LoginForm";
+import LinkTag from "../../common/LinkTag";
 
 export default function FomBox() {
   return (
     <Section>
       <LoginForm />
       <FindBox>
-        <Link href={"/findPw"}>
-          <HrefText>비밀번호 찾기</HrefText>
-        </Link>
-        ·
-        <Link href={"/findId"}>
-          <HrefText>아이디 찾기</HrefText>
-        </Link>
-        ·
-        <Link href={"/signup"}>
-          <HrefText>회원가입</HrefText>
-        </Link>
+        <LinkTag title={"비밀번호 찾기"} size={11} link={"/findpw"} />·
+        <LinkTag title={"아이디 찾기"} size={11} link={"/findId"} />·
+        <LinkTag title={"회원가입"} size={11} link={"/signup"} />
       </FindBox>
     </Section>
   );
 }
 
-const HrefText = styled.span`
-  display: block;
-  font-size: 11px;
-  width: 20%;
-  text-align: center;
-  cursor: pointer;
-  color: ${(props) => props.theme.textColor};
-`;
-
 const Section = styled.section`
   width: 40%;
   height: 100%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;

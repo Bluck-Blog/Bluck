@@ -7,10 +7,9 @@ import SelectBox from "./SelectBox";
 
 //img
 import ContentCard from "./ContentCard";
-import Title from "../../common/Title";
 import SearchBox from "../../common/SearchBox";
 
-export default function LeftSection({ content }) {
+export default function MainSection({ content }) {
   const filterList1 = [
     "인기순",
     "최신순",
@@ -30,13 +29,12 @@ export default function LeftSection({ content }) {
 
   return (
     <Section>
-      <TitleBox>
-        <Title title={"HOME"} />
-        <SearchBox />
-      </TitleBox>
       <Menu>
-        <SelectBox list={filterList1} />
-        <SelectBox list={filterList2} />
+        <SelectBoxWrapper>
+          <SelectBox list={filterList1} />
+          <SelectBox list={filterList2} />
+        </SelectBoxWrapper>
+        <SearchBox />
       </Menu>
       <Content>
         {contentList.length > 0 &&
@@ -49,12 +47,9 @@ export default function LeftSection({ content }) {
 const Section = styled.div`
   width: 100%;
   height: 100%;
-  padding: 3%;
 `;
 
-const TitleBox = styled.div`
-  font-weight: bold;
-  margin: 0px 0 80px 0;
+const SelectBoxWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -62,14 +57,15 @@ const TitleBox = styled.div`
 
 const Menu = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
 `;
 
 const Content = styled.div`
   width: 100%;
   margin-top: 10px;
-  height: 63vh;
+  height: 65vh;
+  padding-right: 1%;
   overflow-y: auto;
   display: flex;
   flex-wrap: wrap;

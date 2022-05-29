@@ -12,25 +12,23 @@ export default function DarkModeBtn() {
 
   return (
     <DarkMode onClick={() => setIsDark(isDark)}>
-      <Image width={25} height={25} src={isDark ? Sun : Moon} />
-      <Dark>다크모드</Dark>
+      <Image width={20} height={20} src={isDark ? Sun : Moon} />
+      <Dark>{isDark ? "라이트모드" : "다크모드"}</Dark>
     </DarkMode>
   );
 }
 
 const Dark = styled.span`
-  font-weight: bold;
-  font-size: 20px;
+  font-weight: 600;
+  font-size: 14px;
   color: ${(props) => props.theme.navText};
 `;
 
 const DarkMode = styled.button`
-  width: 9vw;
-  height: 6vh;
-  margin-top: 10px;
-  margin-bottom: 30px;
-  border-radius: 5vw;
-  border: 4px solid ${(props) => props.theme.navText};
+  width: 8vw;
+  height: 100%;
+  border-radius: 20px;
+  border: 2px solid ${(props) => props.theme.navText};
   display: flex;
   justify-content: space-around;
   align-items: center;

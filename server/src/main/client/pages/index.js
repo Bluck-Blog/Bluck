@@ -1,14 +1,14 @@
 // lib
 
 //components
-import Main from "../components/main/main";
+import MainPage from "../components/main/MainPage";
 import { GET } from "./api/Get";
 
 //img
 import Poster from "../styles/img/whiteProfile.png";
 
 export default function Home(props) {
-  return <Main content={props.content} />;
+  return <MainPage content={props.content} />;
 }
 
 export async function getServerSideProps() {

@@ -1,9 +1,12 @@
-import { RecoilRoot } from "recoil";
+// components
 import Layout from "../components/Layout";
-import styled from "styled-components";
-import Nav from "../components/index/Nav";
-import Footer from "../components/footer/Footer";
+
+// lib
 import { QueryClient, QueryClientProvider } from "react-query";
+import { RecoilRoot } from "recoil";
+import styled from "styled-components";
+
+// img
 
 export const root = new QueryClient();
 
@@ -12,23 +15,11 @@ function MyApp({ Component, pageProps }) {
     <QueryClientProvider client={root}>
       <RecoilRoot>
         <Layout>
-          <Wapper>
-            <Nav />
-            <div>
-              <Component {...pageProps} />
-              <Footer />
-            </div>
-          </Wapper>
+          <Component {...pageProps} />
         </Layout>
       </RecoilRoot>
     </QueryClientProvider>
   );
 }
-
-const Wapper = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-`;
 
 export default MyApp;

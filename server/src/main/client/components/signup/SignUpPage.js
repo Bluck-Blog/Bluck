@@ -11,25 +11,27 @@ import JoinForm from "./components/JoinForm";
 export default function SignUpPage() {
   return (
     <Wrapper>
-      <Left>
+      {/* <Left>
         <Title title={"JOIN"} />
         <SearchBox />
-      </Left>
+      </Left> */}
       <JoinForm />
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  width: 84vw;
-  height: 88vh;
-  border-radius: 50px;
+  /* width: 84vw; */
+  width: 100%;
+  /* height: 88vh; */
+  height: 100%;
+  /* border-radius: 50px;
   background: ${(props) => props.theme.noticeColor};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 0 1% 0 0;
+  padding: 0 1% 0 0; */
 `;
 
 const Left = styled.section`
