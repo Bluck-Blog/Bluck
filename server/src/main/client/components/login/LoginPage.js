@@ -12,17 +12,17 @@ import Title from "../common/Title";
 export default function LoginPage() {
   return (
     <Wrapper>
-      <Left>
+      {/* <Left>
         <Title title={"LOGIN"} />
         <RightSection />
-      </Left>
+      </Left> */}
       <FomBox />
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  width: 84vw;
+  /* width: 84vw;
   height: 88vh;
   border-radius: 50px;
   background: ${(props) => props.theme.noticeColor};
@@ -30,7 +30,9 @@ const Wrapper = styled.div`
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
-  padding: 0 1% 0 0;
+  padding: 0 1% 0 0; */
+  width: 100%;
+  height: 100%;
 `;
 
 const Left = styled.section`

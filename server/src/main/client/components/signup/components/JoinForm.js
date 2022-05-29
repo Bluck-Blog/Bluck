@@ -7,6 +7,7 @@ import { validation } from "../../module/validation";
 import { useForm } from "react-hook-form";
 
 //components
+import { POST } from "../../../pages/api/Post";
 import { darkMode } from "../../../state/atom";
 
 //img
@@ -14,7 +15,6 @@ import Active from "../../../styles/img/activeCheck.png";
 import Check from "../../../styles/img/check.png";
 import BlackActive from "../../../styles/img/blackActiveCheck.png";
 import BlackCheck from "../../../styles/img/blackCheck.png";
-import { POST } from "../../../pages/api/Post";
 
 export default function JoinForm() {
   const isDark = useRecoilValue(darkMode);
@@ -239,7 +239,7 @@ const Btn = styled.button`
 `;
 
 const BtnBox = styled.div`
-  width: 100%;
+  width: 90%;
   margin: 40px 0;
   display: flex;
   justify-content: space-between;
@@ -247,9 +247,10 @@ const BtnBox = styled.div`
 `;
 
 const Section = styled.section`
-  width: 70%;
+  max-width: 768px;
   height: 80%;
-  padding: 0 5%;
+  /* padding: 0 2%; */
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -271,8 +272,8 @@ const Section = styled.section`
 `;
 
 const Form = styled.form`
-  width: 100%;
-  margin-left: 20px;
+  width: 70%;
+  margin: 0 20px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -281,8 +282,8 @@ const Form = styled.form`
 
 const PhotoBtn = styled.label`
   cursor: pointer;
-  width: 120px;
-  height: 120px;
+  width: 190px;
+  height: 190px;
   border: none;
   border-radius: 10px;
   display: flex;
@@ -307,7 +308,7 @@ const Label = styled.p`
 `;
 
 const IntroLabel = styled.p`
-  width: 10%;
+  width: 15%;
   height: 40px;
   line-height: 2.8;
   /* padding-left: 2%; */
@@ -388,7 +389,7 @@ const ConFirmInput = styled.input`
 `;
 
 const IntroInput = styled.textarea`
-  width: 85%;
+  width: 80%;
   height: 90%;
   border: none;
   border-radius: 10px;

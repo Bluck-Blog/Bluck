@@ -4,12 +4,13 @@ import styled from "styled-components";
 
 //img
 
-export default function Title({ title }) {
-  return <TitleText>{title}</TitleText>;
+export default function Title({ title, size }) {
+  return <TitleText size={size}>{title}</TitleText>;
 }
 
-const TitleText = styled.p`
-  font-size: 48px;
+const TitleText = styled.span`
+  font-size: ${(props) => props.size}px;
   font-weight: bold;
-  /* margin-top: 20px; */
+  cursor: pointer;
+  color: ${(props) => props.theme.textColor};
 `;
