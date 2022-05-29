@@ -124,3 +124,6 @@ task buildReactServer(type: NpmTask){
 build {
     dependsOn copyDocument
 }
+
+//build 완료시 task 실행
+//build.finalizedBy(test_ssh)
