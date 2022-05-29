@@ -2,15 +2,43 @@ buildscript {
     ext{
         querydslVersion = "5.0.0"
         mooworkNodeVersion = "1.3.1"
+        sshVersion = "2.10.1"
     }
 }
 
 plugins {
     id 'org.springframework.boot' version '2.6.7'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.asciidoctor.jvm.convert' version "3.3.2" //restDoc
-    id "com.moowork.node" version "${mooworkNodeVersion}"
+    id 'org.asciidoctor.jvm.convert' version '3.3.2' //restDoc
+    id 'com.moowork.node' version "${mooworkNodeVersion}"
+    id 'org.hidetake.ssh' version "${sshVersion}"
     id 'java'
+}
+
+ssh.settings{
+    dryRun = project.hasProperty('dryRun')
+}
+
+remotes {
+    backend {
+        host = 'localhost'
+        user = 'ubuntu'
+        identity = file("${System.properties['user.home']}/.ssh/key.pem")
+    }
+}
+
+task deployBE{
+    doLast {
+        ssh.run{
+            session(remotes.backend){
+                execute("sudo sh ./auton/scripts/stop.sh")
+
+                put from: "${projectDir}/build/libs/blog-0.0.1-SNAPSHOT.jar", into: "./auton/app"
+
+                execute("sudo nohup java -jar ./auton/app/blog-0.0.1-SNAPSHOT.jar nohup.out 2>&1 &")
+            }
+        }
+    }
 }
 
 group = 'com.choo'
