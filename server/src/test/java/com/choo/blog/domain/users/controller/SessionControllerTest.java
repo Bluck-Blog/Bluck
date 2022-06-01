@@ -17,11 +17,14 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -91,8 +94,19 @@ class SessionControllerTest extends BaseControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaTypes.HAL_JSON)
                             .content(objectMapper.writeValueAsString(loginData)))
+                        .andDo(print())
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.accessToken").exists());
+                        .andExpect(jsonPath("$.accessToken").exists())
+                        .andDo(document(
+                                "login",
+                                requestFields(
+                                    fieldWithPath("email").type(JsonFieldType.STRING).description("로그인 이메일"),
+                                    fieldWithPath("password").type(JsonFieldType.STRING).description("로그인 패스워드")
+                                ),
+                                responseFields(
+                                        fieldWithPath("accessToken").type(JsonFieldType.STRING).description("로그인 토큰")
+                                )
+                        ));
             }
         }
 
