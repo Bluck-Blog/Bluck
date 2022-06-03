@@ -1,7 +1,6 @@
 //lib
 import styled from "styled-components";
 import Image from "next/image";
-import { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 
 //components
@@ -23,12 +22,13 @@ export default function ContentCard({ item }) {
   const isDark = useRecoilValue(darkMode);
 
   return (
-    <Wrapper>
+    <Wrapper isDark={isDark}>
       <Banner>
         <Image
-          width="100%"
-          height="120%"
+          // width={"260%"}
           layout="responsive"
+          height={500}
+          // layout="fill"
           src={Dog}
           alt="photo"
         />
@@ -103,11 +103,14 @@ const Wrapper = styled.div`
   cursor: pointer;
   transition: 0.3s;
   &:hover {
-    box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: ${(props) =>
+      props.isDark
+        ? "2px 3px 3px 0px rgba(255, 255, 255, 0.1)"
+        : "2px 3px 3px 0px rgba(0, 0, 0, 0.1)"};
   }
 `;
 
-const Banner = styled.div`
+const Banner = styled.figure`
   width: 30%;
   height: 100%;
   border-right: 1px solid #aaa;

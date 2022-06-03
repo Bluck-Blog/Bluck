@@ -1,25 +1,18 @@
+// componenets
+import { validation } from "../../module/validation";
+
 // lib
 import { useState } from "react";
 import styled from "styled-components";
-import Image from "next/image";
-import { useRecoilValue } from "recoil";
-import { validation } from "../../module/validation";
-
-//components
-import { darkMode } from "../../../state/atom";
 import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
+import { darkMode } from "../../../state/atom";
 
-//img
-import Active from "../../../styles/img/activeCheck.png";
-import Check from "../../../styles/img/check.png";
-import BlackActive from "../../../styles/img/blackActiveCheck.png";
-import BlackCheck from "../../../styles/img/blackCheck.png";
+// img
 
-export default function LoginForm() {
+export default function FindIdFormBox() {
   const isDark = useRecoilValue(darkMode);
   const ERRORMESSAGE = "*아이디 및 비밀번호가 잘못되었습니다.";
-
-  const [rememberId, setRememberId] = useState(false);
 
   const {
     register,
@@ -37,7 +30,7 @@ export default function LoginForm() {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onValid)}>
+    <FindIDForm onSubmit={handleSubmit(onValid)}>
       <IdBox>
         <Label>아이디</Label>
         <IdInput
@@ -67,29 +60,14 @@ export default function LoginForm() {
         />
       </IdBox>
       <ErrText>{errors?.pw?.message}</ErrText>
-      <IdRememberBox onClick={() => setRememberId((prev) => !prev)}>
-        <Image
-          src={
-            isDark
-              ? rememberId
-                ? BlackActive
-                : BlackCheck
-              : rememberId
-              ? Active
-              : Check
-          }
-          width={20}
-          height={20}
-        />
-        <IdRememberText>로그인 상태 유지</IdRememberText>
-      </IdRememberBox>
-      <LoginBtn type="submit">로그인</LoginBtn>
-    </Form>
+      <LoginBtn type="submit">아이디 찾기</LoginBtn>
+    </FindIDForm>
   );
 }
 
-const Form = styled.form`
-  width: 80%;
+const FindIDForm = styled.form`
+  width: 50%;
+  margin: 250px auto 0 auto;
 `;
 
 const IdInput = styled.input`
