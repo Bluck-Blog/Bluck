@@ -2,17 +2,22 @@
 import { validation } from "../../module/validation";
 
 // lib
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
-import { darkMode } from "../../../state/atom";
+// import { useEffect } from "react/cjs/react.development";
 
 // img
 
 export default function FindIdFormBox() {
-  const isDark = useRecoilValue(darkMode);
-  const ERRORMESSAGE = "*아이디 및 비밀번호가 잘못되었습니다.";
+  const FINDIDERRORMESSAGE = "*일치하는 정보가 없습니다.";
+
+  const [isFindedId, setIsFindedId] = useState(false);
+
+  useEffect(() => {
+    console.log("isFindedId===");
+    console.log(isFindedId);
+  }, [isFindedId]);
 
   const {
     register,
@@ -22,55 +27,62 @@ export default function FindIdFormBox() {
     setError,
   } = useForm();
 
-  const onValid = (data) => {
+  const namePhoneNumberForFindIdValidation = (data) => {
     console.log("data");
     console.log(data);
 
-    setError("pw");
+    setIsFindedId((prev) => {
+      console.log("prev===");
+      console.log(prev);
+      return !prev;
+    });
   };
 
   return (
-    <FindIDForm onSubmit={handleSubmit(onValid)}>
-      <IdBox>
-        <Label>아이디</Label>
-        <IdInput
-          {...register("id", {
-            required: ERRORMESSAGE,
-            pattern: {
-              value: validation.email,
-              message: ERRORMESSAGE,
-            },
-          })}
-          type="text"
-          placeholder="아이디를 입력해주세요."
-        />
-      </IdBox>
-      <IdBox>
-        <Label>비밀번호</Label>
-        <PwInput
-          {...register("pw", {
-            required: "*아이디 및 비밀번호가 잘못되었습니다.",
-            pattern: {
-              value: validation.password,
-              message: ERRORMESSAGE,
-            },
-          })}
-          type="password"
-          placeholder="비밀번호를 입력해주세요."
-        />
-      </IdBox>
-      <ErrText>{errors?.pw?.message}</ErrText>
-      <LoginBtn type="submit">아이디 찾기</LoginBtn>
+    <FindIDForm onSubmit={handleSubmit(namePhoneNumberForFindIdValidation)}>
+      {isFindedId && <div>asfdasdfasdf</div>}
+      {isFindedId ? (
+        <div>asdfasfd</div>
+      ) : (
+        <>
+          <IdBoxForFindId>
+            <LabelForFindId>이름</LabelForFindId>
+            <IdInputForFindId
+              {...register("nameForFindId", {
+                required: true,
+              })}
+              type="text"
+              placeholder="이름을 입력해주세요."
+            />
+          </IdBoxForFindId>
+          <IdBoxForFindId>
+            <LabelForFindId>휴대폰</LabelForFindId>
+            <PhoneInputForFindId
+              {...register("phoneForFindId", {
+                required: true,
+                pattern: {
+                  value: validation.phone,
+                  message: FINDIDERRORMESSAGE,
+                },
+              })}
+              type="number"
+              placeholder="휴대폰 번호를 입력해주세요."
+            />
+          </IdBoxForFindId>
+          <ErrText>{errors?.phone?.message}</ErrText>
+          <ForFindIdBtn type="submit">아이디 찾기</ForFindIdBtn>
+        </>
+      )}
     </FindIDForm>
   );
 }
 
 const FindIDForm = styled.form`
-  width: 50%;
+  width: 35%;
   margin: 250px auto 0 auto;
 `;
 
-const IdInput = styled.input`
+const IdInputForFindId = styled.input`
   width: 80%;
   height: 50px;
   border: none;
@@ -82,7 +94,7 @@ const IdInput = styled.input`
   }
 `;
 
-const PwInput = styled.input`
+const PhoneInputForFindId = styled.input`
   width: 80%;
   height: 50px;
   border: none;
@@ -94,7 +106,7 @@ const PwInput = styled.input`
   }
 `;
 
-const IdBox = styled.div`
+const IdBoxForFindId = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -103,7 +115,7 @@ const IdBox = styled.div`
   margin-top: 20px;
 `;
 
-const Label = styled.p`
+const LabelForFindId = styled.p`
   width: 20%;
   padding-left: 2%;
   font-size: 14px;
@@ -111,20 +123,7 @@ const Label = styled.p`
   color: ${(props) => props.theme.textColor};
 `;
 
-const IdRememberBox = styled.div`
-  margin-top: 15px;
-  width: 40%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  cursor: pointer;
-`;
-
-const IdRememberText = styled.span`
-  margin-left: 3%;
-`;
-
-const LoginBtn = styled.button`
+const ForFindIdBtn = styled.button`
   width: 100%;
   height: 55px;
   margin-top: 50px;
