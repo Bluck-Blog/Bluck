@@ -18,7 +18,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -26,6 +28,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -94,25 +98,17 @@ class PostControllerTest extends BaseControllerTest {
                             .content(objectMapper.writeValueAsString(saveData))
                             .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken()))
                         .andDo(print())
-                        .andExpect(status().isCreated())
-                        .andExpect(jsonPath("id").exists())
-                        .andExpect(header().exists(HttpHeaders.LOCATION))
-                        .andExpect(jsonPath("title").value(saveData.getTitle()))
-                        .andExpect(jsonPath("content").value(saveData.getContent()))
-                        .andExpect(jsonPath("likes").value(0))
-                        .andExpect(jsonPath("dislikes").value(0))
-                        .andExpect(jsonPath("openType").value(saveData.getOpenType().toString()))
-                        .andExpect(jsonPath("view").value(0))
-                        .andExpect(jsonPath("_links.self").exists())
-                        .andExpect(jsonPath("_links.update-url").exists())
-                        .andExpect(jsonPath("_links.delete-url").exists())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("status").value(HttpStatus.CREATED.name()))
+                        .andExpect(jsonPath("body.id").exists())
+                        .andExpect(jsonPath("body.title").value(saveData.getTitle()))
+                        .andExpect(jsonPath("body.content").value(saveData.getContent()))
+                        .andExpect(jsonPath("body.likes").value(0))
+                        .andExpect(jsonPath("body.dislikes").value(0))
+                        .andExpect(jsonPath("body.openType").value(saveData.getOpenType().toString()))
+                        .andExpect(jsonPath("body.view").value(0))
                         .andDo(document(
                                 "create-posts",
-                                links(halLinks(),
-                                        linkWithRel("self").description("Link to self"),
-                                        linkWithRel("update-url").description("Link to update"),
-                                        linkWithRel("delete-url").description("Link to delete")
-                                ),
                                 requestHeaders(
                                         headerWithName(HttpHeaders.ACCEPT).description("accept header"),
                                         headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header")
@@ -123,23 +119,19 @@ class PostControllerTest extends BaseControllerTest {
                                         fieldWithPath("openType").type(JsonFieldType.STRING).description("게시물 공개 범위"),
                                         fieldWithPath("categoryId").type(JsonFieldType.NUMBER).description("카테고리 id")
                                 ),
-                                responseHeaders(
-                                        headerWithName(HttpHeaders.LOCATION).description("Location header"),
-                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content type")
-                                ),
                                 relaxedResponseFields(
-                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("생성된 게시물 번호"),
-                                        fieldWithPath("author").type(JsonFieldType.OBJECT).description("게시물 작성자"),
-                                        fieldWithPath("title").type(JsonFieldType.STRING).description("게시물 제목"),
-                                        fieldWithPath("content").type(JsonFieldType.STRING).description("게시물 내용"),
+                                        fieldWithPath("body.id").type(JsonFieldType.NUMBER).description("생성된 게시물 번호"),
+                                        fieldWithPath("body.author").type(JsonFieldType.OBJECT).description("게시물 작성자"),
+                                        fieldWithPath("body.title").type(JsonFieldType.STRING).description("게시물 제목"),
+                                        fieldWithPath("body.content").type(JsonFieldType.STRING).description("게시물 내용"),
                                         //fieldWithPath("category").description("게시물 카테고리"),
-                                        fieldWithPath("likes").type(JsonFieldType.NUMBER).description("게시물 좋아요 갯수"),
-                                        fieldWithPath("dislikes").type(JsonFieldType.NUMBER).description("게시물 싫어요 갯수"),
-                                        fieldWithPath("view").type(JsonFieldType.NUMBER).description("게시물 조회 수"),
-                                        fieldWithPath("openType").type(JsonFieldType.STRING).description("게시물 공개 범위"),
-                                        fieldWithPath("commentsList").type(JsonFieldType.ARRAY).description("게시물 댓글 목록"),
-                                        fieldWithPath("createDate").type(JsonFieldType.STRING).description("게시물 생성 시간"),
-                                        fieldWithPath("modifiedDate").type(JsonFieldType.STRING).description("게시물 수정 시간")
+                                        fieldWithPath("body.likes").type(JsonFieldType.NUMBER).description("게시물 좋아요 갯수"),
+                                        fieldWithPath("body.dislikes").type(JsonFieldType.NUMBER).description("게시물 싫어요 갯수"),
+                                        fieldWithPath("body.view").type(JsonFieldType.NUMBER).description("게시물 조회 수"),
+                                        fieldWithPath("body.openType").type(JsonFieldType.STRING).description("게시물 공개 범위"),
+                                        fieldWithPath("body.commentsList").type(JsonFieldType.ARRAY).description("게시물 댓글 목록"),
+                                        fieldWithPath("body.createDate").type(JsonFieldType.STRING).description("게시물 생성 시간"),
+                                        fieldWithPath("body.modifiedDate").type(JsonFieldType.STRING).description("게시물 수정 시간")
                                 )
 
                         ));
@@ -236,23 +228,50 @@ class PostControllerTest extends BaseControllerTest {
             @Test
             @DisplayName("게시물을 수정하고 수정된 게시물을 반환한다.")
             void it_return_updated_posts() throws Exception {
-                mockMvc.perform(patch("/api/posts/{id}",post.getId())
+                mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/posts/{id}",post.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaTypes.HAL_JSON)
                             .content(objectMapper.writeValueAsString(updateData))
                             .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken()))
                         .andDo(print())
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("id").value(post.getId()))
-                        .andExpect(jsonPath("title").value(updateData.getTitle()))
-                        .andExpect(jsonPath("content").value(updateData.getContent()))
-                        .andExpect(jsonPath("likes").value(post.getLikes()))
-                        .andExpect(jsonPath("dislikes").value(post.getDislikes()))
-                        .andExpect(jsonPath("openType").value(updateData.getOpenType().toString()))
-                        .andExpect(jsonPath("view").value(post.getView()))
-                        .andExpect(jsonPath("_links.self").exists())
-                        .andExpect(jsonPath("_links.update-url").exists())
-                        .andExpect(jsonPath("_links.delete-url").exists());
+                        .andExpect(jsonPath("status").value(HttpStatus.OK.name()))
+                        .andExpect(jsonPath("body.id").value(post.getId()))
+                        .andExpect(jsonPath("body.title").value(updateData.getTitle()))
+                        .andExpect(jsonPath("body.content").value(updateData.getContent()))
+                        .andExpect(jsonPath("body.likes").value(post.getLikes()))
+                        .andExpect(jsonPath("body.dislikes").value(post.getDislikes()))
+                        .andExpect(jsonPath("body.openType").value(updateData.getOpenType().toString()))
+                        .andExpect(jsonPath("body.view").value(post.getView()))
+                        .andDo(document(
+                                "update-post",
+                                requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")
+                                ),
+                                pathParameters(
+                                        parameterWithName("id").description("수정할 게시물 pk")
+                                ),
+                                requestFields(
+                                        fieldWithPath("title").type(JsonFieldType.STRING).description("게시물 제목"),
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("게시물 내용"),
+                                        fieldWithPath("categoryId").type(JsonFieldType.NUMBER).description("카테고리 pk"),
+                                        fieldWithPath("openType").type(JsonFieldType.STRING).description("게시물 공개 범위")
+                                ),
+                                relaxedResponseFields(
+                                        fieldWithPath("body.id").type(JsonFieldType.NUMBER).description("게시물 번호"),
+                                        fieldWithPath("body.author").type(JsonFieldType.OBJECT).description("게시물 작성자"),
+                                        fieldWithPath("body.title").type(JsonFieldType.STRING).description("게시물 제목"),
+                                        fieldWithPath("body.content").type(JsonFieldType.STRING).description("게시물 내용"),
+                                        //fieldWithPath("category").description("게시물 카테고리"),
+                                        fieldWithPath("body.likes").type(JsonFieldType.NUMBER).description("게시물 좋아요 갯수"),
+                                        fieldWithPath("body.dislikes").type(JsonFieldType.NUMBER).description("게시물 싫어요 갯수"),
+                                        fieldWithPath("body.view").type(JsonFieldType.NUMBER).description("게시물 조회 수"),
+                                        fieldWithPath("body.openType").type(JsonFieldType.STRING).description("게시물 공개 범위"),
+                                        fieldWithPath("body.commentsList").type(JsonFieldType.ARRAY).description("게시물 댓글 목록"),
+                                        fieldWithPath("body.createDate").type(JsonFieldType.STRING).description("게시물 생성 시간"),
+                                        fieldWithPath("body.modifiedDate").type(JsonFieldType.STRING).description("게시물 수정 시간")
+                                )
+                        ));
             }
 
             @Nested
@@ -590,8 +609,7 @@ class PostControllerTest extends BaseControllerTest {
                 .content(objectMapper.writeValueAsString(postProperties.generateRequestData(category, suffix)))
                 .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken()))
                 .andReturn();
-        String content = result.getResponse().getContentAsString();
-        System.out.println(content);
+        String content = getBody(result);
         return objectMapper.readValue(content, Post.class);
     }
 

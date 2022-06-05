@@ -21,7 +21,7 @@ ssh.settings{
 
 remotes {
     backend {
-        host = 'localhost'
+        host = '3.36.249.59'
         user = 'ubuntu'
         identity = file("${System.properties['user.home']}/.ssh/pref.pem")
     }
@@ -33,7 +33,7 @@ remotes {
     }
 }
 
-task deployBE{
+task deploy{
 //    doFirst {
 //        buildReactServer
 //    }

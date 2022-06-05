@@ -1,5 +1,6 @@
 package com.choo.blog.controller;
 
+import com.choo.blog.commons.response.ApiResponse;
 import com.choo.blog.domain.posts.entity.Post;
 import com.choo.blog.domain.posts.dto.PostModel;
 import com.choo.blog.domain.posts.dto.PostRequestData;
@@ -12,6 +13,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -42,7 +44,8 @@ public class PostController {
 
         URI createdUri = selfLinkBuilder.toUri();
 
-        return ResponseEntity.created(createdUri).body(postModel);
+
+        return ApiResponse.status(HttpStatus.CREATED).body(postModel).toResponse();
     }
 
     @PatchMapping("/{id}")
@@ -57,7 +60,7 @@ public class PostController {
         Post post = postService.update(id, updateData);
         PostModel postModel = new PostModel(post);
 
-        return ResponseEntity.ok(postModel);
+        return ApiResponse.status(HttpStatus.OK).body(postModel).toResponse();
     }
 
     @GetMapping

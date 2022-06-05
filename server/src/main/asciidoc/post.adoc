@@ -10,9 +10,16 @@
 
 operation::get-events[snippets='response-fields,curl-request,http-response,links']
 
-[[resources-게시물-create]]
+[[resources-post-create]]
 === 게시물 생성
 
-`POST` 요청을 사용해서 새 이벤트를 만들 수 있다.
+`POST` 요청을 사용해서 새 게시물을 만들 수 있다.
 
 operation::create-posts[snippets='request-fields,curl-request,http-request,request-headers,http-response,response-headers,response-fields,links']
+
+[[reource-post-update]]
+=== 게시물 수정
+
+`PUT` 요청을 사용해서 게시물을 숮어할 수 있다.
+
+operation::update-post[snippets='request-fields,curl-request,http-request,request-headers,http-response,response-headers,response-fields,links']
