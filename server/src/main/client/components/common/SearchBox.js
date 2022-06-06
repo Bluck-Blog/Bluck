@@ -10,6 +10,7 @@ import { darkModeHandle } from "../../state/atom";
 //img
 import WhiteLenz from "../../styles/img/whiteLenz.png";
 import BlackLenz from "../../styles/img/blackLenz.png";
+import { media } from "../../styles/common/media";
 
 export default function SearchBox() {
   const filter = ["작성자", "제목", "태그"];
@@ -41,6 +42,10 @@ const Wrapper = styled.form`
   background: ${(props) => props.theme.bgColor};
   float: right;
   margin-bottom: 15px;
+
+  ${media.desktop`
+      width: 25vw;
+    `}
 `;
 
 const AbsolBox = styled.div`

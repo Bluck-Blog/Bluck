@@ -5,7 +5,7 @@ const size = {
   tablet: 768,
 };
 
-const media = Object.keys(size).reduce((acc, label) => {
+export const media = Object.keys(size).reduce((acc, label) => {
   acc[label] = (...args) => css`
     @media (max-width: ${size[label]}px) {
       ${css(...args)}

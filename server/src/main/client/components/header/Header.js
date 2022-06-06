@@ -1,15 +1,14 @@
 // components
 import Title from "../common/Title";
+import { media } from "../../styles/common/media";
 
 // lib
 import styled from "styled-components";
-import Link from "next/link";
 import LinkTag from "../common/LinkTag";
 
 // img
 
 export default function Header() {
-  console.log("here");
   return (
     <HeaderWrapper>
       <LinkTag title={"BLUCK"} size={42} link={"/"} />
@@ -36,4 +35,8 @@ const BtnBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  ${media.desktop`
+      width: 15%;  
+    `}
 `;
