@@ -343,8 +343,9 @@ class PostControllerTest extends BaseControllerTest {
                                 .content(objectMapper.writeValueAsString(updateData))
                                 .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken()))
                         .andDo(print())
-                        .andExpect(status().isNotFound())
-                        .andExpect(jsonPath("message").exists())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("status").value(HttpStatus.NOT_FOUND.name()))
+                        .andExpect(jsonPath("body.message").value(Matchers.containsString("-1")));
                         ;
 
             }
@@ -408,11 +409,7 @@ class PostControllerTest extends BaseControllerTest {
                                 .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken()))
                         .andDo(print())
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("page").exists())
-                        .andExpect(jsonPath("_links.self").exists())
-                        .andExpect(jsonPath("_embedded.posts[0]._links.self").exists())
-                        .andExpect(jsonPath("_embedded.posts[0]._links.update-url").exists())
-                        .andExpect(jsonPath("_embedded.posts[0]._links.delete-url").exists());
+                        .andExpect(jsonPath("body.page").exists());
             }
         }
 
@@ -436,11 +433,7 @@ class PostControllerTest extends BaseControllerTest {
                                 .header(HttpHeaders.AUTHORIZATION,  "Bearer " + accessToken))
                         .andDo(print())
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("page").exists())
-                        .andExpect(jsonPath("_links.self").exists())
-                        .andExpect(jsonPath("_embedded.posts[0]._links.self").exists())
-                        .andExpect(jsonPath("_embedded.posts[0]._links.update-url").doesNotExist())
-                        .andExpect(jsonPath("_embedded.posts[0]._links.delete-url").doesNotExist());
+                        .andExpect(jsonPath("body.page").exists());
             }
         }
     }
@@ -467,14 +460,11 @@ class PostControllerTest extends BaseControllerTest {
                             .accept(MediaTypes.HAL_JSON)
                             .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken()))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("_links.self").exists())
-                        .andExpect(jsonPath("title").value(post.getTitle()))
-                        .andExpect(jsonPath("content").value(post.getContent()))
-                        .andExpect(jsonPath("likes").value(post.getLikes()))
-                        .andExpect(jsonPath("dislikes").value(post.getDislikes()))
-                        .andExpect(jsonPath("view").value(post.getView() + 1))
-                        .andExpect(jsonPath("_links.update-url").exists())
-                        .andExpect(jsonPath("_links.delete-url").exists());
+                        .andExpect(jsonPath("body.title").value(post.getTitle()))
+                        .andExpect(jsonPath("body.content").value(post.getContent()))
+                        .andExpect(jsonPath("body.likes").value(post.getLikes()))
+                        .andExpect(jsonPath("body.dislikes").value(post.getDislikes()))
+                        .andExpect(jsonPath("body.view").value(post.getView() + 1));
             }
         }
 
@@ -495,14 +485,11 @@ class PostControllerTest extends BaseControllerTest {
                                 .accept(MediaTypes.HAL_JSON)
                                 .header(HttpHeaders.AUTHORIZATION,  "Bearer " + accessToken))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("_links.self").exists())
-                        .andExpect(jsonPath("title").value(post.getTitle()))
-                        .andExpect(jsonPath("content").value(post.getContent()))
-                        .andExpect(jsonPath("likes").value(post.getLikes()))
-                        .andExpect(jsonPath("dislikes").value(post.getDislikes()))
-                        .andExpect(jsonPath("view").value(post.getView() + 1))
-                        .andExpect(jsonPath("_links.update-url").doesNotExist())
-                        .andExpect(jsonPath("_links.delete-url").doesNotExist());
+                        .andExpect(jsonPath("body.title").value(post.getTitle()))
+                        .andExpect(jsonPath("body.content").value(post.getContent()))
+                        .andExpect(jsonPath("body.likes").value(post.getLikes()))
+                        .andExpect(jsonPath("body.dislikes").value(post.getDislikes()))
+                        .andExpect(jsonPath("body.view").value(post.getView() + 1));
             }
         }
 
@@ -514,8 +501,9 @@ class PostControllerTest extends BaseControllerTest {
             void it_return_notFound() throws Exception {
                 mockMvc.perform(get("/api/posts/{id}", -1)
                                 .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken()))
-                        .andExpect(status().isNotFound())
-                        .andExpect(jsonPath("message").value(Matchers.containsString("-1")));
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("status").value(HttpStatus.NOT_FOUND.name()))
+                        .andExpect(jsonPath("body.message").value(Matchers.containsString("-1")));
             }
         }
     }
@@ -551,8 +539,9 @@ class PostControllerTest extends BaseControllerTest {
             void it_return_notFound() throws Exception{
                 mockMvc.perform(delete("/api/posts/{id}", -1)
                                 .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken()))
-                        .andExpect(status().isNotFound())
-                        .andExpect(jsonPath("message").value(Matchers.containsString("-1")));
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("status").value(HttpStatus.NOT_FOUND.name()))
+                        .andExpect(jsonPath("body.message").value(Matchers.containsString("-1")));
             }
         }
 

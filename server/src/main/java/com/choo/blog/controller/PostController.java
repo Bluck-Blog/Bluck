@@ -69,7 +69,7 @@ public class PostController {
 
         PagedModel<PostModel> postModels = assembler.toModel(page, e -> new PostModel(e));
 
-        return ResponseEntity.ok(postModels);
+        return ApiResponse.ok(postModels).toResponse();
     }
 
     @GetMapping("{id}")
@@ -78,7 +78,7 @@ public class PostController {
 
         PostModel postModel = new PostModel(post);
 
-        return ResponseEntity.ok(postModel);
+        return ApiResponse.ok(postModel).toResponse();
     }
 
     @DeleteMapping("{id}")
@@ -86,6 +86,6 @@ public class PostController {
     public ResponseEntity deletePost(@PathVariable Long id){
         postService.delete(id);
 
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok().build().toResponse();
     }
 }
