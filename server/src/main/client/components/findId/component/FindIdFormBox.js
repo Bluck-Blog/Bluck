@@ -5,6 +5,7 @@ import { validation } from "../../module/validation";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import LinkTag from "../../common/LinkTag";
 // import { useEffect } from "react/cjs/react.development";
 
 // img
@@ -13,6 +14,7 @@ export default function FindIdFormBox() {
   const FINDIDERRORMESSAGE = "*일치하는 정보가 없습니다.";
 
   const [isFindedId, setIsFindedId] = useState(false);
+  const [userIdFromDB, setUserIdFromDB] = useState("");
 
   useEffect(() => {
     console.log("isFindedId===");
@@ -31,18 +33,14 @@ export default function FindIdFormBox() {
     console.log("data");
     console.log(data);
 
-    setIsFindedId((prev) => {
-      console.log("prev===");
-      console.log(prev);
-      return !prev;
-    });
+    setIsFindedId((prev) => !prev);
+    setUserIdFromDB((prev) => "dlsdk0601@gmail.com");
   };
 
   return (
     <FindIDForm onSubmit={handleSubmit(namePhoneNumberForFindIdValidation)}>
-      {isFindedId && <div>asfdasdfasdf</div>}
       {isFindedId ? (
-        <div>asdfasfd</div>
+        <NameText>회원님의 아이디는 {userIdFromDB}입니다.</NameText>
       ) : (
         <>
           <IdBoxForFindId>
@@ -73,13 +71,32 @@ export default function FindIdFormBox() {
           <ForFindIdBtn type="submit">아이디 찾기</ForFindIdBtn>
         </>
       )}
+      <LinkBoxForm>
+        <LinkTag title={"로그인"} size={11} link={"/login"} />·
+        <LinkTag title={"비밀번호 찾기"} size={11} link={"/findpw"} />·
+        <LinkTag title={"회원가입"} size={11} link={"/signup"} />
+      </LinkBoxForm>
     </FindIDForm>
   );
 }
 
+const LinkBoxForm = styled.div`
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+const NameText = styled.p`
+  text-align: center;
+  font-size: 28px;
+`;
+
 const FindIDForm = styled.form`
   width: 35%;
-  margin: 250px auto 0 auto;
+  margin: 150px auto 0 auto;
 `;
 
 const IdInputForFindId = styled.input`

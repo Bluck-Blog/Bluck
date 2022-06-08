@@ -17,6 +17,7 @@ import BlackCommend from "../../../styles/img/blackCommend.png";
 import BlackLike from "../../../styles/img/blackLike.png";
 import BlackFind from "../../../styles/img/blackFind.png";
 import BlackHate from "../../../styles/img/blackHate.png";
+import { media } from "../../../styles/common/media";
 
 export default function ContentCard({ item }) {
   const isDark = useRecoilValue(darkMode);
@@ -108,6 +109,10 @@ const Wrapper = styled.div`
         ? "2px 3px 3px 0px rgba(255, 255, 255, 0.1)"
         : "2px 3px 3px 0px rgba(0, 0, 0, 0.1)"};
   }
+
+  ${media.desktop`
+      height: 120px;
+    `}
 `;
 
 const Banner = styled.figure`

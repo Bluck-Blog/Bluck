@@ -4,7 +4,6 @@ import Layout from "../components/Layout";
 // lib
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
-import styled from "styled-components";
 
 // img
 
