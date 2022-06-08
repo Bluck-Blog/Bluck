@@ -11,7 +11,6 @@ import com.choo.blog.mail.MailProvider;
 import com.choo.blog.util.VerifyCodeUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -24,6 +23,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private static final String CODE_KEY = "code";
+
     private final UserRepository userRepository;
 
     private final ModelMapper modelMapper;
@@ -43,12 +44,24 @@ public class UserService {
     }
 
     private void checkVerifyCode(String code) {
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpSession session = servletRequestAttributes.getRequest().getSession();
-        String encryptCode = (String) session.getAttribute("code");
+        Object sessionAttiribute = getSessionAttribute();
+
+        if(sessionAttiribute == null){
+            throw new InvalidVerifyCodeException();
+        }
+
+        String encryptCode = String.valueOf(sessionAttiribute);
+
         if(!passwordEncoder.matches(code, encryptCode)){
             throw new InvalidVerifyCodeException();
         }
+    }
+
+    private Object getSessionAttribute() {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpSession session = servletRequestAttributes.getRequest().getSession();
+        Object sessionAttiribute = session.getAttribute(CODE_KEY);
+        return sessionAttiribute;
     }
 
     public User getUser(Long userId){
