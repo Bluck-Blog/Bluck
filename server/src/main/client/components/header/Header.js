@@ -1,5 +1,4 @@
 // components
-import Title from "../common/Title";
 import { media } from "../../styles/common/media";
 
 // lib
@@ -11,10 +10,28 @@ import LinkTag from "../common/LinkTag";
 export default function Header() {
   return (
     <HeaderWrapper>
-      <LinkTag title={"BLUCK"} size={42} link={"/"} />
+      <LinkTag
+        title={"BLUCK"}
+        tabletSize={36}
+        mobileSize={24}
+        size={42}
+        link={"/"}
+      />
       <BtnBox>
-        <LinkTag title={"LOG-IN"} size={14} link={"/login"} />
-        <LinkTag title={"JOIN"} size={14} link={"/signup"} />
+        <LinkTag
+          title={"LOG-IN"}
+          tabletSize={12}
+          mobileSize={10}
+          size={14}
+          link={"/login"}
+        />
+        <LinkTag
+          title={"JOIN"}
+          tabletSize={12}
+          mobileSize={10}
+          size={14}
+          link={"/signup"}
+        />
       </BtnBox>
     </HeaderWrapper>
   );
@@ -36,7 +53,7 @@ const BtnBox = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  ${media.desktop`
+  ${media.tablet`
       width: 15%;  
     `}
 `;

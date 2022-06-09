@@ -14,7 +14,7 @@ export default function FindIdPage() {
   );
 }
 
-const Wrapper = styled.section`
+const Wrapper = styled.div`
   width: 100%;
   height: 100%;
 `;

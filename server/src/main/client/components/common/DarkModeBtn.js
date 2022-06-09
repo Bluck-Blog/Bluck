@@ -6,6 +6,7 @@ import { darkMode, darkModeHandle } from "../../state/atom";
 //img
 import Moon from "../../styles/img/moon.png";
 import Sun from "../../styles/img/sun.png";
+import { media } from "../../styles/common/media";
 
 export default function DarkModeBtn() {
   const [isDark, setIsDark] = useRecoilState(darkModeHandle);
@@ -22,10 +23,15 @@ const Dark = styled.span`
   font-weight: 600;
   font-size: 14px;
   color: ${(props) => props.theme.navText};
+
+  ${media.tablet`
+  font-size: 12px;
+  `}
 `;
 
 const DarkMode = styled.button`
-  width: 8vw;
+  /* width: 8vw; */
+  width: 130px;
   height: 100%;
   border-radius: 20px;
   border: 2px solid ${(props) => props.theme.navText};
@@ -33,4 +39,9 @@ const DarkMode = styled.button`
   justify-content: space-around;
   align-items: center;
   background: none;
+
+  ${media.tablet`
+  width: 130px;
+  height: 80%;
+  `}
 `;
