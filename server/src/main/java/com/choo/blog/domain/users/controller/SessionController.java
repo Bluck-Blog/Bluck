@@ -1,6 +1,8 @@
 package com.choo.blog.domain.users.controller;
 
+import com.choo.blog.commons.enums.EnumType;
 import com.choo.blog.commons.response.ApiResponse;
+import com.choo.blog.domain.posts.enums.PostOpenType;
 import com.choo.blog.domain.users.dto.SessionResponseData;
 import com.choo.blog.domain.users.dto.UserLoginData;
 import com.choo.blog.domain.users.exceptions.CodeNotFoundException;

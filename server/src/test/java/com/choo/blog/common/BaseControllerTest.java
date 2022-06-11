@@ -67,6 +67,7 @@ public class BaseControllerTest {
 
         User user = modelMapper.map(registData, User.class);
 
+
         user.encrypte(passwordEncoder);
         User savedUser = userRepository.save(user);
         return savedUser;

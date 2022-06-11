@@ -2,6 +2,7 @@ package com.choo.blog.mail;
 
 import com.choo.blog.util.TextTemplateEngine;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,6 +17,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.util.List;
 
+@Profile("!test")
 @Service
 public class MailProviderImpl implements MailProvider {
     private final MailProperties mailProperties;
@@ -31,11 +33,12 @@ public class MailProviderImpl implements MailProvider {
 
 
     @Async
+    @Override
     public void send(MailMessage mailMessage) {
         doSend(mailMessage);
     }
 
-
+    @Override
     public void send(List<MailMessage> mailMessages) {
         mailMessages.stream().forEach(mailMessage -> send(mailMessage));
 
