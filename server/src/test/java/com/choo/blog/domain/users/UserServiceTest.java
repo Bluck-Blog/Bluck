@@ -3,11 +3,13 @@ package com.choo.blog.domain.users;
 import com.choo.blog.common.UserProperties;
 import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.exceptions.InvalidVerifyCodeException;
+import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.domain.users.service.UserService;
 import com.choo.blog.exceptions.UserNotFoundException;
 import com.choo.blog.util.VerifyCodeUtil;
 import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -35,6 +37,10 @@ class UserServiceTest {
     private UserProperties userProperties;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     MockHttpSession session;
     @Nested
@@ -102,7 +108,7 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp(){
-                user = userService.join(userProperties.prepareUserRegistData(""));
+                user = prepareUser("");
             }
 
             @Test
@@ -179,5 +185,10 @@ class UserServiceTest {
                 assertThat(result).isTrue();
             }
         }
+    }
+
+    private User prepareUser(String suffix){
+        User user = modelMapper.map(userProperties.prepareUserRegistData(suffix), User.class);
+        return userRepository.save(user);
     }
 }

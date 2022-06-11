@@ -8,10 +8,8 @@ import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.dto.UserLoginData;
 import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.domain.users.service.UserService;
-import com.choo.blog.util.VerifyCodeUtil;
 import com.choo.blog.util.WebTokenUtil;
 import org.junit.jupiter.api.*;
-import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
@@ -19,10 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.web.servlet.MvcResult;
 
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -205,19 +201,21 @@ class SessionControllerTest extends BaseControllerTest {
     @Nested
     @DisplayName("이메일 인증은")
     class Describe_verify_email{
-        MockHttpSession session;
+        MockHttpSession mockHttpSession;
 
         String rawCode;
 
         @BeforeEach
         void setUp(){
             rawCode = "A1234";
-            userProperties.generateVerifySession(passwordEncoder, rawCode);
+            mockHttpSession = userProperties.generateVerifySession(passwordEncoder, rawCode);
+
+            mockHttpSession.setAttribute("code", rawCode);
         }
 
         @AfterEach
         void cleanUp(){
-            session.clearAttributes();
+            mockHttpSession.clearAttributes();
         }
 
         @Nested
@@ -228,7 +226,7 @@ class SessionControllerTest extends BaseControllerTest {
             void it_return_status_ok() throws Exception{
                 mockMvc.perform(post("/api/session/verify")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .session(session)
+                        .session(mockHttpSession)
                         .accept(MediaTypes.HAL_JSON)
                         .param("code", rawCode)
                 )
@@ -247,7 +245,7 @@ class SessionControllerTest extends BaseControllerTest {
             void it_return_status_ok() throws Exception{
                 mockMvc.perform(post("/api/session/verify")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .session(session)
+                                .session(mockHttpSession)
                                 .accept(MediaTypes.HAL_JSON)
                                 .param("code", "wrongCode")
                         )

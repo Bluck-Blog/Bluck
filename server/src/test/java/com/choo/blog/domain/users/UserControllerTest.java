@@ -57,8 +57,7 @@ class UserControllerTest extends BaseControllerTest {
             String code = passwordEncoder.encode("code");
 
             registData = userProperties.prepareUserRegistData("");
-            ReflectionTestUtils.setField(registData, "verifyCode", "code");
-            mockHttpSession = new MockHttpSession();
+             ReflectionTestUtils.setField(registData, "verifyCode", "code");
             mockHttpSession.setAttribute("code", code);
         }
 

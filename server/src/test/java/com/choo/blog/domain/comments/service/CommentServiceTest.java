@@ -14,6 +14,8 @@ import com.choo.blog.domain.posts.dto.PostRequestData;
 import com.choo.blog.domain.posts.service.PostService;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.UserRole;
+import com.choo.blog.domain.users.dto.UserRegistData;
+import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.domain.users.service.UserService;
 import com.choo.blog.exceptions.CommentNotFoundException;
 import com.choo.blog.exceptions.PostNotFoundException;
@@ -23,6 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CommentServiceTest {
     private final static String CONTENT = "댓글 내용";
     @Autowired
-    UserService userService;
+    UserRepository userRepository;
     @Autowired
     CategoryService categoryService;
     @Autowired
@@ -48,6 +51,8 @@ class CommentServiceTest {
     UserProperties userProperties;
     @Autowired
     CommentService commentService;
+    @Autowired
+    ModelMapper modelMapper;
     @Autowired
     private WebTokenUtil webTokenUtil;
 
@@ -172,7 +177,8 @@ class CommentServiceTest {
     }
 
     private User prepareUser(String suffix){
-        return userService.join(userProperties.prepareUserRegistData(suffix));
+        User user = modelMapper.map(userProperties.prepareUserRegistData(suffix), User.class);
+        return userRepository.save(user);
     }
 
     private Category prepareCategory(String suffix){

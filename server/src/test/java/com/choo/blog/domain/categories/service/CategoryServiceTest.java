@@ -6,6 +6,7 @@ import com.choo.blog.domain.categories.dto.CategoryRequestData;
 import com.choo.blog.domain.categories.repository.CategoryRespository;
 import com.choo.blog.domain.users.User;
 import com.choo.blog.domain.users.UserRole;
+import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.domain.users.service.UserService;
 import com.choo.blog.domain.categories.exceptions.CategoryNotFoundException;
 import com.choo.blog.exceptions.DuplicateTitleException;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,9 +43,12 @@ public class CategoryServiceTest {
     @Autowired
     private WebTokenUtil webTokenUtil;
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
     @Autowired
     private UserProperties userProperties;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     private User user;
 
@@ -325,6 +330,7 @@ public class CategoryServiceTest {
     }
 
     private User prepareUser(String suffix){
-        return userService.join(userProperties.prepareUserRegistData(suffix));
+        User user = modelMapper.map(userProperties.prepareUserRegistData(suffix), User.class);
+        return userRepository.save(user);
     }
 }

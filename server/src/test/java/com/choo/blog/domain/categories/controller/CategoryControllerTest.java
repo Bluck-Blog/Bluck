@@ -11,6 +11,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -431,8 +432,9 @@ class CategoryControllerTest extends BaseControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaTypes.HAL_JSON))
                         .andDo(print())
-                        .andExpect(status().isNotFound())
-                        .andExpect(jsonPath("message").exists());
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("status").value(HttpStatus.NOT_FOUND.name()))
+                        .andExpect(jsonPath("body.message").exists());
             }
         }
     }
