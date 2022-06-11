@@ -51,6 +51,7 @@ public class UserService {
         }
 
         String encryptCode = String.valueOf(sessionAttiribute);
+        System.out.println("encryptCode = " + encryptCode);
 
         if(!passwordEncoder.matches(code, encryptCode)){
             throw new InvalidVerifyCodeException();

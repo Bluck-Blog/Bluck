@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -49,10 +50,21 @@ class UserControllerTest extends BaseControllerTest {
     @DisplayName("회원 가입은")
     class Describe_regist{
         UserRegistData registData;
+        MockHttpSession mockHttpSession;
 
         @BeforeEach
         void setUp(){
+            String code = passwordEncoder.encode("code");
+
             registData = userProperties.prepareUserRegistData("");
+            ReflectionTestUtils.setField(registData, "verifyCode", "code");
+            mockHttpSession = new MockHttpSession();
+            mockHttpSession.setAttribute("code", code);
+        }
+
+        @AfterEach
+        void clean(){
+            mockHttpSession.clearAttributes();
         }
 
         @Nested
@@ -64,7 +76,9 @@ class UserControllerTest extends BaseControllerTest {
                 mockMvc.perform(post("/api/users")
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaTypes.HAL_JSON)
-                            .content(objectMapper.writeValueAsString(registData)))
+                            .content(objectMapper.writeValueAsString(registData))
+                            .session(mockHttpSession)
+                        )
                         .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("status").value(HttpStatus.CREATED.name()))
