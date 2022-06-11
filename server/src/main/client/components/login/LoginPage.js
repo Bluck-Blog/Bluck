@@ -1,5 +1,6 @@
 // lib
 import styled from "styled-components";
+import { media } from "../../styles/common/media";
 import FomBox from "./component/FomBox";
 
 //components

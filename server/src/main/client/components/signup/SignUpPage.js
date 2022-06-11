@@ -1,7 +1,6 @@
 // lib
 import styled from "styled-components";
 import SearchBox from "../common/SearchBox";
-import Title from "../common/Title";
 import JoinForm from "./components/JoinForm";
 
 //components
@@ -11,10 +10,6 @@ import JoinForm from "./components/JoinForm";
 export default function SignUpPage() {
   return (
     <Wrapper>
-      {/* <Left>
-        <Title title={"JOIN"} />
-        <SearchBox />
-      </Left> */}
       <JoinForm />
     </Wrapper>
   );

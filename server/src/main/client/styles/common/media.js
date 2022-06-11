@@ -1,8 +1,8 @@
 import { css } from "styled-components";
 
 const size = {
-  desktop: 1024,
-  tablet: 768,
+  tablet: 1024,
+  mobile: 768,
 };
 
 export const media = Object.keys(size).reduce((acc, label) => {

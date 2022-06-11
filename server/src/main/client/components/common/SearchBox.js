@@ -43,7 +43,7 @@ const Wrapper = styled.form`
   float: right;
   margin-bottom: 15px;
 
-  ${media.desktop`
+  ${media.tablet`
       width: 25vw;
     `}
 `;
