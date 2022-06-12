@@ -8,6 +8,7 @@ import SelectBox from "./SelectBox";
 //img
 import ContentCard from "./ContentCard";
 import SearchBox from "../../common/SearchBox";
+import { media } from "../../../styles/common/media";
 
 export default function MainSection({ content }) {
   const filterList1 = [
@@ -83,4 +84,8 @@ const Content = styled.div`
   &::-webkit-scrollbar-track {
     /* background-color: grey; */
   }
+
+  ${media.tablet`
+    height: 72vh;
+  `}
 `;
