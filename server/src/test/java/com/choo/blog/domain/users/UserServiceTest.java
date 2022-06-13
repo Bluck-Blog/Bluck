@@ -42,7 +42,6 @@ class UserServiceTest {
     @Autowired
     private ModelMapper modelMapper;
 
-    MockHttpSession session;
     @Nested
     @DisplayName("회원 가입은")
     class Descrive_join{
@@ -60,6 +59,12 @@ class UserServiceTest {
 
             ReflectionTestUtils.setField(registData, "verifyCode", code);
         }
+
+        @AfterEach
+        void cleanUp(){
+            userProperties.cleanUp();
+        }
+
         @Nested
         @DisplayName("회원 정보를 입력받으면")
         class context_with_user_info{

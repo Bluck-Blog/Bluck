@@ -12,6 +12,7 @@ import com.choo.blog.exceptions.LoginFailException;
 import com.choo.blog.exceptions.PasswordNotMatchException;
 import com.choo.blog.util.WebTokenUtil;
 import org.junit.jupiter.api.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -47,11 +48,15 @@ class AuthenticationServiceTest {
     @Autowired
     CommentRepository commentRepository;
 
+    @Autowired
+    ModelMapper modelMapper;
+
+
     User user;
 
     @BeforeEach
     public void setUp(){
-        user = userService.join(userProperties.prepareUserRegistData(""));
+        user = userProperties.prepareUser("");
     }
 
     @AfterEach
