@@ -1,5 +1,5 @@
 // lib
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { useRecoilValue } from "recoil";
@@ -14,12 +14,15 @@ import Active from "../../../styles/img/activeCheck.png";
 import Check from "../../../styles/img/check.png";
 import BlackActive from "../../../styles/img/blackActiveCheck.png";
 import BlackCheck from "../../../styles/img/blackCheck.png";
+import { POST } from "../../../pages/api/Post";
 
 export default function LoginForm() {
   const isDark = useRecoilValue(darkMode);
   const ERRORMESSAGE = "*아이디 및 비밀번호가 잘못되었습니다.";
 
   const [rememberId, setRememberId] = useState(false);
+
+  // const { data, isSuccess, mutate } = POST.useLogin("")
 
   const {
     register,
@@ -32,9 +35,25 @@ export default function LoginForm() {
   const onValid = (data) => {
     console.log("data");
     console.log(data);
+    const { id, pw } = data;
+    if (rememberId) {
+      localStorage.setItem("rememberID", id);
+    }
+
+    if (!rememberId) {
+      localStorage.removeItem("rememberID");
+    }
 
     setError("pw");
   };
+
+  useEffect(() => {
+    const userIdinLocalStorage = localStorage.getItem("rememberID");
+
+    if (userIdinLocalStorage) {
+      setValue("id", userIdinLocalStorage);
+    }
+  }, []);
 
   return (
     <Form onSubmit={handleSubmit(onValid)}>

@@ -25,14 +25,7 @@ export default function ContentCard({ item }) {
   return (
     <Wrapper isDark={isDark}>
       <Banner>
-        <Image
-          // width={"260%"}
-          layout="responsive"
-          height={500}
-          // layout="fill"
-          src={Dog}
-          alt="photo"
-        />
+        <Image layout="responsive" height={500} src={Dog} alt="photo" />
       </Banner>
       <Body>
         <ProfileBox>
@@ -111,7 +104,8 @@ const Wrapper = styled.div`
   }
 
   ${media.tablet`
-      height: 120px;
+      width: 99%;
+      height: 175px;
     `}
 `;
 

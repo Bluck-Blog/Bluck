@@ -9,6 +9,7 @@ export const post = async (path, body) => {
 
 export const POST = {
   useConfirmEmail: (path) => useMutation((data) => post(path, data)),
+  useLogin: (path) => useMutation((data) => post(path, data)),
   mutateCallBack: (key) => ({
     onSuccess: () => {
       const keyArr = [key];
