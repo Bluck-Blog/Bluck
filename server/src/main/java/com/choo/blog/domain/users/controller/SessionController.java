@@ -30,15 +30,16 @@ public class SessionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SessionResponseData login(@Valid @RequestBody UserLoginData loginData, BindingResult result){
+    public ApiResponse login(@Valid @RequestBody UserLoginData loginData, BindingResult result){
         if(result.hasErrors()){
             throw new InvalidParameterException(result);
         }
 
         String accessToken = authenticationService.login(loginData);
-        return SessionResponseData.builder()
+        SessionResponseData session = SessionResponseData.builder()
                 .accessToken(accessToken)
                 .build();
+        return ApiResponse.status(HttpStatus.CREATED).body(session);
     }
 
     @GetMapping("/verify")

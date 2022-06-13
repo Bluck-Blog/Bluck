@@ -100,7 +100,10 @@ class SessionControllerTest extends BaseControllerTest {
                                     fieldWithPath("password").type(JsonFieldType.STRING).description("로그인 패스워드")
                                 ),
                                 responseFields(
-                                        fieldWithPath("accessToken").type(JsonFieldType.STRING).description("로그인 토큰")
+                                        fieldWithPath("status").type(JsonFieldType.STRING).description("http 상태 코드"),
+                                        fieldWithPath("body.accessToken").type(JsonFieldType.STRING).description("로그인 토큰"),
+                                        fieldWithPath("code").type(JsonFieldType.STRING).description("에러코드")
+
                                 )
                         ));
             }
