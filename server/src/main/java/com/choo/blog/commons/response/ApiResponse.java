@@ -13,6 +13,10 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ApiResponse<T> {
     private HttpStatus status;
+    /*
+    * 로그인 비밀 번호 에러 : -2
+    * 로그인 id 에러 : -3
+    *  */
     private Integer code;
     private T body;
 
