@@ -193,7 +193,8 @@ class SessionControllerTest extends BaseControllerTest {
                                 .param("email", email)
                         )
                         .andDo(print())
-                        .andExpect(jsonPath("status").value(HttpStatus.CREATED.name()));
+                        .andExpect(jsonPath("status").value(HttpStatus.CREATED.name()))
+                        ;
             }
         }
     }

@@ -409,7 +409,32 @@ class PostControllerTest extends BaseControllerTest {
                                 .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken()))
                         .andDo(print())
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("body.page").exists());
+                        .andExpect(jsonPath("body.page").exists())
+                        .andDo(document(
+                                "get-posts",
+                                relaxedRequestFields(
+                                        fieldWithPath("pageNumber").description("현재 페이지"),
+                                        fieldWithPath("pageSize").description("페이지당 게시물 갯수"),
+                                        fieldWithPath("offset").description("offset"),
+                                        fieldWithPath("paged").description("페이징 처리 여부")
+                                ),
+                                relaxedResponseFields(
+                                        fieldWithPath("status").description("HTTP 상태 코드"),
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("body.links[].href").description("url / first : 첫 페이지, self : 현재 페이지, next : 다음 페이지, last : 마지막 페이지"),
+                                        fieldWithPath("body.content[].createDate").description("생성일"),
+                                        fieldWithPath("body.content[].modifiedDate").description("수정일"),
+                                        fieldWithPath("body.content[].id").description("id"),
+                                        fieldWithPath("body.content[].author").description("게시물 생성자 정보"),
+                                        fieldWithPath("body.content[].title").description("게시물 제목"),
+                                        fieldWithPath("body.content[].likes").description("좋아요 수"),
+                                        fieldWithPath("body.content[].dislikes").description("싫어요 수"),
+                                        fieldWithPath("body.content[].openType").description("게시물 공개 타입"),
+                                        fieldWithPath("body.content[].view").description("조회 횟수")
+                                )
+
+                        ))
+                        ;
             }
         }
 
