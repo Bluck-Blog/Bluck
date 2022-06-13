@@ -1,13 +1,22 @@
 // components
 import { media } from "../../styles/common/media";
+import { loginState } from "../../state/atom";
+import LinkTag from "../common/LinkTag";
 
 // lib
 import styled from "styled-components";
-import LinkTag from "../common/LinkTag";
+import { useRecoilState } from "recoil";
 
 // img
 
 export default function Header() {
+  const [isLogged, setIsLogged] = useRecoilState(loginState);
+
+  const logOutHandle = () => {
+    sessionStorage.removeItem("accessToken");
+    setIsLogged((prev) => false);
+  };
+
   return (
     <HeaderWrapper>
       <LinkTag
@@ -18,20 +27,41 @@ export default function Header() {
         link={"/"}
       />
       <BtnBox>
-        <LinkTag
-          title={"LOG-IN"}
-          tabletSize={12}
-          mobileSize={10}
-          size={14}
-          link={"/login"}
-        />
-        <LinkTag
-          title={"JOIN"}
-          tabletSize={12}
-          mobileSize={10}
-          size={14}
-          link={"/signup"}
-        />
+        {isLogged ? (
+          <LogOutButton
+            onClick={logOutHandle}
+            tabletSize={12}
+            mobileSize={10}
+            size={14}
+          >
+            LOGOUT
+          </LogOutButton>
+        ) : (
+          <LinkTag
+            title={"LOG-IN"}
+            tabletSize={12}
+            mobileSize={10}
+            size={14}
+            link={"/login"}
+          />
+        )}
+        {isLogged ? (
+          <LinkTag
+            title={"MYPAGE"}
+            tabletSize={12}
+            mobileSize={10}
+            size={14}
+            link={"/mypage"}
+          />
+        ) : (
+          <LinkTag
+            title={"JOIN"}
+            tabletSize={12}
+            mobileSize={10}
+            size={14}
+            link={"/signup"}
+          />
+        )}
       </BtnBox>
     </HeaderWrapper>
   );
@@ -48,7 +78,7 @@ const HeaderWrapper = styled.header`
 `;
 
 const BtnBox = styled.div`
-  width: 8%;
+  width: 10%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -56,4 +86,15 @@ const BtnBox = styled.div`
   ${media.tablet`
       width: 15%;  
     `}
+`;
+
+const LogOutButton = styled.span`
+  font-size: ${(props) => props.size}px;
+  font-weight: bold;
+  cursor: pointer;
+  color: ${(props) => props.theme.textColor};
+
+  ${media.tablet`
+    font-size: ${(props) => props.tabletSize}px;
+  `}
 `;

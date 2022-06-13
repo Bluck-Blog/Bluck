@@ -22,8 +22,11 @@ export default function JoinForm() {
   const [check, setCheck] = useState(false);
   const [profile, setProfile] = useState("");
 
-  const { data, isSuccess, mutate } =
-    POST.useConfirmEmail("api/session/verify");
+  const {
+    data: emailVerifyData,
+    isSuccess: isEmailVerifySuccess,
+    mutate: emailVerifyMutate,
+  } = POST.useConfirmEmail("api/session/verify");
 
   const {
     register,
@@ -60,7 +63,7 @@ export default function JoinForm() {
     const email = getValues("email");
     const formData = new FormData();
     formData.append("email", email);
-    mutate(formData, POST.mutateCallBack("confirmEmaill"));
+    emailVerifyMutate(formData, POST.mutateCallBack("confirmEmaill"));
   };
 
   return (
