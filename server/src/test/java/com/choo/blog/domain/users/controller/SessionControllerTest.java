@@ -209,8 +209,6 @@ class SessionControllerTest extends BaseControllerTest {
         void setUp(){
             rawCode = "A1234";
             mockHttpSession = userProperties.generateVerifySession(passwordEncoder, rawCode);
-
-            mockHttpSession.setAttribute("code", rawCode);
         }
 
         @AfterEach

@@ -39,11 +39,16 @@ public class UserProperties {
     private MockHttpSession session;
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
     private UserService userService;
 
     public User prepareUser(String suffix, String code){
         UserRegistData registData = prepareUserRegistData(suffix);
+        session = generateVerifySession(passwordEncoder, code);
         MockHttpServletRequest request = new MockHttpServletRequest();
+
         request.setSession(session);
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
         ReflectionTestUtils.setField(registData, "verifyCode", code);

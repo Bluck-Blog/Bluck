@@ -56,7 +56,7 @@ class AuthenticationServiceTest {
 
     @BeforeEach
     public void setUp(){
-        user = userProperties.prepareUser("");
+        user = userProperties.prepareUser("", "a1234");
     }
 
     @AfterEach

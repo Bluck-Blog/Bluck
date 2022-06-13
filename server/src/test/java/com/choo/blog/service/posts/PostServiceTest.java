@@ -193,7 +193,7 @@ class PostServiceTest {
 
             @BeforeEach
             void setUp() {
-                User author = prepareUser("other");
+                User author = userProperties.prepareUser("other", "a1234");
                 updateData = prepareRequestData("_NEW");
                 post = postRepository.save(prepareRequestData("").createEntity(author));
 
@@ -235,7 +235,7 @@ class PostServiceTest {
 
             @BeforeEach
             void setUp() {
-                User othreUser = prepareUser("");
+                User othreUser = userProperties.prepareUser("other", "a1234");
                 Category otherCategory = prepareCategory("_other", othreUser);
                 ReflectionTestUtils.setField(updateData, "categoryId", otherCategory.getId());
                 post = postService.save(prepareRequestData(""));
@@ -301,7 +301,7 @@ class PostServiceTest {
             postRepository.deleteAll();
             pageable = PageRequest.of(page,pageSize);
 
-            User author = prepareUser("");
+            User author = userProperties.prepareUser("","a1234");
 
             IntStream.range(0, size).forEach(i ->{
                 postRepository.save(prepareRequestData(i + "").createEntity(author));
@@ -361,7 +361,7 @@ class PostServiceTest {
             Post post;
             @BeforeEach
             void setUp(){
-                User author = prepareUser("other");
+                User author = userProperties.prepareUser("other", "a1234");
                 post = postRepository.save(prepareRequestData("").createEntity(author));
 
             }
@@ -423,9 +423,6 @@ class PostServiceTest {
             }
         }
     }
-    public User prepareUser(String suffix){
-        return userService.join(userProperties.prepareUserRegistData(suffix));
-    }
 
     public Category prepareCategory(String suffiex, User user){
         Category category = CategoryRequestData.builder()
@@ -449,7 +446,7 @@ class PostServiceTest {
     }
 
     private User setAuthentication(String prefix) {
-        User user = prepareUser(prefix);
+        User user = userProperties.prepareUser(prefix, "a1234");
         String accessToken = webTokenUtil.encode(user.getId());
         SecurityContextHolder.getContext().setAuthentication(new UserAuthentication(UserRole.Authorized, accessToken, user.getId()));
         return user;
