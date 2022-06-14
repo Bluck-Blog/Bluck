@@ -4,7 +4,7 @@ ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
 
 
-IDLE_PID=$(sudo lsof -ti tcp:8089)
+IDLE_PID=$(sudo lsof -ti tcp:80)
 
 if [ -z ${IDLE_PID} ]
 then
