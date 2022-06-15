@@ -1,16 +1,19 @@
 //lib
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import SelectBox from "./SelectBox";
 
 //components
+import ContentCard from "./ContentCard";
+import { media } from "../../../styles/common/media";
+import SelectBox from "./SelectBox";
+import SearchBox from "../../common/SearchBox";
 
 //img
-import ContentCard from "./ContentCard";
-import SearchBox from "../../common/SearchBox";
-import { media } from "../../../styles/common/media";
 
-export default function MainSection({ content }) {
+export default function MainSection({ content, isToken }) {
+  console.log("isToken===");
+  console.log(isToken);
+
   const filterList1 = [
     "인기순",
     "최신순",

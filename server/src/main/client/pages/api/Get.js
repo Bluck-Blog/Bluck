@@ -1,4 +1,3 @@
-import { useQuery } from "react-query";
 import { Axios } from "./Axios";
 
 export const get = async (path) => {
@@ -7,5 +6,5 @@ export const get = async (path) => {
 };
 
 export const GET = {
-  useAllPosts: async () => await get("api/posts/72"),
+  useAllPosts: async () => await get("api/posts"),
 };

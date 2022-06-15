@@ -2,11 +2,12 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Image from "next/image";
-import { useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { validation } from "../../module/validation";
+import { POST } from "../../../pages/api/Post";
 
 //components
-import { darkMode } from "../../../state/atom";
+import { darkMode, loginState } from "../../../state/atom";
 import { useForm } from "react-hook-form";
 
 //img
@@ -14,15 +15,18 @@ import Active from "../../../styles/img/activeCheck.png";
 import Check from "../../../styles/img/check.png";
 import BlackActive from "../../../styles/img/blackActiveCheck.png";
 import BlackCheck from "../../../styles/img/blackCheck.png";
-import { POST } from "../../../pages/api/Post";
+import { useRouter } from "next/router";
 
 export default function LoginForm() {
+  const { push } = useRouter();
+
+  const ERRORMESSAGE = "*아이디 및 비밀번호 형식이 잘못되었습니다.";
+
   const isDark = useRecoilValue(darkMode);
-  const ERRORMESSAGE = "*아이디 및 비밀번호가 잘못되었습니다.";
-
   const [rememberId, setRememberId] = useState(false);
+  const setIsLogged = useSetRecoilState(loginState);
 
-  // const { data, isSuccess, mutate } = POST.useLogin("")
+  const { data, isSuccess, isError, mutate } = POST.useLogin("api/session");
 
   const {
     register,
@@ -33,9 +37,8 @@ export default function LoginForm() {
   } = useForm();
 
   const onValid = (data) => {
-    console.log("data");
-    console.log(data);
     const { id, pw } = data;
+
     if (rememberId) {
       localStorage.setItem("rememberID", id);
     }
@@ -44,14 +47,50 @@ export default function LoginForm() {
       localStorage.removeItem("rememberID");
     }
 
-    setError("pw");
+    const loginJson = {
+      email: id,
+      password: pw,
+    };
+
+    mutate(JSON.stringify(loginJson), POST.mutateCallBack("login"));
   };
+
+  const afterLoginHandle = () => {
+    const { code } = data || {};
+
+    if (isSuccess && code === 0) {
+      const {
+        body: { accessToken },
+      } = data || {};
+
+      sessionStorage.setItem("accessToken", accessToken);
+      setIsLogged((prev) => true);
+      push("/");
+      return;
+    }
+
+    if (isSuccess && code === -2) {
+      // 비밀번호 오류
+      setError("pw", { message: "비밀번호가 잘못됐습니다." });
+    }
+
+    if (isSuccess && code === -3) {
+      // 아이디 오류
+      console.log("아이디 오류");
+      setError("id", { message: "아이디가 잘못됐습니다." });
+    }
+  };
+
+  useEffect(() => {
+    afterLoginHandle();
+  }, [isSuccess, isError, data]);
 
   useEffect(() => {
     const userIdinLocalStorage = localStorage.getItem("rememberID");
 
     if (userIdinLocalStorage) {
       setValue("id", userIdinLocalStorage);
+      setRememberId((prev) => true);
     }
   }, []);
 
@@ -61,7 +100,7 @@ export default function LoginForm() {
         <Label>아이디</Label>
         <IdInput
           {...register("id", {
-            required: ERRORMESSAGE,
+            required: true,
             pattern: {
               value: validation.email,
               message: ERRORMESSAGE,
@@ -75,9 +114,9 @@ export default function LoginForm() {
         <Label>비밀번호</Label>
         <PwInput
           {...register("pw", {
-            required: "*아이디 및 비밀번호가 잘못되었습니다.",
-            pattern: {
-              value: validation.password,
+            required: true,
+            minLength: {
+              value: 1,
               message: ERRORMESSAGE,
             },
           })}
@@ -85,6 +124,7 @@ export default function LoginForm() {
           placeholder="비밀번호를 입력해주세요."
         />
       </IdBox>
+      <ErrText>{errors?.id?.message}</ErrText>
       <ErrText>{errors?.pw?.message}</ErrText>
       <IdRememberBox onClick={() => setRememberId((prev) => !prev)}>
         <Image

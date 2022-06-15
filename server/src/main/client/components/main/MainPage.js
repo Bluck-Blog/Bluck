@@ -5,6 +5,6 @@ import MainSection from "./component/MainSection";
 
 //img
 
-export default function MainPage({ content }) {
-  return <MainSection content={content} />;
+export default function MainPage(props) {
+  return <MainSection content={props.content} isToken={props.isToken} />;
 }

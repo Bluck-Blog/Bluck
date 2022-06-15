@@ -1,20 +1,30 @@
 // components
-import { darkMode } from "../state/atom";
+import { darkMode, loginState } from "../state/atom";
 import { GlobalStyle } from "../styles/common/GlobalStyle";
 import { darkTheme, lightTheme } from "../styles/common/Theme";
 import Seo from "./Seo";
 import Footer from "./footer/Footer";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import Header from "./header/Header";
 
 // lib
-import { useRecoilValue } from "recoil";
 import { ThemeProvider } from "styled-components";
+import { useEffect } from "react";
 import styled from "styled-components";
-import Header from "./header/Header";
 
 // img
 
 export default function Layout({ children }) {
   const isDark = useRecoilValue(darkMode);
+
+  const isLogged = useSetRecoilState(loginState);
+
+  useEffect(() => {
+    const TOKEN = sessionStorage.getItem("accessToken");
+    if (TOKEN) {
+      isLogged((prev) => true);
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={isDark ? darkTheme : lightTheme}>

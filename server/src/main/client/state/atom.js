@@ -5,7 +5,7 @@ export const darkMode = atom({
   default: false,
 });
 
-export const isLogged = atom({
+export const loginState = atom({
   key: "isLogged",
   default: false,
 });
