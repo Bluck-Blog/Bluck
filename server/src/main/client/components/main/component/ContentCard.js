@@ -25,7 +25,13 @@ export default function ContentCard({ item }) {
   return (
     <Wrapper isDark={isDark}>
       <Banner>
-        <Image layout="responsive" height={500} src={Dog} alt="photo" />
+        <Image
+          // layout="responsive"
+          className="thumnail"
+          // height={"100%"}
+          src={Dog}
+          alt="photo"
+        />
       </Banner>
       <Body>
         <ProfileBox>
@@ -113,6 +119,10 @@ const Banner = styled.figure`
   width: 30%;
   height: 100%;
   border-right: 1px solid #aaa;
+
+  & .thumnail {
+    height: 185px;
+  }
 `;
 
 const Body = styled.div`

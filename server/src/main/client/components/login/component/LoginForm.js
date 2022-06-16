@@ -76,7 +76,6 @@ export default function LoginForm() {
 
     if (isSuccess && code === -3) {
       // 아이디 오류
-      console.log("아이디 오류");
       setError("id", { message: "아이디가 잘못됐습니다." });
     }
   };
