@@ -4,7 +4,6 @@ import { useSetRecoilState } from "recoil";
 //components
 import MainPage from "../components/main/MainPage";
 import { GET } from "./api/Get";
-import { loginState } from "../state/atom";
 
 //img
 import Poster from "../styles/img/whiteProfile.png";

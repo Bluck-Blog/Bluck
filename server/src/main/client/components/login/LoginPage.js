@@ -1,21 +1,15 @@
 // lib
-import styled from "styled-components";
-import { media } from "../../styles/common/media";
-import FomBox from "./component/FomBox";
 
 //components
+import FomBox from "./component/FomBox";
+import * as S from "../../styles/login/LoginPageStyle";
 
 //img
 
 export default function LoginPage() {
   return (
-    <Wrapper>
+    <S.Wrapper>
       <FomBox />
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
-`;

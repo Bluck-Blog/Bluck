@@ -1,9 +1,9 @@
 // components
 import { validation } from "../../module/validation";
+import * as S from "../../../styles/findId/FIndIDFormStyle";
 
 // lib
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import { useForm } from "react-hook-form";
 
 export default function FindIDForm() {
@@ -34,26 +34,26 @@ export default function FindIDForm() {
   };
 
   return (
-    <FormWrapper onSubmit={handleSubmit(namePhoneNumberForFindIdValidation)}>
+    <S.FormWrapper onSubmit={handleSubmit(namePhoneNumberForFindIdValidation)}>
       {isFindedId ? (
-        <NameText>
+        <S.NameText>
           회원님의 아이디는 <br /> {userIdFromDB}입니다.
-        </NameText>
+        </S.NameText>
       ) : (
         <>
-          <IdBoxForFindId>
-            <LabelForFindId>이름</LabelForFindId>
-            <IdInputForFindId
+          <S.IdBoxForFindId>
+            <S.LabelForFindId>이름</S.LabelForFindId>
+            <S.IdInputForFindId
               {...register("nameForFindId", {
                 required: true,
               })}
               type="text"
               placeholder="이름을 입력해주세요."
             />
-          </IdBoxForFindId>
-          <IdBoxForFindId>
-            <LabelForFindId>휴대폰</LabelForFindId>
-            <PhoneInputForFindId
+          </S.IdBoxForFindId>
+          <S.IdBoxForFindId>
+            <S.LabelForFindId>휴대폰</S.LabelForFindId>
+            <S.PhoneInputForFindId
               {...register("phoneForFindId", {
                 required: true,
                 pattern: {
@@ -64,80 +64,11 @@ export default function FindIDForm() {
               type="number"
               placeholder="휴대폰 번호를 입력해주세요."
             />
-          </IdBoxForFindId>
-          <ErrText>{errors?.phone?.message}</ErrText>
-          <ForFindIdBtn type="submit">아이디 찾기</ForFindIdBtn>
+          </S.IdBoxForFindId>
+          <S.ErrText>{errors?.phone?.message}</S.ErrText>
+          <S.ForFindIdBtn type="submit">아이디 찾기</S.ForFindIdBtn>
         </>
       )}
-    </FormWrapper>
+    </S.FormWrapper>
   );
 }
-
-const FormWrapper = styled.form`
-  width: 80%;
-`;
-
-const NameText = styled.p`
-  text-align: center;
-  font-size: 28px;
-`;
-
-const IdInputForFindId = styled.input`
-  width: 80%;
-  height: 50px;
-  border: none;
-  background: none;
-  color: ${(props) => props.theme.textColor};
-  &:focus {
-    outline: none;
-    background: none;
-  }
-`;
-
-const PhoneInputForFindId = styled.input`
-  width: 80%;
-  height: 50px;
-  border: none;
-  background: none;
-  color: ${(props) => props.theme.textColor};
-  &:focus {
-    outline: none;
-    background: none;
-  }
-`;
-
-const IdBoxForFindId = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: ${(props) => props.theme.bgColor};
-  border-radius: 10px;
-  margin-top: 20px;
-`;
-
-const LabelForFindId = styled.p`
-  width: 20%;
-  padding-left: 2%;
-  font-size: 14px;
-  font-weight: bold;
-  color: ${(props) => props.theme.textColor};
-`;
-
-const ForFindIdBtn = styled.button`
-  width: 100%;
-  height: 55px;
-  margin-top: 50px;
-  font-size: 16px;
-  font-weight: bold;
-  color: ${(props) => props.theme.textColor};
-  background: none;
-  border: 2px solid ${(props) => props.theme.textColor};
-  border-radius: 15px;
-  cursor: pointer;
-`;
-
-const ErrText = styled.p`
-  font-size: 12px;
-  color: red;
-  margin-top: 10px;
-`;

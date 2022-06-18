@@ -1,12 +1,10 @@
-import styled from "styled-components";
+// component
+import * as S from "../../../styles/header/NoticeItemStyle";
+
+// lib
+
+// img
 
 export default function NoticeItem({ item }) {
-  return <Item>{item.title}</Item>;
+  return <S.Item>{item.title}</S.Item>;
 }
-
-const Item = styled.li`
-  width: 100%;
-  font-size: 9px;
-  margin: 12px 0;
-  cursor: pointer;
-`;

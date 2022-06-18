@@ -1,20 +1,15 @@
 // componenets
+import FindPwFormBox from "./component/FindPwFormBox";
 
 // lib
-import styled from "styled-components";
-import FindPwFormBox from "./component/FindPwFormBox";
+import * as S from "../../styles/findpw/FindPwPageStyle";
 
 // img
 
 export default function FindPwPage() {
   return (
-    <Wrapper>
+    <S.Wrapper>
       <FindPwFormBox />
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
-`;

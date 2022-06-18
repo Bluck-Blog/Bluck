@@ -1,19 +1,18 @@
 // componenets
 import { validation } from "../../module/validation";
-import { media } from "../../../styles/common/media";
-
-// lib
-import styled from "styled-components";
+import * as S from "../../../styles/findId/FindIdFormBoxStyle";
 import LinkTag from "../../common/LinkTag";
 import FindIDForm from "./FIndIDForm";
+
+// lib
 
 // img
 
 export default function FindIdFormBox() {
   return (
-    <Section>
+    <S.Section>
       <FindIDForm />
-      <LinkBoxForm>
+      <S.LinkBoxForm>
         <LinkTag
           title={"로그인"}
           tabletSize={10}
@@ -37,30 +36,7 @@ export default function FindIdFormBox() {
           size={11}
           link={"/signup"}
         />
-      </LinkBoxForm>
-    </Section>
+      </S.LinkBoxForm>
+    </S.Section>
   );
 }
-
-const Section = styled.section`
-  width: 40%;
-  height: 80%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  ${media.tablet`
-    width: 75%;
-  `}
-`;
-
-const LinkBoxForm = styled.div`
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 30px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-`;
