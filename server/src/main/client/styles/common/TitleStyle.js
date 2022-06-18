@@ -10,4 +10,8 @@ export const TitleText = styled.span`
   ${media.tablet`
     font-size: ${(props) => props.tabletSize}px;
   `}
+
+  ${media.mobile`
+  font-size: ${(props) => props.mobileSize}px;
+  `}
 `;

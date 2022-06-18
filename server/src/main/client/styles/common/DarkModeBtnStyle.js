@@ -11,6 +11,17 @@ export const Dark = styled.span`
   `}
 `;
 
+export const DarkModeImageBox = styled.figure`
+  position: relative;
+  width: 20px;
+  height: 20px;
+
+  ${media.mobile`
+  width: 15px;
+  height: 15px;
+  `}
+`;
+
 export const DarkMode = styled.button`
   /* width: 8vw; */
   width: 130px;
@@ -25,5 +36,9 @@ export const DarkMode = styled.button`
   ${media.tablet`
   width: 130px;
   height: 80%;
+  `}
+
+  ${media.mobile`
+    height: 90%;
   `}
 `;

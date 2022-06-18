@@ -20,6 +20,10 @@ export const IdInputForFindId = styled.input`
     outline: none;
     background: none;
   }
+
+  ${media.mobile`
+    height: 40px;
+  `}
 `;
 
 export const PhoneInputForFindId = styled.input`
@@ -32,6 +36,10 @@ export const PhoneInputForFindId = styled.input`
     outline: none;
     background: none;
   }
+
+  ${media.mobile`
+    height: 40px;
+  `}
 `;
 
 export const IdBoxForFindId = styled.div`
@@ -49,6 +57,11 @@ export const LabelForFindId = styled.p`
   font-size: 14px;
   font-weight: bold;
   color: ${(props) => props.theme.textColor};
+
+  ${media.mobile`
+  padding-left: 4%;
+  font-size: 10px;
+  `}
 `;
 
 export const ForFindIdBtn = styled.button`
@@ -62,6 +75,12 @@ export const ForFindIdBtn = styled.button`
   border: 2px solid ${(props) => props.theme.textColor};
   border-radius: 15px;
   cursor: pointer;
+
+  ${media.mobile`
+    height: 35px;
+    font-size: 12px;
+    margin-top: 30px;
+  `}
 `;
 
 export const ErrText = styled.p`

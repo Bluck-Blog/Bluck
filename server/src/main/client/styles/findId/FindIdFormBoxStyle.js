@@ -13,6 +13,10 @@ export const Section = styled.section`
   ${media.tablet`
     width: 75%;
   `}
+
+  ${media.mobile`
+    width: 100%;
+  `}
 `;
 
 export const LinkBoxForm = styled.div`
@@ -22,4 +26,9 @@ export const LinkBoxForm = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
+
+  ${media.mobile`
+  margin: 0 auto;
+  margin-top: 20px;
+  `}
 `;

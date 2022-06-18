@@ -24,13 +24,7 @@ export default function ContentCard({ item }) {
   return (
     <S.Wrapper isDark={isDark}>
       <S.Banner>
-        <Image
-          // layout="responsive"
-          className="thumnail"
-          // height={"100%"}
-          src={Dog}
-          alt="photo"
-        />
+        <Image layout="fill" src={Dog} alt="photo" />
       </S.Banner>
       <S.Body>
         <S.ProfileBox>

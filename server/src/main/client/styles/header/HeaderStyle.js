@@ -19,7 +19,12 @@ export const BtnBox = styled.div`
 
   ${media.tablet`
       width: 15%;  
-    `}
+  `}
+
+  ${media.mobile`
+      width: 25%;  
+      margin-right: 2%;
+  `}
 `;
 
 export const LogOutButton = styled.span`

@@ -25,7 +25,7 @@ export default function MainSection({ content, isToken }) {
   const [contentList, setContentList] = useState([]);
 
   useEffect(() => {
-    setContentList([...content]);
+    setContentList((prev) => [...content]);
   }, []);
 
   return (

@@ -23,16 +23,29 @@ export const Wrapper = styled.div`
       width: 99%;
       height: 175px;
     `}
+
+  ${media.mobile`
+  width: 90%;
+  margin: 10px auto;
+  display: block;
+  border: 1px solid #aaa;
+  height: 250px;
+  `}
 `;
 
 export const Banner = styled.figure`
   width: 30%;
   height: 100%;
+  position: relative;
   border-right: 1px solid #aaa;
 
-  & .thumnail {
-    height: 185px;
-  }
+  ${media.mobile`
+  width: 100%;
+  height: 40%;
+  border: none;
+  border-bottom: 1px solid #aaa;
+  overflow: hidden;
+  `}
 `;
 
 export const Body = styled.div`
@@ -40,6 +53,11 @@ export const Body = styled.div`
   height: 100%;
   padding: 0 4% 0 2%;
   background: ${(props) => props.theme.ctBgColor};
+
+  ${media.mobile`
+  width: 100%;
+  padding: 0 4% 0 4%;
+  `}
 `;
 
 export const ProfileBox = styled.div`
@@ -57,11 +75,20 @@ export const Name = styled.span`
 export const Title = styled.p`
   font-weight: bold;
   margin: 25px 0;
+
+  ${media.mobile`
+  margin: 15px 0;
+  `}
 `;
 
 export const MainContent = styled.p`
   margin: 20px 0;
   font-size: 14px;
+
+  ${media.mobile`
+  font-size: 10px;
+  margin: 10px 0 20px 0;
+  `}
 `;
 
 export const ContentFooter = styled.div`

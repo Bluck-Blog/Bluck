@@ -15,7 +15,9 @@ export default function DarkModeBtn() {
 
   return (
     <S.DarkMode onClick={() => setIsDark(isDark)}>
-      <Image width={20} height={20} src={isDark ? Sun : Moon} />
+      <S.DarkModeImageBox>
+        <Image layout="fill" src={isDark ? Sun : Moon} />
+      </S.DarkModeImageBox>
       <S.Dark>{isDark ? "라이트모드" : "다크모드"}</S.Dark>
     </S.DarkMode>
   );

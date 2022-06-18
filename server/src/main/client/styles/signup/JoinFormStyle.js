@@ -6,6 +6,10 @@ export const ErrorMsg = styled.span`
   font-size: 10px;
   padding-left: 5px;
   margin-bottom: 10px;
+
+  ${media.mobile`
+  margin-bottom: 5px;
+  `}
 `;
 
 export const Btn = styled.button`
@@ -16,6 +20,11 @@ export const Btn = styled.button`
   border-radius: 10px;
   color: ${(props) => props.theme.textColor};
   border: 2px solid ${(props) => props.theme.textColor};
+
+  ${media.mobile`
+  height: 30px;
+  font-size: 10px;
+  `}
 `;
 
 export const BtnBox = styled.div`
@@ -24,6 +33,11 @@ export const BtnBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  ${media.mobile`
+  width: 100%;
+  margin: 20px 0;
+  `}
 `;
 
 export const Section = styled.section`
@@ -36,6 +50,10 @@ export const Section = styled.section`
   align-items: flex-start;
   overflow: hidden auto;
 
+  ${media.mobile`
+  display: block;
+  `}
+
   &::-webkit-scrollbar {
     width: 5px;
   }
@@ -46,9 +64,6 @@ export const Section = styled.section`
     border-top-left-radius: 5px;
     border-bottom-right-radius: 5px;
   }
-  &::-webkit-scrollbar-track {
-    /* background-color: grey; */
-  }
 `;
 
 export const Form = styled.form`
@@ -58,6 +73,11 @@ export const Form = styled.form`
   justify-content: space-between;
   flex-wrap: wrap;
   align-items: center;
+
+  ${media.mobile`
+    width: 95%;
+    margin: 0 auto;
+  `}
 `;
 
 export const PhotoBtn = styled.label`
@@ -74,6 +94,12 @@ export const PhotoBtn = styled.label`
   background-size: ${(props) => (props.photo ? "cover" : null)};
   background-position: ${(props) => (props.photo ? "center" : null)};
   background-repeat: no-repeat;
+
+  ${media.mobile`
+    margin: 20px auto;
+    width: 100px;
+    height: 100px;
+  `}
 `;
 
 export const Label = styled.p`
@@ -85,6 +111,12 @@ export const Label = styled.p`
   font-weight: bold;
   background: ${(props) => props.theme.bgColor};
   color: ${(props) => props.theme.textColor};
+
+  ${media.mobile`
+  font-size: 10px;
+  padding-left: 4%;
+  line-height: 4;
+  `}
 `;
 
 export const IntroLabel = styled.p`
@@ -96,6 +128,10 @@ export const IntroLabel = styled.p`
   font-weight: bold;
   background: ${(props) => props.theme.bgColor};
   color: ${(props) => props.theme.textColor};
+
+  ${media.mobile`
+  font-size: 10px;
+  `}
 `;
 
 export const Input = styled.input`
@@ -119,6 +155,10 @@ export const InputBox = styled.div`
   margin-bottom: 10px;
   border-radius: 10px;
   width: 100%;
+
+  ${media.mobile`
+  margin-bottom: 5px;
+  `}
 `;
 
 export const StateMsg = styled.div`
@@ -138,6 +178,10 @@ export const ConfirmBox = styled.div`
   margin-bottom: 10px;
   border-radius: 10px;
   width: 100%;
+
+  ${media.mobile`
+  margin-bottom: 5px;
+  `}
 `;
 
 export const ConfirmBtn = styled.button`
@@ -199,13 +243,32 @@ export const IdRememberBox = styled.div`
   justify-content: flex-start;
   align-items: center;
   cursor: pointer;
+
+  ${media.mobile`
+  margin-top: 10px;
+  `}
 `;
 
 export const IdRememberText = styled.span`
   font-size: 14px;
   margin-left: 1%;
+
+  ${media.mobile`
+  font-size: 10px;
+  `}
 `;
 
 export const FileInput = styled.input`
   display: none;
+`;
+
+export const IdRememberImageBox = styled.figure`
+  position: relative;
+  width: 20px;
+  height: 20px;
+
+  ${media.mobile`
+  width: 10px;
+  height: 10px;
+  `}
 `;

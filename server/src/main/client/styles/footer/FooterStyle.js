@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { media } from "../common/media";
 
 export const Wrapper = styled.footer`
   width: 96vw;
@@ -15,4 +16,8 @@ export const Text = styled.p`
   font-size: 12px;
   text-align: right;
   color: ${(props) => props.theme.textColor};
+
+  ${media.mobile`
+  font-size: 10px;
+  `}
 `;

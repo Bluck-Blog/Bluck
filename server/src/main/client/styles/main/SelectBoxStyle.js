@@ -8,6 +8,12 @@ export const Filter1 = styled.div`
   width: 60px;
   cursor: pointer;
   position: relative;
+
+  ${media.mobile`
+  
+    font-size: 8px;
+  `}
+
   ul {
     display: ${(props) => (props.isShow ? "block" : "none")};
     position: absolute;
@@ -23,6 +29,11 @@ export const Filter1 = styled.div`
       text-align: center;
       margin: 10px 0;
       font-size: 10px;
+
+      ${media.mobile`
+        font-size: 8px;
+        
+      `}
     }
   }
 `;

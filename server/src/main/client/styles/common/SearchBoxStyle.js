@@ -11,8 +11,14 @@ export const Wrapper = styled.form`
   margin-bottom: 15px;
 
   ${media.tablet`
-      width: 25vw;
-    `}
+  width: 25vw;
+  `}
+
+  ${media.mobile`
+  width: 50vw;
+  height: 20px;
+  margin-bottom: 0px;
+  `}
 `;
 
 export const AbsolBox = styled.div`
@@ -32,6 +38,10 @@ export const Search = styled.input`
   &:focus {
     outline: none;
   }
+
+  ${media.mobile`
+  font-size: 8px;
+  `}
 `;
 
 export const LenzBox = styled.div`
@@ -43,4 +53,10 @@ export const LenzBox = styled.div`
   transform: translate(0, -50%);
   z-index; 1;
   cursor: pointer;
+  
+  ${media.mobile`
+  width: 10px;
+  height: 10px;
+  top: 35%;
+  `}
 `;

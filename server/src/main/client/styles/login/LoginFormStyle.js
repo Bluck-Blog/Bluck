@@ -1,4 +1,6 @@
+import Image from "next/image";
 import styled from "styled-components";
+import { media } from "../common/media";
 
 export const Form = styled.form`
   width: 80%;
@@ -14,6 +16,10 @@ export const IdInput = styled.input`
     outline: none;
     background: none;
   }
+
+  ${media.mobile`
+    height: 40px; 
+  `}
 `;
 
 export const PwInput = styled.input`
@@ -26,6 +32,10 @@ export const PwInput = styled.input`
     outline: none;
     background: none;
   }
+
+  ${media.mobile`
+    height: 40px; 
+  `}
 `;
 
 export const IdBox = styled.div`
@@ -43,19 +53,42 @@ export const Label = styled.p`
   font-size: 14px;
   font-weight: bold;
   color: ${(props) => props.theme.textColor};
+
+  ${media.mobile`
+  padding-left: 3%;
+  font-size: 10px;
+  `}
 `;
 
 export const IdRememberBox = styled.div`
   margin-top: 15px;
-  width: 40%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   cursor: pointer;
+
+  ${media.tablet`
+    width: 70%;
+  `}
+`;
+
+export const IdRememberCheckImageBox = styled.figure`
+  position: relative;
+  width: 20px;
+  height: 20px;
+
+  ${media.mobile`
+  width: 15px;
+  height: 15px;
+  `}
 `;
 
 export const IdRememberText = styled.span`
   margin-left: 3%;
+
+  ${media.mobile`
+    font-size: 10px;
+  `}
 `;
 
 export const LoginBtn = styled.button`
@@ -69,6 +102,12 @@ export const LoginBtn = styled.button`
   border: 2px solid ${(props) => props.theme.textColor};
   border-radius: 15px;
   cursor: pointer;
+
+  ${media.mobile`
+    height: 35px;
+    font-size: 12px;
+    margin-top: 30px;
+  `}
 `;
 
 export const ErrText = styled.p`

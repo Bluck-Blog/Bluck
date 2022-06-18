@@ -126,19 +126,20 @@ export default function LoginForm() {
       <S.ErrText>{errors?.id?.message}</S.ErrText>
       <S.ErrText>{errors?.pw?.message}</S.ErrText>
       <S.IdRememberBox onClick={() => setRememberId((prev) => !prev)}>
-        <Image
-          src={
-            isDark
-              ? rememberId
-                ? BlackActive
-                : BlackCheck
-              : rememberId
-              ? Active
-              : Check
-          }
-          width={20}
-          height={20}
-        />
+        <S.IdRememberCheckImageBox>
+          <Image
+            src={
+              isDark
+                ? rememberId
+                  ? BlackActive
+                  : BlackCheck
+                : rememberId
+                ? Active
+                : Check
+            }
+            layout="fill"
+          />
+        </S.IdRememberCheckImageBox>
         <S.IdRememberText>로그인 상태 유지</S.IdRememberText>
       </S.IdRememberBox>
       <S.LoginBtn type="submit">로그인</S.LoginBtn>
