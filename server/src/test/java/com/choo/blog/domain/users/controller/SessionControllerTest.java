@@ -92,7 +92,7 @@ class SessionControllerTest extends BaseControllerTest {
                             .content(objectMapper.writeValueAsString(loginData)))
                         .andDo(print())
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.accessToken").exists())
+                        .andExpect(jsonPath("body.accessToken").exists())
                         .andDo(document(
                                 "login",
                                 requestFields(
@@ -122,7 +122,7 @@ class SessionControllerTest extends BaseControllerTest {
                         .build();
             }
             @Test
-            @DisplayName("401에러를 반환한")
+            @DisplayName("401에러를 반환한다")
             void it_return_unAuthorized() throws Exception{
                 mockMvc.perform(post("/api/session")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -131,7 +131,7 @@ class SessionControllerTest extends BaseControllerTest {
                         .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("status").value(HttpStatus.UNAUTHORIZED.name()))
-                        .andExpect(jsonPath("code").isNumber())
+                        .andExpect(jsonPath("code").exists())
                         .andExpect(jsonPath("body.message").exists())
                 ;
             }
