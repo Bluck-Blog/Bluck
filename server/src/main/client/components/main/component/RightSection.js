@@ -1,27 +1,17 @@
 //lib
-import styled from "styled-components";
-import DetailContent from "./DetailContent";
-import SearchBox from "../../common/SearchBox";
 
 //components
+import DetailContent from "./DetailContent";
+import SearchBox from "../../common/SearchBox";
+import * as S from "../../../styles/main/RightSectionStyle";
 
 //img
 
 export default function RightSection() {
   return (
-    <Wrapper>
+    <S.Wrapper>
       <SearchBox />
       <DetailContent />
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.section`
-  width: 50%;
-  height: 95%;
-  padding: 0 3% 0 0;
-  /* display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex-direction: column; */
-`;

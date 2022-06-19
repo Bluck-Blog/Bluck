@@ -1,9 +1,9 @@
 //lib
 import { useState, useEffect } from "react";
-import styled from "styled-components";
 import Image from "next/image";
 
 //components
+import * as S from "../../../styles/main/SelectBoxStyle";
 
 //img
 import Arrow from "../../../styles/img/aroow.png";
@@ -26,7 +26,7 @@ export default function SelectBox({ list }) {
   };
 
   return (
-    <Filter1
+    <S.Filter1
       isShow={isShowFilter}
       onClick={() => setIsShowFilter((prev) => !prev)}
     >
@@ -39,32 +39,6 @@ export default function SelectBox({ list }) {
             </li>
           ))}
       </ul>
-    </Filter1>
+    </S.Filter1>
   );
 }
-
-const Filter1 = styled.div`
-  font-weight: bold;
-  margin-right: 20px;
-  font-size: 12px;
-  width: 60px;
-  cursor: pointer;
-  position: relative;
-  ul {
-    display: ${(props) => (props.isShow ? "block" : "none")};
-    position: absolute;
-    left: 0;
-    top: 150%;
-    background: #1f295a;
-    opacity: 0.8;
-    width: 100%;
-    border-radius: 10px;
-    z-index: 2;
-    li {
-      color: white;
-      text-align: center;
-      margin: 10px 0;
-      font-size: 10px;
-    }
-  }
-`;

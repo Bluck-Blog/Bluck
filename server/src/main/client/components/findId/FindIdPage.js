@@ -1,20 +1,15 @@
 // componenets
+import FindIdFormBox from "./component/FIndidFormBox";
+import * as S from "../../styles/findId/FIndIdPageStyle";
 
 // lib
-import styled from "styled-components";
-import FindIdFormBox from "./component/FIndidFormBox";
 
 // img
 
 export default function FindIdPage() {
   return (
-    <Wrapper>
+    <S.Wrapper>
       <FindIdFormBox />
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
-`;

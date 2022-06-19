@@ -1,12 +1,13 @@
 //lib
-import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 import { useRecoilValue } from "recoil";
+
 //components
 import DarkModeBtn from "../common/DarkModeBtn";
 import Notice from "./component/Notice";
 import { darkMode, isLogged } from "../../state/atom";
+import * as S from "../../styles/header/NavStyle";
 
 //imgs
 import WhitePerson from "../../styles/img/whiteProfile.png";
@@ -17,82 +18,28 @@ export default function Nav() {
   const isLog = useRecoilValue(isLogged);
 
   return (
-    <Navi>
+    <S.Navi>
       <Link href={"/"}>
-        <Logo>BLUCK</Logo>
+        <S.Logo>BLUCK</S.Logo>
       </Link>
-      <ProfilBox>
+      <S.ProfilBox>
         <Image
           width={160}
           height={160}
           src={isDark ? BlackPerson : WhitePerson}
         />
-      </ProfilBox>
-      <Name>{isLog ? "발빠른토깽이 님" : "로그인을 해주세요"}</Name>
+      </S.ProfilBox>
+      <S.Name>{isLog ? "발빠른토깽이 님" : "로그인을 해주세요"}</S.Name>
       <Notice />
-      <LogBox>
+      <S.LogBox>
         <Link href={"/login"}>
           <Login>LOGIN</Login>
         </Link>
         <Link href={"/signup"}>
-          <LogOut>JOIN</LogOut>
+          <S.LogOut>JOIN</S.LogOut>
         </Link>
-      </LogBox>
+      </S.LogBox>
       <DarkModeBtn />
-    </Navi>
+    </S.Navi>
   );
 }
-
-const Login = styled.span`
-  cursor: pointer;
-  color: ${(props) => props.theme.textColor};
-`;
-
-const LogOut = styled.span`
-  cursor: pointer;
-  color: ${(props) => props.theme.textColor};
-`;
-
-const LogBox = styled.div`
-  width: 12vw;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  font-weight: bold;
-  margin-top: 40px;
-`;
-
-const Navi = styled.nav`
-  width: 15vw;
-  height: 100vh;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: column;
-`;
-
-const Logo = styled.a`
-  color: ${(props) => props.theme.textColor};
-  font-weight: bold;
-  font-size: 42px;
-  margin: 20px 0 30px 0;
-  cursor: pointer;
-`;
-
-const ProfilBox = styled.figure`
-  width: 180px;
-  height: 180px;
-  background: ${(props) => props.theme.textColor};
-  border-radius: 100px;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 40px;
-`;
-
-const Name = styled.span`
-  color: ${(props) => props.theme.textColor};
-  font-weight: bold;
-  font-size: 24px;
-`;

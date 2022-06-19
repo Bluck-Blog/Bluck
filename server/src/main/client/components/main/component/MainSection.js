@@ -4,16 +4,13 @@ import { useState, useEffect } from "react";
 
 //components
 import ContentCard from "./ContentCard";
-import { media } from "../../../styles/common/media";
 import SelectBox from "./SelectBox";
 import SearchBox from "../../common/SearchBox";
+import * as S from "../../../styles/main/MainSectionStyle";
 
 //img
 
 export default function MainSection({ content, isToken }) {
-  console.log("isToken===");
-  console.log(isToken);
-
   const filterList1 = [
     "인기순",
     "최신순",
@@ -28,67 +25,22 @@ export default function MainSection({ content, isToken }) {
   const [contentList, setContentList] = useState([]);
 
   useEffect(() => {
-    setContentList([...content]);
+    setContentList((prev) => [...content]);
   }, []);
 
   return (
-    <Section>
-      <Menu>
-        <SelectBoxWrapper>
+    <S.Section>
+      <S.Menu>
+        <S.SelectBoxWrapper>
           <SelectBox list={filterList1} />
           <SelectBox list={filterList2} />
-        </SelectBoxWrapper>
+        </S.SelectBoxWrapper>
         <SearchBox />
-      </Menu>
-      <Content>
+      </S.Menu>
+      <S.Content>
         {contentList.length > 0 &&
           contentList.map((item) => <ContentCard key={item.id} item={item} />)}
-      </Content>
-    </Section>
+      </S.Content>
+    </S.Section>
   );
 }
-
-const Section = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
-const SelectBoxWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Menu = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Content = styled.div`
-  width: 100%;
-  margin-top: 10px;
-  height: 65vh;
-  padding-right: 1%;
-  overflow-y: auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #aaa;
-    background-clip: padding-box;
-    border: 1px solid transparet;
-    border-top-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-  }
-  &::-webkit-scrollbar-track {
-    /* background-color: grey; */
-  }
-
-  ${media.tablet`
-    height: 72vh;
-  `}
-`;

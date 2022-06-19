@@ -11,6 +11,7 @@ import Header from "./header/Header";
 import { ThemeProvider } from "styled-components";
 import { useEffect } from "react";
 import styled from "styled-components";
+import { media } from "../styles/common/media";
 
 // img
 

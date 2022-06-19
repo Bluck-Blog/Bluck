@@ -1,23 +1,23 @@
+// componenets
+import LinkTag from "../../common/LinkTag";
+import FindPwForm from "./FindPwForm";
+import * as S from "../../../styles/findpw/FindPwFormBoxStyle";
+
 // lib
 
-//components
-import * as S from "../../../styles/login/FormBoxStyle";
+// img
 
-//img
-import LoginForm from "./LoginForm";
-import LinkTag from "../../common/LinkTag";
-
-export default function FomBox() {
+export default function FindPwFormBox() {
   return (
     <S.Section>
-      <LoginForm />
-      <S.FindBox>
+      <FindPwForm />
+      <S.LinkBoxForm>
         <LinkTag
-          title={"비밀번호 찾기"}
+          title={"로그인"}
           tabletSize={10}
           mobileSize={9}
           size={11}
-          link={"/findpw"}
+          link={"/login"}
         />
         ·
         <LinkTag
@@ -35,7 +35,7 @@ export default function FomBox() {
           size={11}
           link={"/signup"}
         />
-      </S.FindBox>
+      </S.LinkBoxForm>
     </S.Section>
   );
 }
