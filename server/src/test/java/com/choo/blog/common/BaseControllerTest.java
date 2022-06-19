@@ -84,8 +84,7 @@ public class BaseControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(loginData))).andReturn();
-        String content = result.getResponse().getContentAsString();
-        System.out.println(content);
+        String content = getBody(result);
         return objectMapper.readValue(content, SessionResponseData.class);
     }
 

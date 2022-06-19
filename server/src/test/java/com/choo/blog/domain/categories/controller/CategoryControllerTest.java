@@ -43,12 +43,6 @@ class CategoryControllerTest extends BaseControllerTest {
         session = login(prepareLoginData());
     }
 
-    @AfterEach
-    void cleanUp() {
-        categoryRespository.deleteAll();
-        userRepository.deleteAll();
-    }
-
     @Nested
     @DisplayName("카테고리 생성은")
     class Descrive_save{
