@@ -1,6 +1,7 @@
 //lib
 import Image from "next/image";
 import { useRecoilValue } from "recoil";
+import { useRouter } from "next/router";
 
 //components
 import { darkMode } from "../../../state/atom";
@@ -20,9 +21,13 @@ import BlackHate from "../../../styles/img/blackHate.png";
 
 export default function ContentCard({ item }) {
   const isDark = useRecoilValue(darkMode);
+  const router = useRouter();
 
   return (
-    <S.Wrapper isDark={isDark}>
+    <S.Wrapper
+      onClick={() => router.push(`/detail/${item.id}`)}
+      isDark={isDark}
+    >
       <S.Banner>
         <Image layout="fill" src={Dog} alt="photo" />
       </S.Banner>

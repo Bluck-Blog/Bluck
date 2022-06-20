@@ -82,20 +82,25 @@ export const Title = styled.p`
 `;
 
 export const MainContent = styled.p`
-  margin: 20px 0;
+  margin: 15px 0;
   font-size: 14px;
+  width: 540px;
+  height: 40px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 
   ${media.mobile`
   font-size: 10px;
   margin: 10px 0 20px 0;
-  `}
+  `};
 `;
 
 export const ContentFooter = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 7%;
+  margin-top: 4%;
 `;
 
 export const RightIcon = styled.div`
