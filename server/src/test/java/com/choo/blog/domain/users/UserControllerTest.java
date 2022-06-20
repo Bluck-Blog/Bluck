@@ -14,6 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -84,7 +87,37 @@ class UserControllerTest extends BaseControllerTest {
                         .andExpect(jsonPath("body.email").value(registData.getEmail()))
                         .andExpect(jsonPath("body.nickname").value(registData.getNickname()))
                         .andExpect(jsonPath("body.introduction").value(registData.getIntroduction()))
-                        .andExpect(jsonPath("body.password").doesNotExist());
+                        .andExpect(jsonPath("body.password").doesNotExist())
+                        .andDo(document(
+                                "create-user",
+                                requestFields(
+                                        fieldWithPath("email").description("email"),
+                                        fieldWithPath("password").description("password"),
+                                        fieldWithPath("name").description("name"),
+                                        fieldWithPath("nickname").description("nickname"),
+                                        fieldWithPath("profileImage").description("프로필 이미지, 차후 multipart로 변환"),
+                                        fieldWithPath("birthdate").description("생년월일"),
+                                        fieldWithPath("profileMessage").description("프로필 상태 메시지").optional(),
+                                        fieldWithPath("introduction").description("자기소개").optional(),
+                                        fieldWithPath("phone").description("핸드폰 번호").optional(),
+                                        fieldWithPath("verifyCode").description("이메일 인증번호")
+                                ),
+                                relaxedResponseFields(
+                                        fieldWithPath("status").description("http 상태 코드"),
+                                        fieldWithPath("code").description("에러 코드"),
+                                        fieldWithPath("body.createDate").description("생성일"),
+                                        fieldWithPath("body.modifiedDate").description("최종 수정일"),
+                                        fieldWithPath("body.id").description("user pk"),
+                                        fieldWithPath("body.email").description("email"),
+                                        fieldWithPath("body.name").description("name"),
+                                        fieldWithPath("body.nickname").description("nickname"),
+                                        fieldWithPath("body.profileImage").description("프로필 이미지, 차후 multipart로 변환"),
+                                        fieldWithPath("body.birthdate").description("생년월일"),
+                                        fieldWithPath("body.profileMessage").description("프로필 상태 메시지").optional(),
+                                        fieldWithPath("body.introduction").description("자기소개").optional(),
+                                        fieldWithPath("body.phone").description("핸드폰 번호").optional()
+                                )
+                        ));
             }
         }
 
