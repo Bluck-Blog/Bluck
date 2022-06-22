@@ -21,9 +21,9 @@ ssh.settings{
 
 remotes {
     backend {
-        host = '13.209.47.30'
-        user = 'ubuntu'
-        identity = file("${System.properties['user.home']}/.ssh/bluck.pem")
+        host = project.properties['host']
+        user = project.properties['user']
+        identity = project.properties['identity']
     }
 }
 
