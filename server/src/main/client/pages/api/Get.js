@@ -6,5 +6,5 @@ export const get = async (path) => {
 };
 
 export const GET = {
-  useAllPosts: async () => await get("api/posts"),
+  selectAllPosts: async () => await Axios.get("api/posts"),
 };

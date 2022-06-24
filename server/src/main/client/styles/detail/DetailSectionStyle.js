@@ -14,13 +14,19 @@ export const ScrollWrapper = styled.div`
     background-color: #aaa;
     background-clip: padding-box;
     border: 1px solid transparet;
-    border-top-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 5px;
+    /* border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px; */
   }
+
+  ${media.mobile`
+    width: 95%;
+    padding: 0;
+  `}
 `;
 
 export const Wrapper = styled.div`
-  border-radius: 40px 40px 0 0;
+  border-radius: 40px;
   overflow: hidden;
   background-color: ${(props) => props.theme.bgColor};
 `;
@@ -29,6 +35,10 @@ export const BannerBox = styled.figure`
   width: 100%;
   height: 300px;
   position: relative;
+
+  ${media.mobile`
+    height: 200px;
+  `}
 `;
 
 export const AccountBox = styled.div`
@@ -49,6 +59,11 @@ export const ProfilFigure = styled.figure`
   width: 35px;
   height: 35px;
   position: relative;
+
+  ${media.mobile`
+    width: 25px;
+    height: 25px;
+  `}
 `;
 
 export const UserNameAndDate = styled.div`
@@ -59,6 +74,10 @@ export const UserName = styled.p`
   font-size: 14px;
   font-weight: 600;
   color: ${(props) => props.theme.MainTextColor};
+
+  ${media.mobile`
+  font-size: 12px;
+  `}
 `;
 
 export const ContentsDate = styled.p`
@@ -66,12 +85,22 @@ export const ContentsDate = styled.p`
   font-weight: 600;
   margin: 5px 0;
   color: ${(props) => props.theme.MainTextColor};
+
+  ${media.mobile`
+  font-size: 10px;
+  margin-bottom: 0;
+  margin-top: 2px;
+  `}
 `;
 
 export const ShareBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${media.mobile`
+    margin-right: 10px;
+  `}
 `;
 
 export const IconsBox = styled.figure`
@@ -80,6 +109,11 @@ export const IconsBox = styled.figure`
   position: relative;
   margin-left: 13px;
   cursor: pointer;
+
+  ${media.mobile`
+  width: 15px;
+  height: 15px;
+  `}
 `;
 
 export const TagBox = styled.div`
@@ -88,7 +122,11 @@ export const TagBox = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+
+  ${media.mobile`
+  margin: 15px auto;
+  `}
 `;
 
 export const TagText = styled.p`
@@ -103,24 +141,40 @@ export const TagText = styled.p`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${media.mobile`
+  font-size: 12px;
+  padding: 0 2px;
+  height: 24px;
+  border-radius: 6px;
+  `}
 `;
 
 export const BodyWrapper = styled.div`
   width: 95%;
   height: 100%;
   margin: 0 auto;
+
+  ${media.mobile`
+    width: 95%;
+  `}
 `;
 
 export const DetailFooter = styled.ul`
-  width: 100%;
-  margin: 30px 0;
+  width: 90%;
+  margin: 30px auto 30px auto;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+
+  ${media.mobile`
+  width: 90%;
+  margin: 15px auto 10px auto;
+  `}
 `;
 
 export const FooterIconBOx = styled.li`
-  width: 6%;
+  width: 10%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -128,6 +182,10 @@ export const FooterIconBOx = styled.li`
 
 export const IconNumber = styled.span`
   font-size: 15px;
+
+  ${media.mobile`
+  font-size: 12px;
+  `}
 `;
 
 export const NextPrevButtonBox = styled.div`
@@ -150,7 +208,7 @@ export const NextPrevButton = styled.button`
   cursor: pointer;
 
   ${media.tablet`
-  width: 40%;
+  width: 45%;
   height: 60px;
   `}
 `;
@@ -178,7 +236,7 @@ export const NextPrevTitle = styled.p`
   text-overflow: ellipsis;
 
   ${media.tablet`
-    font-size: ${(props) => (props.isTitle ? "12px" : "16px")};
-    width: 120px;
+    font-size: ${(props) => (props.isTitle ? "10px" : "12px")};
+    width: 90px;
   `}
 `;
