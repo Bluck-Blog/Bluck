@@ -61,8 +61,7 @@ export const Section = styled.section`
     background-color: #aaa;
     background-clip: padding-box;
     border: 1px solid transparet;
-    border-top-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 5px;
   }
 `;
 

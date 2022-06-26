@@ -84,7 +84,7 @@ export const Title = styled.p`
 export const MainContent = styled.p`
   margin: 15px 0;
   font-size: 14px;
-  width: 540px;
+  width: 95%;
   height: 40px;
   overflow: hidden;
   white-space: nowrap;
@@ -93,6 +93,11 @@ export const MainContent = styled.p`
   ${media.mobile`
   font-size: 10px;
   margin: 10px 0 20px 0;
+  height: 25px;
+  width: 95%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   `};
 `;
 
@@ -101,6 +106,10 @@ export const ContentFooter = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 4%;
+
+  ${media.mobile`
+    margin-bottom: 4%;
+  `}
 `;
 
 export const RightIcon = styled.div`
