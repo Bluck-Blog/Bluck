@@ -480,7 +480,7 @@ class PostControllerTest extends BaseControllerTest {
             @Test
             @DisplayName("id에 해당하는 게시물을 반환한다.")
             void it_return_post() throws Exception {
-                mockMvc.perform(get("/api/posts/{id}", post.getId())
+                mockMvc.perform(RestDocumentationRequestBuilders.get("/api/posts/{id}", post.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaTypes.HAL_JSON)
                             .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken()))
@@ -489,7 +489,29 @@ class PostControllerTest extends BaseControllerTest {
                         .andExpect(jsonPath("body.content").value(post.getContent()))
                         .andExpect(jsonPath("body.likes").value(post.getLikes()))
                         .andExpect(jsonPath("body.dislikes").value(post.getDislikes()))
-                        .andExpect(jsonPath("body.view").value(post.getView() + 1));
+                        .andExpect(jsonPath("body.view").value(post.getView() + 1))
+                        .andDo(document(
+                                "get-post",
+                                pathParameters(
+                                        parameterWithName("id").description("게시물 id")
+                                ),
+                                relaxedResponseFields(
+                                        fieldWithPath("status").type(JsonFieldType.STRING).description("http 상태 코드"),
+                                        fieldWithPath("body.id").type(JsonFieldType.NUMBER).description("게시물 id"),
+                                        fieldWithPath("body.author").type(JsonFieldType.OBJECT).description("게시물 등록자"),
+                                        fieldWithPath("body.title").type(JsonFieldType.STRING).description("게시물 제목"),
+                                        fieldWithPath("body.content").type(JsonFieldType.STRING).description("게시물 내용"),
+                                        fieldWithPath("body.category").type(JsonFieldType.OBJECT).description("게시물 카테고리"),
+                                        fieldWithPath("body.likes").type(JsonFieldType.NUMBER).description("게시물 좋아요 수"),
+                                        fieldWithPath("body.dislikes").type(JsonFieldType.NUMBER).description("게시물 싫어요 수"),
+                                        fieldWithPath("body.openType").type(JsonFieldType.STRING).description("게시물 공개방식"),
+                                        fieldWithPath("body.view").type(JsonFieldType.NUMBER).description("게시물 조회수"),
+                                        fieldWithPath("body.commentsList").type(JsonFieldType.ARRAY).description("게시물 댓글 목록"),
+                                        fieldWithPath("body.createDate").type(JsonFieldType.STRING).description("게시물 생성일"),
+                                        fieldWithPath("body.modifiedDate").type(JsonFieldType.STRING).description("게시물 수정일"),
+                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("에러코드")
+                                )
+                        ));
             }
         }
 
