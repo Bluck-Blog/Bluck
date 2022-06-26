@@ -249,7 +249,19 @@ class SessionControllerTest extends BaseControllerTest {
                         .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("body").value("true"))
-                        .andExpect(jsonPath("status").value(HttpStatus.OK.name()));
+                        .andExpect(jsonPath("status").value(HttpStatus.OK.name()))
+                        .andDo(document(
+                                "verify-email",
+                                requestParameters(
+                                        parameterWithName("code").description("이메일 인증 코드")
+                                ),
+                                responseFields(
+                                        fieldWithPath("status").type(JsonFieldType.STRING).description("http 상태 코드"),
+                                        fieldWithPath("body").type(JsonFieldType.BOOLEAN).description("인증 성공 여부"),
+                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("에러코드")
+                                )
+                        ))
+                        ;
             }
         }
 
