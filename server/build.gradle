@@ -23,7 +23,7 @@ remotes {
     backend {
         host = project.properties['host']
         user = project.properties['user']
-        identity = project.properties['identity']
+        identity = file("${System.properties['user.home']}/.ssh/bluck.pem")
     }
 }
 
