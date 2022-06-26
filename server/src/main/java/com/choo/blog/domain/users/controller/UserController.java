@@ -45,7 +45,5 @@ public class UserController {
         URI createdUri = selfLinkBuilder.toUri();
 
         return ApiResponse.status(HttpStatus.CREATED).body(userModel).toResponse();
-
-        //return ResponseEntity.created(createdUri).body(userModel);
     }
 }

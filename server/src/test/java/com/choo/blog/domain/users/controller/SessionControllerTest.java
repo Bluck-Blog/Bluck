@@ -21,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.mockito.Mockito.mockStatic;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -197,6 +199,18 @@ class SessionControllerTest extends BaseControllerTest {
                         )
                         .andDo(print())
                         .andExpect(jsonPath("status").value(HttpStatus.CREATED.name()))
+                        .andDo(document(
+                                "generate-verify-code",
+                                requestParameters(
+                                        parameterWithName("email").description("인증 이메일")
+                                ),
+                                responseFields(
+                                        fieldWithPath("status").type(JsonFieldType.STRING).description("http 상태 코드"),
+                                        fieldWithPath("body").type(JsonFieldType.STRING).description("인증번호"),
+                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("에러코드")
+
+                                )
+                        ))
                         ;
             }
         }
