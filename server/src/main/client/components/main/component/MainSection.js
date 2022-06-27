@@ -1,5 +1,4 @@
 //lib
-import styled from "styled-components";
 import { useState, useEffect } from "react";
 
 //components
@@ -10,7 +9,7 @@ import * as S from "../../../styles/main/MainSectionStyle";
 
 //img
 
-export default function MainSection({ content, isToken }) {
+export default function MainSection({ content }) {
   const filterList1 = [
     "인기순",
     "최신순",

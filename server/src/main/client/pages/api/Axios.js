@@ -16,3 +16,9 @@ Axios.interceptors.request.use(function (config) {
 
   return config;
 });
+
+Axios.interceptors.response.use(function (res) {
+  const { data } = res;
+
+  return data;
+});

@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 
 //components
 import { validation } from "../../module/validation";
-import { POST } from "../../../pages/api/Post";
+import { post, POST } from "../../../pages/api/Post";
 import { darkMode, loginState } from "../../../state/atom";
 import * as S from "../../../styles/login/LoginFormStyle";
 
@@ -26,8 +26,6 @@ export default function LoginForm() {
   const [rememberId, setRememberId] = useState(false);
   const setIsLogged = useSetRecoilState(loginState);
 
-  const { data, isSuccess, isError, mutate } = POST.useLogin("api/session");
-
   const {
     register,
     handleSubmit,
@@ -35,25 +33,6 @@ export default function LoginForm() {
     setValue,
     setError,
   } = useForm();
-
-  const onValid = (data) => {
-    const { id, pw } = data;
-
-    if (rememberId) {
-      localStorage.setItem("rememberID", id);
-    }
-
-    if (!rememberId) {
-      localStorage.removeItem("rememberID");
-    }
-
-    const loginJson = {
-      email: id,
-      password: pw,
-    };
-
-    mutate(JSON.stringify(loginJson), POST.mutateCallBack("login"));
-  };
 
   const afterLoginHandle = () => {
     const { code } = data || {};
@@ -80,9 +59,26 @@ export default function LoginForm() {
     }
   };
 
-  useEffect(() => {
-    afterLoginHandle();
-  }, [isSuccess, isError, data]);
+  const onValid = async (data) => {
+    const { id, pw } = data;
+
+    if (rememberId) {
+      localStorage.setItem("rememberID", id);
+    }
+
+    if (!rememberId) {
+      localStorage.removeItem("rememberID");
+    }
+
+    const loginJson = {
+      email: id,
+      password: pw,
+    };
+
+    const loginAPI = await POST.useLogin(loginJson);
+    console.log("loginAPI===");
+    console.log(loginAPI);
+  };
 
   useEffect(() => {
     const userIdinLocalStorage = localStorage.getItem("rememberID");

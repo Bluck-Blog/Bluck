@@ -22,12 +22,6 @@ export default function JoinForm() {
   const [check, setCheck] = useState(false);
   const [profile, setProfile] = useState("");
 
-  // const {
-  //   data: emailVerifyData,
-  //   isSuccess: isEmailVerifySuccess,
-  //   mutate: emailVerifyMutate,
-  // } = POST.useConfirmEmail("api/session/verify");
-
   const {
     register,
     handleSubmit,
@@ -64,14 +58,14 @@ export default function JoinForm() {
     const formData = new FormData();
     formData.append("email", email);
 
-    // emailVerifyMutate(formData, POST.mutateCallBack("confirmEmaill"));
-  };
+    const confirmEmailAPI = await POST.confirmEmail(formData);
+    console.log("confirmEmailAPI===");
+    console.log(confirmEmailAPI);
 
-  useEffect(() => {
-    if (isEmailVerifySuccess) {
-      setError("confirmState", { message: "인증번호가 잘못되었습니다." });
-    }
-  }, []);
+    // if (isEmailVerifySuccess) {
+    //   setError("confirmState", { message: "인증번호가 잘못되었습니다." });
+    // }
+  };
 
   return (
     <S.Section>
