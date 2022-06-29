@@ -23,7 +23,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "api/session", produces = MediaTypes.HAL_JSON_VALUE)
+@RequestMapping(value = "api/sess", produces = MediaTypes.HAL_JSON_VALUE)
 public class SessionController {
     private final AuthenticationService authenticationService;
     private final UserService userService;
@@ -36,25 +36,25 @@ public class SessionController {
         }
 
         String accessToken = authenticationService.login(loginData);
-        SessionResponseData session = SessionResponseData.builder()
+        SessionResponseData sess = SessionResponseData.builder()
                 .accessToken(accessToken)
                 .build();
-        return ApiResponse.status(HttpStatus.CREATED).body(session);
+        return ApiResponse.status(HttpStatus.CREATED).body(sess);
     }
 
     @GetMapping("/verify")
     public ResponseEntity generateVerifyCode(String email, HttpServletRequest request){
-        HttpSession session = request.getSession();
+        HttpSession sess = request.getSession();
         String code = userService.generateVerifyCode(email);
-        session.setAttribute("code", code);
+        sess.setAttribute("code", code);
 
         return ApiResponse.status(HttpStatus.CREATED).body(code).toResponse();
     }
 
     @PostMapping("/verify")
     public ResponseEntity verifyEmail(String code, HttpServletRequest request){
-        HttpSession session = request.getSession();
-        Object sessionCode = session.getAttribute("code");
+        HttpSession sess = request.getSession();
+        Object sessionCode = sess.getAttribute("code");
         if(sessionCode == null){
             throw new CodeNotFoundException();
         }

@@ -88,5 +88,4 @@ include::{snippets}/error-response/http-response.adoc[]
 
 operation::login[snippets='request-fields,request-body,response-fields,response-body']
 
-
-include::post.adoc[]
+include::resources-member.adoc[]
