@@ -23,7 +23,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "api/sess", produces = MediaTypes.HAL_JSON_VALUE)
+@RequestMapping(value = "api/session", produces = MediaTypes.HAL_JSON_VALUE)
 public class SessionController {
     private final AuthenticationService authenticationService;
     private final UserService userService;
