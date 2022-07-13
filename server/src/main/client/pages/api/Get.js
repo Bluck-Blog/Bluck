@@ -7,4 +7,5 @@ export const get = async (path) => {
 
 export const GET = {
   selectAllPosts: async () => await Axios.get("api/posts"),
+  sentAuthEmail: async (data) => await Axios.get("api/session/verify", data),
 };

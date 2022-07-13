@@ -34,8 +34,8 @@ export default function ContentCard({ item }) {
       <S.Body>
         <S.ProfileBox>
           <Image
-            height={18}
-            width={18}
+            height={"18px"}
+            width={"18px"}
             src={isDark ? item.img : BlackProfile}
             alt="profile"
           />

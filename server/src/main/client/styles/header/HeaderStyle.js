@@ -3,26 +3,30 @@ import { media } from "../common/media";
 
 export const HeaderWrapper = styled.header`
   width: 100%;
-  height: 10%;
+  /* height: 5%; */
   padding-top: 1%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2%;
+  margin: 1% 0;
+
+  ${media.mobile`
+  margin: 2.5% 0;
+  `}
 `;
 
 export const BtnBox = styled.div`
-  width: 10%;
+  width: 7%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   ${media.tablet`
-      width: 15%;  
+      width: 10%;  
   `}
 
   ${media.mobile`
-      width: 25%;  
+      width: 14%;  
       margin-right: 2%;
   `}
 `;
@@ -35,5 +39,22 @@ export const LogOutButton = styled.span`
 
   ${media.tablet`
     font-size: ${(props) => props.tabletSize}px;
+  `}
+`;
+
+export const IconFigure = styled.figure`
+  position: relative;
+  cursor: pointer;
+  width: ${(props) => props.size}px;
+  height: ${(props) => props.size}px;
+
+  ${media.tablet`
+  width: ${(props) => props.tabletSize}px;
+  height: ${(props) => props.tabletSize}px;
+  `}
+
+  ${media.mobile`
+  width: ${(props) => props.mobileSize}px;
+  height: ${(props) => props.mobileSize}px;
   `}
 `;

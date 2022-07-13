@@ -12,12 +12,9 @@ export const Wrapper = styled.footer`
 `;
 
 export const Text = styled.p`
-  font-weight: 600;
-  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  font-size: 10px;
   text-align: right;
   color: ${(props) => props.theme.textColor};
-
-  ${media.mobile`
-  font-size: 10px;
-  `}
 `;

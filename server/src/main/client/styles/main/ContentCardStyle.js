@@ -82,22 +82,30 @@ export const Title = styled.p`
 `;
 
 export const MainContent = styled.p`
-  margin: 15px 0;
+  margin: 15px 0 35px 0;
   font-size: 14px;
   width: 95%;
-  height: 40px;
-  overflow: hidden;
-  white-space: nowrap;
+  height: 30px;
+  white-space: normal;
   text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 1.2;
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 
   ${media.mobile`
   font-size: 10px;
   margin: 10px 0 20px 0;
-  height: 25px;
+  height: 23px;
   width: 95%;
   overflow: hidden;
-  white-space: nowrap;
+  white-space: normal;
   text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   `};
 `;
 
@@ -116,6 +124,11 @@ export const RightIcon = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 20px;
+
+  ${media.mobile`
+    width: 60%;
+  `}
 `;
 
 export const IconBox = styled.figure`
@@ -123,13 +136,24 @@ export const IconBox = styled.figure`
   justify-content: space-between;
   align-items: center;
   margin: 0 5px;
+  /* position: relative; */
+  /* width: 35px;
+  height: 35px; */
 `;
 
 export const Count = styled.figcaption`
   margin-left: 10px;
   font-size: 14px;
+
+  ${media.mobile`
+  font-size: 10px;
+  `}
 `;
 
 export const Date = styled.span`
   font-size: 14px;
+
+  ${media.mobile`
+  font-size: 10px;
+  `}
 `;

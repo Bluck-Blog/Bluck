@@ -189,7 +189,7 @@ export const ConfirmBtn = styled.button`
   background: none;
   font-size: 10px;
   font-weight: bold;
-  margin-right: 2%;
+  margin-left: 2%;
   width: 20%;
   height: 40px;
   border: 2px solid ${(props) => props.theme.textColor};
@@ -197,12 +197,12 @@ export const ConfirmBtn = styled.button`
 `;
 
 export const ConFirmInput = styled.input`
-  width: 80%;
+  width: 60%;
   height: 40px;
   border: none;
   background: none;
-  border-radius: 10px;
-  padding-left: 5%;
+  border-radius: 0 10px 10px 0;
+  /* padding-left: 5%; */
   background: ${(props) => props.theme.bgColor};
   color: ${(props) => props.theme.textColor};
   &:focus {
