@@ -1,26 +1,27 @@
 // components
-import { loginState } from "../../state/atom";
+import { darkMode, loginState } from "../../state/atom";
 import LinkTag from "../common/LinkTag";
 import * as S from "../../styles/header/HeaderStyle";
 
 // lib
+import { useState } from "react";
 import Image from "next/image";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 // img
 import WhiteLogin from "../../styles/img/whiteLogin.png";
 import BlackLogin from "../../styles/img/blackLogin.png";
 import WhiteLogout from "../../styles/img/whiteLogout.png";
 import BlackLogout from "../../styles/img/blackLogout.png";
-import BlackJoin from "../../styles/img/blackJoin.png";
-import WhiteJoin from "../../styles/img/whiteJoin.png";
-import WhiteMyPage from "../../styles/img/whiteMyPage.png";
-import BlackMyPage from "../../styles/img/blackMyPage.png";
+import BlackBell from "../../styles/img/blackBell.png";
+import WhiteBell from "../../styles/img/WhiteBell.png";
 import Link from "next/link";
 
 export default function Header() {
   const [isLogged, setIsLogged] = useRecoilState(loginState);
-  console.log(isLogged);
+  const isDark = useRecoilValue(darkMode);
+
+  const [isModal, setIsModal] = useState(false);
 
   const logOutHandle = () => {
     sessionStorage.removeItem("accessToken");
@@ -40,10 +41,10 @@ export default function Header() {
         {isLogged ? (
           <Link href={"/logout"}>
             <a>
-              <S.IconFigure size={25} tabletSize={12} mobileSize={10}>
+              <S.IconFigure size={25} tabletSize={20} mobileSize={15}>
                 <Image
                   layout="fill"
-                  src={isLogged ? WhiteLogout : BlackLogout}
+                  src={isDark ? WhiteLogout : BlackLogout}
                   alt="logout"
                 />
               </S.IconFigure>
@@ -55,38 +56,27 @@ export default function Header() {
               <S.IconFigure size={25} tabletSize={20} mobileSize={15}>
                 <Image
                   layout="fill"
-                  src={isLogged ? WhiteLogin : BlackLogin}
+                  src={isDark ? WhiteLogin : BlackLogin}
                   alt="login"
                 />
               </S.IconFigure>
             </a>
           </Link>
         )}
-        {isLogged ? (
-          <Link href={"/mypage"}>
-            <a>
-              <S.IconFigure size={25} tabletSize={12} mobileSize={10}>
-                <Image
-                  layout="fill"
-                  src={isLogged ? WhiteMyPage : BlackMyPage}
-                  alt="mypage"
-                />
-              </S.IconFigure>
-            </a>
-          </Link>
-        ) : (
-          <Link href={"/signup"}>
-            <a>
-              <S.IconFigure size={25} tabletSize={20} mobileSize={15}>
-                <Image
-                  layout="fill"
-                  src={isLogged ? WhiteJoin : BlackJoin}
-                  alt="join"
-                />
-              </S.IconFigure>
-            </a>
-          </Link>
-        )}
+        <S.IconFigure
+          onMouseEnter={() => setIsModal(true)}
+          onMouseLeave={() => setIsModal(false)}
+          size={25}
+          tabletSize={20}
+          mobileSize={15}
+        >
+          <Image
+            layout="fill"
+            src={isDark ? WhiteBell : BlackBell}
+            alt="bell"
+          />
+          {isModal && <S.Modal isShow={isModal}>여기</S.Modal>}
+        </S.IconFigure>
       </S.BtnBox>
     </S.HeaderWrapper>
   );

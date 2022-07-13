@@ -58,3 +58,16 @@ export const IconFigure = styled.figure`
   height: ${(props) => props.mobileSize}px;
   `}
 `;
+
+export const Modal = styled.ul`
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 100%;
+  width: 100px;
+  height: 100px;
+  background: red;
+  transform: translate(-50%, 0);
+  transition: 1s ease;
+  opacity: ${(props) => (props.isShow ? 1 : 0)};
+`;
