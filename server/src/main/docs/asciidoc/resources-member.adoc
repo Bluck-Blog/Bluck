@@ -1,0 +1,6 @@
+[[resources-member]]
+== 회원
+
+`POST` 요청을 사용하여 회원가입을 진행할 수 있다.
+
+operation::create-user[snippets]
