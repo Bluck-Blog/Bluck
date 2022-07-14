@@ -1,5 +1,16 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { media } from "../common/media";
+
+const animation = keyframes`
+  0%{
+    transform: translate(-35%, 10px);
+    opacity: 0;
+  }
+  100%{
+    transform: translate(-35%, 0);
+    opacity: 1;
+  }
+`;
 
 export const HeaderWrapper = styled.header`
   width: 100%;
@@ -44,7 +55,7 @@ export const LogOutButton = styled.span`
 
 export const IconFigure = styled.figure`
   position: relative;
-  cursor: pointer;
+  /* cursor: pointer; */
   width: ${(props) => props.size}px;
   height: ${(props) => props.size}px;
 
@@ -65,9 +76,9 @@ export const Modal = styled.ul`
   left: 0;
   top: 100%;
   width: 100px;
-  height: 100px;
-  background: red;
-  transform: translate(-50%, 0);
-  transition: 1s ease;
-  opacity: ${(props) => (props.isShow ? 1 : 0)};
+  height: 200px;
+  background: ${(props) => props.theme.navBgColor};
+  border-radius: 10px;
+  animation: ${(props) => (props.isShow ? animation : null)} 0.3s linear
+    forwards;
 `;

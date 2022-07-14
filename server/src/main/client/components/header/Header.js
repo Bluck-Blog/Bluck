@@ -21,7 +21,8 @@ export default function Header() {
   const [isLogged, setIsLogged] = useRecoilState(loginState);
   const isDark = useRecoilValue(darkMode);
 
-  const [isModal, setIsModal] = useState(false);
+  const [isAlarmModal, setIsAlarmModal] = useState(false);
+  const [isLoginModal, setIsLoginModal] = useState(false);
 
   const logOutHandle = () => {
     sessionStorage.removeItem("accessToken");
@@ -43,6 +44,7 @@ export default function Header() {
             <a>
               <S.IconFigure size={25} tabletSize={20} mobileSize={15}>
                 <Image
+                  style={{ cursor: "pointer" }}
                   layout="fill"
                   src={isDark ? WhiteLogout : BlackLogout}
                   alt="logout"
@@ -53,29 +55,38 @@ export default function Header() {
         ) : (
           <Link href={"/login"}>
             <a>
-              <S.IconFigure size={25} tabletSize={20} mobileSize={15}>
+              <S.IconFigure
+                onMouseEnter={() => setIsLoginModal(true)}
+                onMouseLeave={() => setIsLoginModal(false)}
+                size={25}
+                tabletSize={20}
+                mobileSize={15}
+              >
                 <Image
+                  style={{ cursor: "pointer" }}
                   layout="fill"
                   src={isDark ? WhiteLogin : BlackLogin}
                   alt="login"
                 />
+                {isLoginModal && <S.Modal isShow={isLoginModal}>여기</S.Modal>}
               </S.IconFigure>
             </a>
           </Link>
         )}
         <S.IconFigure
-          onMouseEnter={() => setIsModal(true)}
-          onMouseLeave={() => setIsModal(false)}
+          onMouseEnter={() => setIsAlarmModal(true)}
+          onMouseLeave={() => setIsAlarmModal(false)}
           size={25}
           tabletSize={20}
           mobileSize={15}
         >
           <Image
+            style={{ cursor: "pointer" }}
             layout="fill"
             src={isDark ? WhiteBell : BlackBell}
             alt="bell"
           />
-          {isModal && <S.Modal isShow={isModal}>여기</S.Modal>}
+          {isAlarmModal && <S.Modal isShow={isAlarmModal}>여기</S.Modal>}
         </S.IconFigure>
       </S.BtnBox>
     </S.HeaderWrapper>
