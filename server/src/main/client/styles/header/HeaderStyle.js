@@ -55,7 +55,6 @@ export const LogOutButton = styled.span`
 
 export const IconFigure = styled.figure`
   position: relative;
-  /* cursor: pointer; */
   width: ${(props) => props.size}px;
   height: ${(props) => props.size}px;
 
@@ -75,10 +74,28 @@ export const Modal = styled.ul`
   z-index: 2;
   left: 0;
   top: 100%;
-  width: 100px;
-  height: 200px;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
   background: ${(props) => props.theme.navBgColor};
   border-radius: 10px;
   animation: ${(props) => (props.isShow ? animation : null)} 0.3s linear
     forwards;
+`;
+
+export const LogoutButton = styled.p`
+  font-size: ${(props) => props.size}px;
+  font-weight: bold;
+  cursor: pointer;
+  color: ${(props) => props.theme.textColor};
+
+  ${media.tablet`
+  font-size: ${(props) => props.tabletSize}px;
+  `}
+  ${media.mobile`
+  font-size: ${(props) => props.mobileSize}px;
+  `}
 `;

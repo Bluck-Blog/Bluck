@@ -16,6 +16,7 @@ import BlackLogout from "../../styles/img/blackLogout.png";
 import BlackBell from "../../styles/img/blackBell.png";
 import WhiteBell from "../../styles/img/WhiteBell.png";
 import Link from "next/link";
+import Title from "../common/Title";
 
 export default function Header() {
   const [isLogged, setIsLogged] = useRecoilState(loginState);
@@ -23,6 +24,7 @@ export default function Header() {
 
   const [isAlarmModal, setIsAlarmModal] = useState(false);
   const [isLoginModal, setIsLoginModal] = useState(false);
+  const [isLogoutModal, setIsLogoutModal] = useState(false);
 
   const logOutHandle = () => {
     sessionStorage.removeItem("accessToken");
@@ -42,13 +44,38 @@ export default function Header() {
         {isLogged ? (
           <Link href={"/logout"}>
             <a>
-              <S.IconFigure size={25} tabletSize={20} mobileSize={15}>
+              <S.IconFigure
+                onMouseEnter={() => setIsLogoutModal(true)}
+                onMouseLeave={() => setIsLogoutModal(false)}
+                size={25}
+                tabletSize={20}
+                mobileSize={15}
+              >
                 <Image
                   style={{ cursor: "pointer" }}
                   layout="fill"
                   src={isDark ? WhiteLogout : BlackLogout}
                   alt="logout"
                 />
+                {isLogoutModal && (
+                  <S.Modal isShow={isLogoutModal}>
+                    <S.LogoutButton
+                      onClick={logOutHandle}
+                      tabletSize={14}
+                      mobileSize={10}
+                      size={14}
+                    >
+                      logout
+                    </S.LogoutButton>
+                    <LinkTag
+                      title={"mypage"}
+                      tabletSize={14}
+                      mobileSize={10}
+                      size={14}
+                      link={"/mypage"}
+                    />
+                  </S.Modal>
+                )}
               </S.IconFigure>
             </a>
           </Link>
@@ -68,7 +95,24 @@ export default function Header() {
                   src={isDark ? WhiteLogin : BlackLogin}
                   alt="login"
                 />
-                {isLoginModal && <S.Modal isShow={isLoginModal}>여기</S.Modal>}
+                {isLoginModal && (
+                  <S.Modal isShow={isLoginModal}>
+                    <LinkTag
+                      title={"login"}
+                      tabletSize={14}
+                      mobileSize={10}
+                      size={14}
+                      link={"/login"}
+                    />
+                    <LinkTag
+                      title={"join"}
+                      tabletSize={14}
+                      mobileSize={10}
+                      size={14}
+                      link={"/signup"}
+                    />
+                  </S.Modal>
+                )}
               </S.IconFigure>
             </a>
           </Link>
