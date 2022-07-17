@@ -28,5 +28,5 @@ export const ScrollWrapper = styled.div`
 export const Wrapper = styled.div`
   border-radius: 40px;
   overflow: hidden;
-  background-color: ${(props) => props.theme.bgColor};
+  /* background-color: ${(props) => props.theme.bgColor}; */
 `;

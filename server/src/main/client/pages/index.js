@@ -15,7 +15,7 @@ export async function getServerSideProps() {
   const fakeData = [...content];
 
   try {
-    const data = await GET.useAllPosts();
+    const data = await GET.selectAllPosts();
 
     return {
       props: {

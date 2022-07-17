@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const baseURL = "http://localhost:8084/";
+export const baseURL = process.env.NEXT_PUBLIC_BASEURL;
 
 export const Axios = axios.create({
   baseURL,
@@ -15,4 +15,10 @@ Axios.interceptors.request.use(function (config) {
   config.headers.Authorization = accessToken ? accessToken : null;
 
   return config;
+});
+
+Axios.interceptors.response.use(function (res) {
+  const { data } = res;
+
+  return data;
 });

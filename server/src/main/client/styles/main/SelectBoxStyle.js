@@ -32,7 +32,6 @@ export const Filter1 = styled.div`
 
       ${media.mobile`
         font-size: 8px;
-        
       `}
     }
   }

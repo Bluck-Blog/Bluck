@@ -1,12 +1,13 @@
 // lib
 import Image from "next/image";
 import { useRecoilValue } from "recoil";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 //components
 import { validation } from "../../module/validation";
 import { POST } from "../../../pages/api/Post";
+import { GET } from "../../../pages/api/Get";
 import { darkMode } from "../../../state/atom";
 import * as S from "../../../styles/signup/JoinFormStyle";
 
@@ -19,14 +20,15 @@ import BlackCheck from "../../../styles/img/blackCheck.png";
 export default function JoinForm() {
   const isDark = useRecoilValue(darkMode);
 
-  const [check, setCheck] = useState(false);
+  // 프로필 사진
   const [profile, setProfile] = useState("");
 
-  // const {
-  //   data: emailVerifyData,
-  //   isSuccess: isEmailVerifySuccess,
-  //   mutate: emailVerifyMutate,
-  // } = POST.useConfirmEmail("api/session/verify");
+  // 개인정보 동의 체크
+  const [check, setCheck] = useState(false);
+
+  // 인증번호 유효성
+  const [isSentAuthEmail, setIsSentAuthEmail] = useState(false);
+  const [isCheckAuthNumber, setIsCheckAuthNumber] = useState(false);
 
   const {
     register,
@@ -58,20 +60,51 @@ export default function JoinForm() {
     reader.readAsDataURL(photo);
   };
 
+  const checkAuthNumberHandler = async (e) => {
+    e.preventDefault();
+
+    if (isCheckAuthNumber) {
+      return;
+    }
+
+    const authNumber = getValues("authNumber");
+    const formData = new FormData();
+    formData.append("code", authNumber);
+    const confirmEmailAPI = await POST.confirmEmail(formData);
+
+    if (confirmEmailAPI.code >= 0) {
+      setIsCheckAuthNumber(true);
+      return;
+    }
+
+    if (confirmEmailAPI.code < 0) {
+      setError("authNumber", { message: "인증번호가 잘못되었습니다." });
+      return;
+    }
+  };
+
   const sentEmail = async (e) => {
     e.preventDefault();
+
+    if (isSentAuthEmail) {
+      return;
+    }
+
     const email = getValues("email");
     const formData = new FormData();
     formData.append("email", email);
+    const sentEmailAPI = await GET.sentAuthEmail(formData);
 
-    // emailVerifyMutate(formData, POST.mutateCallBack("confirmEmaill"));
-  };
-
-  useEffect(() => {
-    if (isEmailVerifySuccess) {
-      setError("confirmState", { message: "인증번호가 잘못되었습니다." });
+    if (sentEmailAPI.code >= 0) {
+      setIsSentAuthEmail(true);
+      return;
     }
-  }, []);
+
+    if (confirmEmailAPI.code < 0) {
+      setError("email", { message: "인증번호 전송에 실패했습니다." });
+      return;
+    }
+  };
 
   return (
     <S.Section>
@@ -87,7 +120,7 @@ export default function JoinForm() {
       <S.Form onSubmit={handleSubmit(joinSubmit)}>
         <S.InputBox>
           <S.Label>이메일</S.Label>
-          <S.Input
+          <S.ConFirmInput
             {...register("email", {
               required: "*이메일을 입력해주세요.*",
               pattern: {
@@ -98,13 +131,23 @@ export default function JoinForm() {
             type="text"
             placeholder="이메일을 입력해주세요."
           />
+          <S.ConfirmBtn onClick={sentEmail}>
+            {isSentAuthEmail ? "전송 완료" : "인증번호 전송"}
+          </S.ConfirmBtn>
         </S.InputBox>
         <S.ErrorMsg>{errors?.email?.message}</S.ErrorMsg>
-        <S.ConfirmBox>
-          <S.ConfirmBtn onClick={sentEmail}>인증번호</S.ConfirmBtn>
-          <S.ConFirmInput type="text" placeholder="인증번호 입력해주세요." />
-        </S.ConfirmBox>
-        <S.ErrorMsg>{errors?.email?.message}</S.ErrorMsg>
+        <S.InputBox>
+          <S.Label>인증번호</S.Label>
+          <S.ConFirmInput
+            {...register("authNumber", {
+              required: "*인증 번호를 확인해주세요.*",
+            })}
+            type="text"
+            placeholder="메일로 받은 인증번호 입력해주세요."
+          />
+          <S.ConfirmBtn onClick={checkAuthNumberHandler}>인증확인</S.ConfirmBtn>
+        </S.InputBox>
+        <S.ErrorMsg>{errors?.authNumber?.message}</S.ErrorMsg>
         <S.InputBox>
           <S.Label>별명</S.Label>
           <S.Input

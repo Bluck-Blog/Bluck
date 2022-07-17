@@ -21,7 +21,7 @@ export const Menu = styled.div`
 export const Content = styled.div`
   width: 100%;
   margin-top: 10px;
-  height: 65vh;
+  height: 67vh;
   padding-right: 1%;
   overflow-y: auto;
   display: flex;
