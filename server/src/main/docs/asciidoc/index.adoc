@@ -84,6 +84,19 @@ include::{snippets}/error-response/http-response.adoc[]
 [[resources-login]]
 == 로그인
 
+[[resource-mail]]
+== 이메일 인증
+
+=== 이메일 인증번호 발급
+operation::generate-verify-code[snippets='request-fields,request-body,response-fields,response-body']
+
+=== 이메일 인증
+operation::verify-email[snippets='request-fields,response-fields,response-body']
+
+
+
+
+
 `Post` 요청을 사용하여 로그인 토큰을 발급할 수 있다.
 
 operation::login[snippets='request-fields,request-body,response-fields,response-body']

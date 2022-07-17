@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -67,6 +68,7 @@ class UserServiceTest {
 
             @Test
             @DisplayName("회원을 등록하고 등록된 회원 정보를 반환한다.")
+            @Rollback(value = false)
             void it_return_user(){
                 User user = userService.join(registData);
 

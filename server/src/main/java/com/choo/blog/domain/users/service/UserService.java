@@ -100,7 +100,7 @@ public class UserService {
                 .subject("BLUCK 인증번호")
                 .attributes(attributes)
                 .build();
-
+        System.out.println("mailMessage = " + mailMessage);
         mailProvider.send(mailMessage);
     }
 }
