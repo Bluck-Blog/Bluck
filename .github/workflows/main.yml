@@ -1,0 +1,145 @@
+name: bluck-deploy
+
+on:
+  push:
+    branches: [ main ] # develop에 push될 때 CD가 일어나도록 핸들링
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1 # 최신 버전을 쓰고 싶었으나 이슈가 생겨서 기존에 CI에서 쓰던 버전 사용
+        with:
+          java-version: 11
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+        shell: bash
+
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss # 다른 포맷으로 변경 가능(MomentJS format syntax)
+          utcOffset: "+09:00" # 한국 시간에 맞추기 위함
+
+        # grandle build를 통해 만들어진 jar를 beanstalk에 배포하기 위한 zip 파일로 만드는 것
+      - name: Generate deployment package 
+        run: |
+          mkdir -p deploy
+          cp build/libs/*.jar deploy/application.jar # 빌드 완료 시 jar 파일명을 application.jar로 변경
+          cp Procfile deploy/Procfile
+          cp -r .ebextensions deploy/.ebextensions
+          cp -r .platform deploy/.platform
+          cd deploy && zip -r deploy.zip . # Procfile, .ebextensions, .platform 포함하여 zip 생성
+
+        # Beanstalk Deploy 플러그인 사용
+      - name: Beanstalk Deploy
+        uses: einaregilsson/beanstalk-deploy@v14
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }} # github secrets로 등록한 값 사용
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # github secrets로 등록한 값 사용
+          application-name: bluck-server # EB application 이름
+          environment_name: Bluckserver-env # EB environment 이름
+          version_label: Github Action-${{steps.current-time.outputs.formattedTime}} # 배포 버전은 타임스탬프를 이용하여 구분
+          region: ap-northeast-2
+          deployment_package: deploy/deploy.zip
+          wait_for_environment_recovery: 180 # default wait time은 30초이며, 필자의 EB가 느려서 180초로 지정했습니다(지정 안하면 간혹 timeout 발생).
+deploy.zipProcfile.ebextensions.platform
+
+
+
+
+files:
+    "/sbin/appstart" :
+        mode: "000755"
+        owner: webapp
+        group: webapp
+        content: |
+            #!/usr/bin/env bash
+            JAR_PATH=/var/app/current/application.jar
+
+            # run app
+            killall java
+            java -Dfile.encoding=UTF-8 -jar $JAR_PATH
+/sbin/sbin755webapp(user).webapp(group)content
+java -Dfile.encoding=UTF-8 -DSpring.profiles.active=dev -jar $JAR_PATH
+
+commands:
+  set_time_zone:
+    command: ln -f -s /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
+
+Procfile
+/sbin/appstart.ebextensions/00-makeFiles.config
+web: appstart
+
+
+reverse proxy5000
+
+
+user                    nginx;
+error_log               /var/log/nginx/error.log warn;
+pid                     /var/run/nginx.pid;
+worker_processes        auto;
+worker_rlimit_nofile    33282;
+
+events {
+    use epoll;
+    worker_connections  1024;
+}
+
+http {
+  include       /etc/nginx/mime.types;
+  default_type  application/octet-stream;
+
+  log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                    '$status $body_bytes_sent "$http_referer" '
+                    '"$http_user_agent" "$http_x_forwarded_for"';
+
+  include       conf.d/*.conf;
+
+  map $http_upgrade $connection_upgrade {
+      default     "upgrade";
+  }
+
+  upstream springboot {
+    server 127.0.0.1:8080;
+    keepalive 1024;
+  }
+
+  server {
+      listen        80 default_server;
+
+      location / {
+          proxy_pass          http://springboot;
+          proxy_http_version  1.1;
+          proxy_set_header    Connection          $connection_upgrade;
+          proxy_set_header    Upgrade             $http_upgrade;
+
+          proxy_set_header    Host                $host;
+          proxy_set_header    X-Real-IP           $remote_addr;
+          proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+      }
+
+      access_log    /var/log/nginx/access.log main;
+
+      client_header_timeout 60;
+      client_body_timeout   60;
+      keepalive_timeout     60;
+      gzip                  off;
+      gzip_comp_level       4;
+
+      # Include the Elastic Beanstalk generated locations
+      include conf.d/elasticbeanstalk/healthd.conf;
+  }
+}
