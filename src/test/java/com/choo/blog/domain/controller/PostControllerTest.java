@@ -156,7 +156,7 @@ class PostControllerTest extends BaseControllerTest {
                                 .content(objectMapper.writeValueAsString(saveData))
                                 .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken()))
                         .andDo(print())
-                        .andExpect(status().isBadRequest())
+                        .andExpect(status().isOk())
                         .andExpect(jsonPath("errors[0].objectName").exists())
                         .andExpect(jsonPath("errors[0].code").exists())
                         .andExpect(jsonPath("errors[0].rejectedValue").hasJsonPath());
@@ -370,7 +370,7 @@ class PostControllerTest extends BaseControllerTest {
                                 .content(objectMapper.writeValueAsString(updateData))
                                 .header(HttpHeaders.AUTHORIZATION,  "Bearer " + session.getAccessToken()))
                         .andDo(print())
-                        .andExpect(status().isBadRequest())
+                        .andExpect(status().isOk())
                         .andExpect(jsonPath("errors[0].objectName").exists())
                         .andExpect(jsonPath("errors[0].code").exists())
                         .andExpect(jsonPath("errors[0].rejectedValue").hasJsonPath());

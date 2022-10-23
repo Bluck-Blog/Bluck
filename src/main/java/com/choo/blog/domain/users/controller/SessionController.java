@@ -17,9 +17,12 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,24 +46,18 @@ public class SessionController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity generateVerifyCode(String email, HttpServletRequest request){
-        HttpSession sess = request.getSession();
+    public ResponseEntity generateVerifyCode(String email){
+
         String code = userService.generateVerifyCode(email);
-        sess.setAttribute("code", code);
+
 
         return ApiResponse.status(HttpStatus.CREATED).body(code).toResponse();
     }
 
     @PostMapping("/verify")
-    public ResponseEntity verifyEmail(String code, HttpServletRequest request){
-        HttpSession sess = request.getSession();
-        Object sessionCode = sess.getAttribute("code");
-        if(sessionCode == null){
-            throw new CodeNotFoundException();
-        }
-        String encodedCode = String.valueOf(sessionCode);
+    public ResponseEntity verifyEmail(String verifyCode, String code){
 
-        boolean result = userService.verifyEmail(code, encodedCode);
+        boolean result = userService.verifyEmail(verifyCode, code);
 
         return ApiResponse.status(HttpStatus.OK).body(result).toResponse();
     }

@@ -1,5 +1,6 @@
 package com.choo.blog.error.handler;
 
+import com.choo.blog.commons.response.ApiResponse;
 import com.choo.blog.error.ErrorResponse;
 import com.choo.blog.exceptions.InvalidParameterException;
 import com.choo.blog.exceptions.InvalidTokenException;
@@ -12,17 +13,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class CommonControllerExceptionHandler {
     @ExceptionHandler(value = InvalidParameterException.class)
-    protected ResponseEntity<ErrorResponse> handleInvalidParameterException(InvalidParameterException e){
+    protected ResponseEntity handleInvalidParameterException(InvalidParameterException e){
         ErrorResponse error = ErrorResponse.create()
                 .message(e.getMessage())
                 .errors(e.getErrors());
-        return ResponseEntity.badRequest().body(error);
+        return ApiResponse.status(HttpStatus.BAD_REQUEST).body(error).toResponse();
     }
 
     @ExceptionHandler(value = InvalidTokenException.class)
-    protected ResponseEntity<ErrorResponse> handleInvalidTokenException(InvalidTokenException e){
+    protected ResponseEntity handleInvalidTokenException(InvalidTokenException e){
         ErrorResponse error = ErrorResponse.create()
                 .message(e.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+        return ApiResponse.status(HttpStatus.UNAUTHORIZED).body(error).toResponse();
     }
 }

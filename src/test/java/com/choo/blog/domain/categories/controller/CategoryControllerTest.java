@@ -153,7 +153,7 @@ class CategoryControllerTest extends BaseControllerTest {
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAccessToken())
                         )
                         .andDo(print())
-                        .andExpect(status().isBadRequest())
+                        .andExpect(status().isOk())
                         .andExpect(jsonPath("message").exists())
                         .andExpect(jsonPath("errors[0].field").value("title"))
                 ;
@@ -249,7 +249,7 @@ class CategoryControllerTest extends BaseControllerTest {
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAccessToken())
                         )
                         .andDo(print())
-                        .andExpect(status().isBadRequest())
+                        .andExpect(status().isOk())
                         .andExpect(jsonPath("message").exists())
                         .andExpect(jsonPath("errors[0].field").value("title"))
                 ;

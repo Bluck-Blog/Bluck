@@ -139,7 +139,7 @@ class UserControllerTest extends BaseControllerTest {
                                 .accept(MediaTypes.HAL_JSON)
                                 .content(objectMapper.writeValueAsString(registData)))
                         .andDo(print())
-                        .andExpect(status().isBadRequest())
+                        .andExpect(status().isOk())
                         .andExpect(jsonPath("errors[0].objectName").exists())
                         .andExpect(jsonPath("errors[0].code").exists())
                         .andExpect(jsonPath("errors[0].rejectedValue").hasJsonPath());
@@ -161,7 +161,7 @@ class UserControllerTest extends BaseControllerTest {
                                 .accept(MediaTypes.HAL_JSON)
                                 .content(objectMapper.writeValueAsString(registData)))
                         .andDo(print())
-                        .andExpect(status().isBadRequest())
+                        .andExpect(status().isOk())
                         .andExpect(jsonPath("errors[0].objectName").exists())
                         .andExpect(jsonPath("errors[0].code").exists())
                         .andExpect(jsonPath("errors[0].rejectedValue").hasJsonPath());
