@@ -52,7 +52,7 @@ public class ApiResponse<T> {
         return body.map(ApiResponse::ok).orElseGet(() -> notFound().build());
     }
 
-    public ResponseEntity toResponse(){
+    public ResponseEntity<ApiResponse<T>> toResponse(){
         return ResponseEntity.ok(this);
     }
 
