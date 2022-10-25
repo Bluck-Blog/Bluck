@@ -29,13 +29,14 @@ public class User extends BaseEntity {
     private String profileMessage;
     private String introduction;
     private String phone;
+    private String code;
 
     @JsonIgnore
     public String getPassword() {
         return password;
     }
 
-    public void encrypte(PasswordEncoder passwordEncoder) {
+    public void encrypt(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
     }
 }

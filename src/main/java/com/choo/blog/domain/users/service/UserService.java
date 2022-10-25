@@ -1,10 +1,9 @@
 package com.choo.blog.domain.users.service;
 
-import com.choo.blog.domain.users.exceptions.DuplicateEmailException;
-import com.choo.blog.domain.users.exceptions.InvalidVerifyCodeException;
-import com.choo.blog.domain.users.repository.UserRepository;
-import com.choo.blog.domain.users.dto.UserRegistData;
 import com.choo.blog.domain.users.User;
+import com.choo.blog.domain.users.dto.UserRegistData;
+import com.choo.blog.domain.users.exceptions.DuplicateEmailException;
+import com.choo.blog.domain.users.repository.UserRepository;
 import com.choo.blog.exceptions.UserNotFoundException;
 import com.choo.blog.mail.MailMessage;
 import com.choo.blog.mail.MailProvider;
@@ -13,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,41 +30,17 @@ public class UserService {
     private final MailProvider mailProvider;
 
     public User join(UserRegistData registData){
-        checkVerifyCode(registData.getVerifyCode());
 
         User user = modelMapper.map(registData, User.class);
 
-        user.encrypte(passwordEncoder);
+        user.encrypt(passwordEncoder);
 
         return userRepository.save(user);
     }
 
-    private void checkVerifyCode(String code) {
-        Object sessionAttiribute = getSessionAttribute();
-
-        if(sessionAttiribute == null){
-            throw new InvalidVerifyCodeException();
-        }
-
-        String encryptCode = String.valueOf(sessionAttiribute);
-        System.out.println("encryptCode = " + encryptCode);
-
-        if(!passwordEncoder.matches(code, encryptCode)){
-            throw new InvalidVerifyCodeException();
-        }
-    }
-
-    private Object getSessionAttribute() {
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpSession session = servletRequestAttributes.getRequest().getSession();
-        Object sessionAttiribute = session.getAttribute(CODE_KEY);
-        return sessionAttiribute;
-    }
-
     public User getUser(Long userId){
-        User user = userRepository.findById(userId)
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
-        return user;
     }
 
     public boolean verifyEmail(String rawCode, String code){
@@ -100,7 +72,7 @@ public class UserService {
                 .subject("BLUCK 인증번호")
                 .attributes(attributes)
                 .build();
-        System.out.println("mailMessage = " + mailMessage);
+
         mailProvider.send(mailMessage);
     }
 }
