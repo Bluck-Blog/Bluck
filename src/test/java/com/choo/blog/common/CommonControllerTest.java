@@ -19,7 +19,7 @@ public class CommonControllerTest extends BaseControllerTest{
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(sampleRequest))
                 )
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andDo(
                         document(
                                 "error-response",
